@@ -315,7 +315,6 @@ button.sm{padding:7px 13px;font-size:12.5px}
 
   <section class="panel" id="p-ringkasan">
     <div id="sleep-now-r"></div>
-    <div id="alerts" style="display:flex;flex-direction:column;gap:8px"></div>
     <div class="stats" id="stats"></div>
     <div class="card" id="today-card"></div>
     <div class="card" id="trial-card"></div>
@@ -903,7 +902,7 @@ function renderSummary(){
   const wpts=D.growth.filter(g=>g.weight!=null).sort(byDate).map(g=>({d:g.date,v:g.weight}));
   if(wpts.length>1){const a=wpts[wpts.length-1],r=wpts.slice().reverse().find(p=>diff(p.d,a.d)>=75);if(r&&zOf(WHO_W,ageM(a.d),a.v)-zOf(WHO_W,ageM(r.d),r.v)<=-.67)al.push(['bad','Berat turun melewati satu garis persentil WHO sejak '+fmt(r.d)+'. Lihat tab Tumbuh.'])}
   if(!ready)al.length=0;
-  $('alerts').innerHTML=al.map(a=>`<div class="alert ${a[0]}"><i><img alt="" src="${fe(a[0]==='bad'?'Warning':'Bell')}"></i><div>${esc(a[1])}</div></div>`).join('');
+  if($('alerts'))$('alerts').innerHTML=al.map(a=>`<div class="alert ${a[0]}"><i><img alt="" src="${fe(a[0]==='bad'?'Warning':'Bell')}"></i><div>${esc(a[1])}</div></div>`).join('');
   const todayMeals=babyFoods().filter(f=>f.date===T).length;
   const fl14n=fl14.length,lastFl=fl14n?fmt(fl14[fl14n-1].date):'';
   const card=(pal,tall,go,ill,lbl,val,chip)=>`<div class="scene${tall?' tall':''}" data-go="${go}" role="button" tabindex="0">${scene(pal)}<img class="ill" alt="" src="${fe(ill)}"><div class="cap"><div class="lbl">${lbl}</div><div class="val">${esc(val)}</div>${chip?`<span class="chip"><i></i>${esc(chip)}</span>`:''}</div></div>`;
