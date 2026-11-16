@@ -130,6 +130,13 @@ fieldset legend{text-transform:uppercase;letter-spacing:.1em;font-size:10.5px}
 .edit-bar button{padding:6px 14px}
 #edm{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.62);display:flex;align-items:flex-end;justify-content:center;animation:fadein .15s}
 #edm[hidden]{display:none}
+.pn-v{margin:4px 0 14px}.pn-v h3{font-family:var(--font-display);font-weight:400;font-size:17px;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.pn-v h3 span{font:700 11px/1 var(--font-body);color:var(--accent-ink);background:var(--accent);padding:4px 8px;border-radius:99px}
+.pn-v ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45;color:var(--ink)}
+.pn-v li::marker{color:var(--accent)}
+#pnm{position:fixed;inset:0;z-index:41;background:rgba(0,0,0,.62);display:flex;align-items:flex-end;justify-content:center;animation:fadein .15s}
+#pnm[hidden]{display:none}
+
 .edm-card{width:min(100%,560px);max-height:90vh;overflow:auto;overscroll-behavior:contain;background:var(--surface);border-radius:26px 26px 0 0;padding:0 18px calc(22px + env(safe-area-inset-bottom,0px));animation:sheetup .2s ease-out}
 .edm-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:16px 0 10px;background:var(--surface)}
 .edm-top b{font-family:var(--font-display);font-weight:400;font-size:21px}
@@ -378,7 +385,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
 <div class="wrap">
   <header class="hero">
     <div class="hero-art" id="hero-art" aria-hidden="true"></div>
-    <div class="hero-top"><div class="hello">Halo, <b>Mama &amp; Papa!</b></div><div class="avatar"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Baby/Default/Flat/baby_flat_default.svg"></div></div>
+    <div class="hero-top"><div class="hello">Halo, <b>Mommy &amp; Daddy!</b></div><div class="avatar"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Baby/Default/Flat/baby_flat_default.svg"></div></div>
     <div class="hero-txt"><h1>Si Kecil Gia</h1><p class="sub" id="greet">selamat datang</p><span class="age-pill" id="age"></span></div>
   </header>
   <div id="subnav" hidden><div class="seg" id="seg" role="tablist"></div></div>
@@ -409,7 +416,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
       <div class="stack">
       <label>Tanggal<input type="date" id="fo-date" required></label>
       <label>Waktu makan<select id="fo-meal"><option>pagi</option><option>siang</option><option>sore</option><option>malam</option><option>snack</option></select></label>
-      <label>Ini makanan siapa?<select id="fo-kind"><option value="bayi">Gia</option><option value="mom">Mama (menyusui)</option></select><span class="help" id="fo-kind-help">Pilih Mama untuk mencatat menu Mama, karena bisa ikut lewat ASI.</span></label>
+      <label>Ini makanan siapa?<select id="fo-kind"><option value="bayi">Gia</option><option value="mom">Mommy (menyusui)</option></select><span class="help" id="fo-kind-help">Pilih Mommy untuk mencatat menu Mommy, karena bisa ikut lewat ASI.</span></label>
       <label>Apa saja yang dimakan<input id="fo-items" placeholder="mis. labu siam, ikan nila, VCO" required><span class="help">Pisahkan tiap bahan dengan koma, supaya tiap bahan bisa dilacak.</span></label>
       </div>
       <div class="tags" id="fo-tags" aria-live="polite"></div>
@@ -606,6 +613,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
   <button type="button" class="bi" data-grp="grow"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5h16"/><path d="M6.5 16l4-5 3 3 4.5-6.5"/><path d="M15 7.5h3v3"/></svg></i>Tumbang</button>
   <button type="button" class="bi" data-grp="rep"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5h6v2.5H9z"/><path d="M7.5 5.5H6a1.5 1.5 0 0 0-1.5 1.5v12A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 18 5.5h-1.5"/><path d="M8.5 12.5l2 2 4.5-4.5"/></svg></i>Laporan</button>
 </nav>
+<div id="pnm" hidden role="dialog" aria-modal="true" aria-labelledby="pnm-t"><div class="edm-card"><div class="edm-top"><b id="pnm-t">Yang baru di Jurnal Gia</b><button type="button" class="ghost icon-btn" data-act="pn-close" aria-label="Tutup">✕</button></div><div class="pn-v"><h3>16 Nov<span>Terbaru</span></h3><ul><li>Laporan: export tinggal PDF dan Excel. PDF-nya sekarang didesain ala Jurnal Gia, lengkap dengan grafik, sebaran BAB, foto pup, dan catatan harian.</li><li>Obat dan suplemen di Laporan dihapus, pakai halaman Suplemen.</li><li>Tombol + sekarang namanya Tulis, menu Tumbuh Kembang di bawah jadi Tumbang.</li><li>Sapaan dan menu jadi Mommy dan Daddy.</li><li>62 foto pup masuk sesuai tanggal dan jamnya, semua kotak 1:1. Foto BAB baru otomatis dipotong kotak.</li><li>Foto pup yang sempat error sudah diganti.</li><li>Timeline Beranda bisa digeser ke hari lain.</li><li>Kondisi: pilihan seberapa parah dihapus, keluhan perut dan makan tidak dobel lagi di riwayat Kondisi.</li><li>Ketuk Beranda 3 kali buat buka catatan update ini.</li></ul></div><div class="pn-v"><h3>Sebelumnya</h3><ul><li>Export Excel ke samping, satu baris per hari: menu, suplemen, BAB, tidur, respon, aktivitas.</li><li>Semua riwayat tinggal ketuk untuk ubah atau hapus, lewat popup.</li><li>Keluhan jadi Kondisi, ada pilihan Lagi bagus.</li><li>Catatan Suplemen baru, Reminder seperti app reminder biasa.</li><li>Grafik dan timeline harian pindah ke Laporan.</li><li>Data 9 sampai 12 Nov dari spreadsheet sudah masuk.</li><li>Navigasi bawah baru dengan tombol + di tengah, plus catatan Aktivitas.</li></ul></div></div></div>
 <div id="edm" hidden role="dialog" aria-modal="true" aria-labelledby="edm-t"><div class="edm-card"><div class="edm-top"><b id="edm-t">Ubah catatan</b><button type="button" class="ghost icon-btn" data-act="edit-cancel" aria-label="Tutup">✕</button></div><div id="edm-body"></div><div id="edm-foot"></div></div></div>
 <div id="toast" hidden></div>
 <input type="file" id="ph-input" accept="image/*" multiple hidden>
@@ -890,7 +898,7 @@ const WIDE_HEAD=['HARI/ TANGGAL','MENU','SUPLEMENTASI','DEFEKASI','POLA TIDUR','
 function wideRows(from,to){const out=[],ids=ref=>photosOf(ref).filter(p=>!String(p.fileId).startsWith('local-')).map(p=>p.fileId),hm=t=>(t||'').replace(':','.'),bt=(a,b)=>(a.time||'99').localeCompare(b.time||'99');
   for(let n=dayN(from);n<=dayN(to);n++){const d=fromN(n);
     const fo=D.foods.filter(f=>f.date===d).sort((a,b)=>(a.kind==='mom')-(b.kind==='mom')||(ORD[a.meal]||2)-(ORD[b.meal]||2));
-    const menu=fo.map(f=>(f.kind==='mom'?'Menu Mama ':'')+f.meal+': '+f.items+(f.amount?' ('+f.amount+')':'')+(f.note?'. '+f.note:'')).join('\n');
+    const menu=fo.map(f=>(f.kind==='mom'?'Menu Mommy ':'')+f.meal+': '+f.items+(f.amount?' ('+f.amount+')':'')+(f.note?'. '+f.note:'')).join('\n');
     const sp=D.supps.filter(x=>x.date===d).sort(bt).map(x=>(x.time?hm(x.time)+' ':'')+x.name+(x.dose?' '+x.dose:'')+(x.note?' ('+x.note+')':'')).join('\n');
     const sts=D.stools.filter(x=>x.date===d).sort(bt),st=sts.map(x=>(x.time?hm(x.time)+' ':'')+'BS '+bsLabel(x)+(x.color?' '+x.color:'')+(x.strain?', mengejan':'')+(x.note?', '+x.note:'')).join('\n');
     const sl=[...D.sleeps.filter(z=>z.date===d).sort((a,b)=>(a.start||'').localeCompare(b.start||'')).map(z=>(z.kind==='malam'?'Malam ':'Siang ')+hm(z.start||'?')+'-'+(z.end?hm(z.end):'?')+(z.end?' ('+durShort(slMin(z))+')':'')+(z.note?', '+z.note:'')),...D.issues.filter(i=>i.date===d&&i.type==='tidur').map(i=>i.title+(i.note?' ('+i.note+')':''))].join('\n');
@@ -1071,7 +1079,7 @@ function renderFoods(){
       const hit=flr.filter(fl=>fl.date===d&&f.kind!=='mom'&&(ORD[f.meal]||1)<=(ORD[fl.afterMeal]||9));
       const hitTags=new Set();hit.forEach(fl=>exposureFor(fl).forEach(t=>hitTags.add(t)));
       const flagged=flr.some(fl=>fl.date===d&&f.kind!=='mom'&&f.meal===fl.afterMeal);
-      h+=`<div class="entry"><div class="ico" style="background:${TINT[f.meal]||'var(--surface3)'}"><img alt="" loading="lazy" src="${foodIcon(f)}"></div><div class="what"><div class="meta">${esc(f.meal[0].toUpperCase()+f.meal.slice(1))}${f.kind==='mom'?' · menu Mama':''}</div><b>${esc(f.items)}</b>
+      h+=`<div class="entry"><div class="ico" style="background:${TINT[f.meal]||'var(--surface3)'}"><img alt="" loading="lazy" src="${foodIcon(f)}"></div><div class="what"><div class="meta">${esc(f.meal[0].toUpperCase()+f.meal.slice(1))}${f.kind==='mom'?' · menu Mommy':''}</div><b>${esc(f.items)}</b>
         ${(f.amount||f.asi)?'<div class="small muted">'+[f.amount?'Porsi '+f.amount:'',f.asi?'Susu '+f.asi:''].filter(Boolean).map(esc).join(' · ')+'</div>':''}
         ${flagged?`<div class="tags">${(f.tags||[]).map(t=>`<span class="tag ${hitTags.has(t)?'hit':''}">${esc(t)}</span>`).join('')}</div>`:''}
         <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${f.appetite&&f.appetite!=='lahap'?`<span class="pill warn">${f.appetite==='tidak mau'?'tidak mau makan':'makan sedikit'}</span>`:''}${f.appetite==='lahap'?'<span class="pill good">lahap</span>':''}${flagged?'<span class="pill bad">merah-merah setelah makan ini</span>':''}</div>
@@ -1197,7 +1205,7 @@ function slSegs(days){const T=todayS(),nowM=hm2m(nowHM()),out=[];
     const d0=dayN(z.date);[[0,a,Math.min(b,1440)],[1,0,b-1440],[2,0,b-2880]].forEach(([k,x,y])=>{if(y>x){const d=fromN(d0+k);if(days.includes(d))out.push({d,a:Math.max(0,x),b:Math.min(1440,y),live:!z.end})}})});return out}
 function dayEvents(T){
   const ev=[],rn={};[...ROUTINE0,...D.routine].forEach(r=>{if(r.name)rn[r.id]=r.name});
-  D.foods.filter(f=>f.date===T).forEach(f=>ev.push({c:'foods',id:f.id,m:SLOT[f.meal]||720,t:cap1(f.meal),ic:f.kind==='mom'?'Woman':'Bowl with spoon',b:f.items,s:(f.kind==='mom'?'Menu Mama':'Makan')+(f.appetite?' · '+(f.appetite==='tidak mau'?'tidak mau':f.appetite):'')}));
+  D.foods.filter(f=>f.date===T).forEach(f=>ev.push({c:'foods',id:f.id,m:SLOT[f.meal]||720,t:cap1(f.meal),ic:f.kind==='mom'?'Woman':'Bowl with spoon',b:f.items,s:(f.kind==='mom'?'Menu Mommy':'Makan')+(f.appetite?' · '+(f.appetite==='tidak mau'?'tidak mau':f.appetite):'')}));
   D.sleeps.filter(x=>x.date===T||(x.end&&diff(x.date,T)===1&&hm2m(x.end)<hm2m(x.start))).forEach(x=>{const st0=x.date===T?hm2m(x.start):0;ev.push({c:'sleeps',id:x.id,m:st0,t:x.date===T?x.start:'00.00',ic:x.kind==='malam'?'Crescent moon':'Sleeping face',b:(x.kind==='malam'?'Tidur malam':'Tidur siang')+(x.end?' sampai '+x.end:', masih tidur'),s:x.end?durTxt(slMin(x)):'sejak '+x.start})});
   D.stools.filter(x=>x.date===T).forEach(x=>ev.push({c:'stools',id:x.id,m:hm2m(x.time)??800,t:x.time||'-',ic:'Pile of poo',b:'BAB · '+bsText(x),s:[x.color,x.strain?'mengejan':''].filter(Boolean).join(' · ')}));
   D.issues.filter(x=>x.date===T).forEach(x=>ev.push({c:'issues',id:x.id,m:hm2m(x.time)??810,t:x.time||'-',ic:x.type==='baik'?'Smiling face with hearts':'Lotion bottle',b:x.title,s:x.type==='baik'?'Kondisi bagus':'Kondisi'+(x.flare?' · kejadian baru':'')}));
@@ -1451,7 +1459,7 @@ const RPT_CSS=`#rpt{position:fixed;left:-20000px;top:0;width:794px;font-family:'
 #rpt .r-lg{display:flex;gap:16px;font-size:10.5px;color:#4A4752;flex-wrap:wrap}
 #rpt .r-lg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
 #rpt .r-strip{display:flex;gap:2px;align-items:flex-end;margin-top:12px}
-#rpt .r-strip .r-d{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:74px}
+#rpt .r-strip .r-d{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:96px}
 #rpt .r-strip .r-d i{width:11px;height:11px;border-radius:50%;display:block}
 #rpt .r-strip .r-d small{font-size:8px;color:#9A96A3;margin-top:2px}
 #rpt .r-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1583,6 +1591,9 @@ function setTab(n){const t=n||curTab;const ok=Object.values(GROUPS).flat().inclu
   $('seg').classList.toggle('compact',L.length>4);if(L.length>1)$('seg').innerHTML=L.map(k=>`<button type="button" role="tab" data-tab="${k}"${k===ok?' aria-current="page" aria-selected="true"':' aria-selected="false"'}><img alt="" src="${fe(SEG_L[k][1])}">${SEG_L[k][0]}</button>`).join('');
   try{history.replaceState(null,'','#'+ok)}catch(x){}
   scrollCharts()}
+let hmTaps=[];function openPN(){$('pnm').hidden=false;document.body.style.overflow='hidden'}function closePN(){$('pnm').hidden=true;document.body.style.overflow=''}
+$('bnav').addEventListener('click',e=>{if(!e.target.closest('.bi[data-grp="home"]'))return;const t=Date.now();hmTaps=hmTaps.filter(x=>t-x<900);hmTaps.push(t);if(hmTaps.length>=3){hmTaps=[];openPN()}});
+$('pnm').addEventListener('click',e=>{if(e.target.id==='pnm'||e.target.closest('[data-act="pn-close"]'))closePN()});
 $('bnav').addEventListener('click',e=>{const b=e.target.closest('.bi');if(!b)return;toggleSheet(false);const g=b.dataset.grp;setTab(lastIn[g]||GROUPS[g][0]);window.scrollTo(0,0)});
 $('seg').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;setTab(b.dataset.tab);window.scrollTo(0,0)});
 document.addEventListener('click',async e=>{
