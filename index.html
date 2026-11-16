@@ -885,7 +885,21 @@ function openRem(id){const r=id?routine().find(x=>x.id===id):null;if(EDIT)endEdi
 
 /* ---------- ringkasan dokter: blok terstruktur, bisa jadi teks, Google Doc, PDF ---------- */
 let lastBlocks=[],lastPhotos=[],lastTitle="";
-let lastRows=[];
+let lastRows=[],lastFrom=null;
+const WIDE_HEAD=['HARI/ TANGGAL','MENU','SUPLEMENTASI','DEFEKASI','POLA TIDUR','RESPON','AKTIVITAS & MOOD'];
+function wideRows(from,to){const out=[],ids=ref=>photosOf(ref).filter(p=>!String(p.fileId).startsWith('local-')).map(p=>p.fileId),hm=t=>(t||'').replace(':','.'),bt=(a,b)=>(a.time||'99').localeCompare(b.time||'99');
+  for(let n=dayN(from);n<=dayN(to);n++){const d=fromN(n);
+    const fo=D.foods.filter(f=>f.date===d).sort((a,b)=>(a.kind==='mom')-(b.kind==='mom')||(ORD[a.meal]||2)-(ORD[b.meal]||2));
+    const menu=fo.map(f=>(f.kind==='mom'?'Menu Mama ':'')+f.meal+': '+f.items+(f.amount?' ('+f.amount+')':'')+(f.note?'. '+f.note:'')).join('\n');
+    const sp=D.supps.filter(x=>x.date===d).sort(bt).map(x=>(x.time?hm(x.time)+' ':'')+x.name+(x.dose?' '+x.dose:'')+(x.note?' ('+x.note+')':'')).join('\n');
+    const sts=D.stools.filter(x=>x.date===d).sort(bt),st=sts.map(x=>(x.time?hm(x.time)+' ':'')+'BS '+bsLabel(x)+(x.color?' '+x.color:'')+(x.strain?', mengejan':'')+(x.note?', '+x.note:'')).join('\n');
+    const sl=[...D.sleeps.filter(z=>z.date===d).sort((a,b)=>(a.start||'').localeCompare(b.start||'')).map(z=>(z.kind==='malam'?'Malam ':'Siang ')+hm(z.start||'?')+'-'+(z.end?hm(z.end):'?')+(z.end?' ('+durShort(slMin(z))+')':'')+(z.note?', '+z.note:'')),...D.issues.filter(i=>i.date===d&&i.type==='tidur').map(i=>i.title+(i.note?' ('+i.note+')':''))].join('\n');
+    const iss=D.issues.filter(i=>i.date===d&&i.type!=='tidur'),rs=iss.map(i=>(i.time?hm(i.time)+' ':'')+i.title+(i.type==='baik'?' (bagus)':i.severity?' ('+SEV_L[i.severity]+')':'')+(i.note?'. '+i.note:'')).join('\n');
+    const ac=D.activities.filter(a=>a.date===d).sort(bt).map(a=>(a.time?hm(a.time)+' ':'')+(AC_L[a.kind]||a.kind)+(a.dur?' '+a.dur+' mnt':'')+(a.note?', '+a.note:'')).join('\n');
+    const ph=[...fo.flatMap(f=>ids('foods:'+f.id)),...sts.flatMap(x=>ids('stools:'+x.id)),...iss.flatMap(i=>ids(i.id))];
+    if(!(menu||sp||st||sl||rs||ac||ph.length))continue;
+    out.push({cells:[dow(d)+', '+fmt(d),menu,sp,st,sl,rs,ac],ph})}
+  return out}
 function blocksToText(t,B){return [t,...B.filter(b=>!b.img).map(b=>b.h?'\n'+b.h.toUpperCase():b.day?b.day+'\n'+b.rows.map(r=>'  - '+r.t+(r.ph.length?' ['+r.ph.length+' foto]':'')).join('\n'):b.li?'- '+b.li:b.ol?'• '+b.ol:b.p)].join('\n')}
 /* grafik untuk dokumen: SVG layar (tema gelap) diubah ke PNG tema terang */
 const LIGHT={'--line':'#E4E4EA','--accent':'#2F63CF','--lime':'#5E8A00','--bad':'#D2412B','--ink':'#1A1A1A','--muted':'#666666','--surface':'#FFFFFF','--good':'#23935F','--warn':'#C08000','--good-soft':'#DFF3E8','--warn-soft':'#FBEFD2','--bad-soft':'#FBE1DC','--surface2':'#F2F2F5','--surface3':'#E6E6EB'};
@@ -1346,7 +1360,7 @@ function renderDokter(){
   H('BAB (skala Bristol)');
   if(D.stools.length)B.push({img:'bab',cap:'Skala Bristol per hari, 60 hari terakhir. Pita hijau = normal (3-4), kuning = keras, merah = cair.'});
   const st=D.stools.filter(s=>inP(s.until||s.date)).sort(byDate);(st.length?st:D.stools.slice().sort(byDate).slice(-6)).forEach(s=>LI(fmt(s.date)+(s.until?' sampai '+fmt(s.until):'')+(s.time?' '+s.time:'')+': BS '+bsLabel(s)+(s.color?', '+s.color:'')+(s.strain?', sulit mengejan':'')+(s.note?' ('+s.note+')':'')));
-  const ld=per||60,rows=dayRows(fromN(dayN(T)-ld+1),T);lastRows=rows;
+  const ld=per||60,rows=dayRows(fromN(dayN(T)-ld+1),T);lastRows=rows;lastFrom=per?fromN(dayN(T)-per+1):[...D.foods,...D.stools,...D.issues,...D.sleeps,...D.activities,...D.supps].map(x=>x.date).filter(Boolean).sort()[0]||fromN(dayN(T)-59);
   if(rows.length){H('Catatan harian'+(rows.some(r=>r.ph.length)?' dengan foto':'')+' ('+ld+' hari)');const byDay={};rows.forEach(r=>(byDay[r.date]=byDay[r.date]||[]).push(r));
     Object.keys(byDay).sort().forEach(d=>B.push({day:dow(d)+', '+fmt(d),rows:byDay[d].map(r=>({t:(r.time?r.time+' · ':'')+r.kind+': '+r.text,ph:r.ph}))}))}
   const qs=['Berat badan melambat sejak pertengahan September (7,1 ke 7,3 kg dalam 6,5 minggu). Perlu evaluasi atau ditimbang ulang?',
@@ -1382,8 +1396,8 @@ async function viewDb(){
 async function exportSheet(){
   if(!HAS_GS||readOnly){toast('Mode pratinjau.');return}
   const btn=$('doc-xls'),o=btn.textContent;btn.disabled=true;btn.textContent='Menyiapkan foto...';
-  try{const rows=[];for(const r of lastRows){const tb=[];for(const f of r.ph){try{tb.push(await thumbB64(f))}catch(x){tb.push('')}}rows.push({...r,tb})}
-    btn.textContent='Membuat...';const r=await call('makeSheet',lastTitle.replace('Ringkasan','Catatan'),rows);
+  try{const rows=[];for(const r of wideRows(lastFrom||fromN(dayN(todayS())-27),todayS())){const tb=[];for(const f of r.ph){try{tb.push(await thumbB64(f))}catch(x){tb.push('')}}rows.push({...r,tb})}
+    btn.textContent='Membuat...';const r=await call('makeSheet',lastTitle.replace('Ringkasan','Catatan'),rows,WIDE_HEAD);
     $('doc-out').innerHTML=`<div class="hint good">Catatan Gia (terbaru) diperbarui ${esc(r.stamp||'')}. <a href="${esc(r.url)}" target="_blank" rel="noopener">Buka di Google Sheets</a>${r.xlsxUrl?` · <a href="${esc(r.xlsxUrl)}" target="_blank" rel="noopener">Unduh .xlsx</a>`:''}</div>${r.prevUrl?`<p class="small muted" style="margin:6px 0 0">Versi sebelumnya disimpan sebagai cadangan: <a href="${esc(r.prevUrl)}" target="_blank" rel="noopener">Sheets</a>${r.prevXlsxUrl?` · <a href="${esc(r.prevXlsxUrl)}" target="_blank" rel="noopener">.xlsx</a>`:''}</p>`:''}${r.xlsxErr?'<p class="small muted" style="margin:6px 0 0">File .xlsx belum bisa dibuat otomatis. Dari Google Sheets: File, Download, Microsoft Excel.</p>':''}${r.imgFail?'<p class="small" style="margin:6px 0 0;color:var(--bad)">'+r.imgFail+' foto gagal dimasukkan.</p>':''}`;toast('Spreadsheet siap'+(r.imgs?' ('+r.imgs+' foto)':''))}
   catch(e){toast(isNet(e)?'Butuh sinyal untuk membuat spreadsheet':'Gagal: '+(e&&e.message||'cek izin Drive'))}
   finally{btn.disabled=false;btn.textContent=o}}
