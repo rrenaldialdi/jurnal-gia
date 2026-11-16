@@ -414,6 +414,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
       <textarea id="summary" readonly style="margin-top:12px"></textarea>
       <p class="small muted" id="doc-ph" style="margin:8px 0 0"></p>
       <div class="row" style="margin-top:10px"><button class="primary" id="doc-gd" type="button">Google Doc</button><button id="doc-pdf" type="button">PDF</button><button id="doc-xls" type="button">Excel</button><button class="ghost" id="copy-sum" type="button">Salin teks</button></div>
+      <div class="row" style="margin-top:8px"><button class="ghost" id="db-view" type="button">Lihat seluruh database (lihat saja)</button></div>
       <div id="doc-out" style="margin-top:10px"></div></div>
     <div class="card"><h2>Pertanyaan untuk dokter</h2><ol id="qs" style="margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px"></ol></div>
     <div class="card"><h2>Obat dan suplemen</h2>
@@ -1023,12 +1024,21 @@ function renderDokter(){
 }
 async function thumbB64(fid){let u=PH[fid];if(!u){const r=await call('getPhoto',fid);u=PH[fid]='data:'+r.mime+';base64,'+r.b64}
   return await new Promise(res=>{const im=new Image();im.onload=()=>{const k=Math.min(1,320/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.82).split(',')[1])};im.onerror=()=>res('');im.src=u})}
+async function viewDb(){
+  if(!HAS_GS||readOnly){toast('Mode pratinjau.');return}
+  const btn=$('db-view'),o=btn.textContent;let w=null;try{w=window.open('','_blank')}catch(x){}
+  btn.disabled=true;btn.textContent='Menyiapkan database...';
+  try{const r=await call('viewDb');
+    if(w&&!w.closed){w.location.href=r.url}
+    $('doc-out').innerHTML=`<div class="hint good">Salinan database siap (${esc(r.stamp||'')}), hanya bisa dilihat. <a href="${esc(r.url)}" target="_blank" rel="noopener">Buka database</a></div>`}
+  catch(e){if(w)try{w.close()}catch(x){};toast(isNet(e)?'Butuh sinyal untuk membuka database':'Gagal: '+(e&&e.message||'cek izin Drive'))}
+  finally{btn.disabled=false;btn.textContent=o}}
 async function exportSheet(){
   if(!HAS_GS||readOnly){toast('Mode pratinjau.');return}
   const btn=$('doc-xls'),o=btn.textContent;btn.disabled=true;btn.textContent='Menyiapkan foto...';
   try{const rows=[];for(const r of lastRows){const tb=[];for(const f of r.ph){try{tb.push(await thumbB64(f))}catch(x){tb.push('')}}rows.push({...r,tb})}
     btn.textContent='Membuat...';const r=await call('makeSheet',lastTitle.replace('Ringkasan','Catatan'),rows);
-    $('doc-out').innerHTML=`<div class="hint good">Tersimpan di Drive, folder "Jurnal Gia - Foto &amp; Dokumen". <a href="${esc(r.url)}" target="_blank" rel="noopener">Buka di Google Sheets</a>${r.xlsxUrl?` · <a href="${esc(r.xlsxUrl)}" target="_blank" rel="noopener">Unduh .xlsx</a>`:''}</div>${r.xlsxErr?'<p class="small muted" style="margin:6px 0 0">File .xlsx belum bisa dibuat otomatis. Dari Google Sheets: File, Download, Microsoft Excel.</p>':''}${r.imgFail?'<p class="small" style="margin:6px 0 0;color:var(--bad)">'+r.imgFail+' foto gagal dimasukkan.</p>':''}`;toast('Spreadsheet siap'+(r.imgs?' ('+r.imgs+' foto)':''))}
+    $('doc-out').innerHTML=`<div class="hint good">Catatan Gia (terbaru) diperbarui ${esc(r.stamp||'')}. <a href="${esc(r.url)}" target="_blank" rel="noopener">Buka di Google Sheets</a>${r.xlsxUrl?` · <a href="${esc(r.xlsxUrl)}" target="_blank" rel="noopener">Unduh .xlsx</a>`:''}</div>${r.prevUrl?`<p class="small muted" style="margin:6px 0 0">Versi sebelumnya disimpan sebagai cadangan: <a href="${esc(r.prevUrl)}" target="_blank" rel="noopener">Sheets</a>${r.prevXlsxUrl?` · <a href="${esc(r.prevXlsxUrl)}" target="_blank" rel="noopener">.xlsx</a>`:''}</p>`:''}${r.xlsxErr?'<p class="small muted" style="margin:6px 0 0">File .xlsx belum bisa dibuat otomatis. Dari Google Sheets: File, Download, Microsoft Excel.</p>':''}${r.imgFail?'<p class="small" style="margin:6px 0 0;color:var(--bad)">'+r.imgFail+' foto gagal dimasukkan.</p>':''}`;toast('Spreadsheet siap'+(r.imgs?' ('+r.imgs+' foto)':''))}
   catch(e){toast(isNet(e)?'Butuh sinyal untuk membuat spreadsheet':'Gagal: '+(e&&e.message||'cek izin Drive'))}
   finally{btn.disabled=false;btn.textContent=o}}
 async function exportDoc(pdf){
@@ -1055,6 +1065,7 @@ document.addEventListener('click',async e=>{
   if(e.target.id==='doc-gd'){exportDoc(false);return}
   if(e.target.id==='doc-pdf'){exportDoc(true);return}
   if(e.target.id==='doc-xls'){exportSheet();return}
+  if(e.target.id==='db-view'){viewDb();return}
   if(e.target.closest('#vw-x')||e.target.id==='viewer'){closeViewer();return}
   if(e.target.id==='vw-prev'&&vw.prev){vw.id=vw.prev;renderViewer();return}
   if(e.target.id==='vw-next'&&vw.next){vw.id=vw.next;renderViewer();return}
