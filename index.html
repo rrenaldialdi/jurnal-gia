@@ -1021,11 +1021,14 @@ function renderDokter(){
   const h=D.history.slice().sort((a,b)=>(a.sort||0)-(b.sort||0));
   $('hist-list').innerHTML=h.length?h.map(x=>`<div class="entry" style="grid-template-columns:130px 1fr auto"><div class="meta" style="text-transform:none">${esc(x.when)}</div><div class="what">${esc(x.text)}</div><div class="act">${delBtn('history',x.id)}</div></div>`).join(''):'<div class="empty">Belum ada.</div>';
 }
+async function thumbB64(fid){let u=PH[fid];if(!u){const r=await call('getPhoto',fid);u=PH[fid]='data:'+r.mime+';base64,'+r.b64}
+  return await new Promise(res=>{const im=new Image();im.onload=()=>{const k=Math.min(1,320/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.82).split(',')[1])};im.onerror=()=>res('');im.src=u})}
 async function exportSheet(){
   if(!HAS_GS||readOnly){toast('Mode pratinjau.');return}
-  const btn=$('doc-xls'),o=btn.textContent;btn.disabled=true;btn.textContent='Membuat...';
-  try{const r=await call('makeSheet',lastTitle.replace('Ringkasan','Catatan'),lastRows);
-    $('doc-out').innerHTML=`<div class="hint good">Tersimpan di Drive, folder "Jurnal Gia - Foto &amp; Dokumen". <a href="${esc(r.url)}" target="_blank" rel="noopener">Buka di Google Sheets</a>${r.xlsxUrl?` · <a href="${esc(r.xlsxUrl)}" target="_blank" rel="noopener">Unduh .xlsx</a>`:''}</div>${r.xlsxErr?'<p class="small muted" style="margin:6px 0 0">File .xlsx belum bisa dibuat otomatis. Dari Google Sheets: File, Download, Microsoft Excel.</p>':''}`;toast('Spreadsheet siap')}
+  const btn=$('doc-xls'),o=btn.textContent;btn.disabled=true;btn.textContent='Menyiapkan foto...';
+  try{const rows=[];for(const r of lastRows){const tb=[];for(const f of r.ph){try{tb.push(await thumbB64(f))}catch(x){tb.push('')}}rows.push({...r,tb})}
+    btn.textContent='Membuat...';const r=await call('makeSheet',lastTitle.replace('Ringkasan','Catatan'),rows);
+    $('doc-out').innerHTML=`<div class="hint good">Tersimpan di Drive, folder "Jurnal Gia - Foto &amp; Dokumen". <a href="${esc(r.url)}" target="_blank" rel="noopener">Buka di Google Sheets</a>${r.xlsxUrl?` · <a href="${esc(r.xlsxUrl)}" target="_blank" rel="noopener">Unduh .xlsx</a>`:''}</div>${r.xlsxErr?'<p class="small muted" style="margin:6px 0 0">File .xlsx belum bisa dibuat otomatis. Dari Google Sheets: File, Download, Microsoft Excel.</p>':''}${r.imgFail?'<p class="small" style="margin:6px 0 0;color:var(--bad)">'+r.imgFail+' foto gagal dimasukkan.</p>':''}`;toast('Spreadsheet siap'+(r.imgs?' ('+r.imgs+' foto)':''))}
   catch(e){toast(isNet(e)?'Butuh sinyal untuk membuat spreadsheet':'Gagal: '+(e&&e.message||'cek izin Drive'))}
   finally{btn.disabled=false;btn.textContent=o}}
 async function exportDoc(pdf){
