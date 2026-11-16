@@ -483,19 +483,21 @@ function applyOp(o){const [col,id,data]=o.args;if(!D[col])return;
   if(o.fn==='put')D[col]=D[col].filter(x=>x.id!==id).concat([{...data,id}]);
   else if(o.fn==='patch')D[col]=D[col].map(x=>x.id===id?{...x,...data}:x);
   else if(o.fn==='del')D[col]=D[col].filter(x=>x.id!==id)}
-function enqueue(fn,args){const q=queue();q.push({fn,args});LS.set(QK,q);offline=true;renderBanner()}
+function enqueue(fn,args){const q=queue();q.push({id:uid(),fn,args});LS.set(QK,q);offline=true;renderBanner()}
+function bg(fn,args){const q=queue();q.push({id:uid(),fn,args});LS.set(QK,q);flush()}
 /* kirim ke Sheet; kalau sinyal putus, simpan di antrean dan kirim ulang nanti. null = masuk antrean */
 async function send(fn,...args){
   if(queue().length){enqueue(fn,args);flush();return null}
   try{const v=await call(fn,...args);if(offline){offline=false;renderBanner()}return v}
   catch(e){if(isNet(e)){enqueue(fn,args);setTimeout(flush,15000);return null}throw e}}
 async function flush(){
-  if(!HAS_GS||flushing)return;const q=queue();if(!q.length)return;flushing=true;let sent=0;
-  while(q.length){try{await call(q[0].fn,...q[0].args)}catch(e){if(isNet(e))break;toast('Satu catatan ditolak: '+(e&&e.message||'cek akses'))}
-    q.shift();sent++;LS.set(QK,q)}
-  flushing=false;offline=q.length>0;renderBanner();
-  if(q.length){setTimeout(flush,20000);return}
-  if(sent)toast(sent+' catatan offline sudah terkirim');load(true)}
+  if(!HAS_GS||flushing||!queue().length)return;flushing=true;const was=offline;let sent=0,net=false;
+  while(true){const q=queue();if(!q.length)break;const op=q[0];
+    try{await call(op.fn,...op.args)}catch(e){if(isNet(e)){net=true;break}toast('Gagal menyimpan: '+(e&&e.message||'ditolak'))}
+    const q2=queue();if(q2.length&&(q2[0].id?q2[0].id===op.id:JSON.stringify(q2[0])===JSON.stringify(op)))q2.shift();LS.set(QK,q2);sent++}
+  flushing=false;offline=net;renderBanner();
+  if(net){setTimeout(flush,15000);return}
+  if(sent&&was)toast(sent+' catatan offline sudah terkirim');clearTimeout(flush.t);flush.t=setTimeout(()=>load(true),1500)}
 function fromCache(){const c=LS.get(CK,null);if(!c||!c.D)return false;COLS.forEach(k=>D[k]=c.D[k]||[]);queue().forEach(applyOp);ready=true;return true}
 async function load(quiet){
   if(!HAS_GS||syncing)return;syncing=true;
@@ -506,14 +508,13 @@ async function load(quiet){
 async function save(col,obj,id){
   if(!HAS_GS||readOnly){toast('Mode pratinjau. Buka lewat link Web App untuk menyimpan.');return false}
   const nid=id||uid(),doc={...obj,id:nid,createdAt:Date.now()};
-  try{const r=await send('put',col,nid,doc);D[col]=D[col].filter(x=>x.id!==nid).concat([r||doc]);renderAll();return nid}
-  catch(e){toast('Gagal menyimpan: '+(e&&e.message||'ditolak'));return false}}
+  D[col]=D[col].filter(x=>x.id!==nid).concat([doc]);renderAll();bg('put',[col,nid,doc]);return nid}
 async function patch(col,id,obj){
   if(!HAS_GS||readOnly)return toast('Mode pratinjau.');
-  try{const r=await send('patch',col,id,obj);D[col]=D[col].map(x=>x.id===id?(r||{...x,...obj}):x);renderAll()}catch(e){toast('Gagal mengubah')}}
+  D[col]=D[col].map(x=>x.id===id?{...x,...obj}:x);renderAll();bg('patch',[col,id,obj])}
 async function remove(col,id){
   if(!HAS_GS||readOnly)return toast('Mode pratinjau.');
-  try{await send('del',col,id);D[col]=D[col].filter(x=>x.id!==id);renderAll()}catch(e){toast('Gagal menghapus')}}
+  D[col]=D[col].filter(x=>x.id!==id);renderAll();bg('del',[col,id])}
 async function importSeed(){
   if(!SEED||!HAS_GS)return;const btn=$('imp');if(btn){btn.disabled=true;btn.textContent='Mengimpor...'}
   try{const n=await call('bulk',SEED);toast('Data awal masuk: '+n+' catatan');await load()}
@@ -781,7 +782,7 @@ function renderBanner(){
   const b=$('banner');
   if(!ready){b.innerHTML='<div class="empty" style="margin-bottom:12px">Memuat jurnal...</div>';return}
   if(readOnly){b.innerHTML='<div class="banner" style="margin-bottom:14px"><span>Mode pratinjau. Simpan data hanya bisa lewat link Web App Apps Script, dengan akun Google yang punya akses edit ke Sheet.</span></div>';return}
-  const qn=queue().length,net=(offline||qn)?`<div class="netbar" role="status"><i></i><span>${offline?'Offline':'Mengirim'}${qn?' · '+qn+' catatan tersimpan di HP, belum terkirim':''}</span>${qn?'<button type="button" class="ghost sm" id="flush">Kirim</button>':''}</div>`:'';
+  const qn=queue().length,net=offline?`<div class="netbar" role="status"><i></i><span>${offline?'Offline':'Mengirim'}${qn?' · '+qn+' catatan tersimpan di HP, belum terkirim':''}</span>${qn?'<button type="button" class="ghost sm" id="flush">Kirim</button>':''}</div>`:'';
   const seeded=D.foods.length>0||D.stools.length>0;
   b.innerHTML=net+(seeded||!SEED?'':'<div class="banner" style="margin-bottom:14px"><span>Jurnal masih kosong. Masukkan data awal dari catatan Gia (CSV aplikasi dan catatan Agustus sampai November, sudah digabung dan duplikatnya disatukan)?</span><button class="primary" id="imp">Impor data awal</button></div>');
 }
@@ -1047,7 +1048,7 @@ $('st-bs').addEventListener('click',e=>{const b=e.target.closest('[data-bs]');if
 $('f-food').addEventListener('submit',async e=>{e.preventDefault();
   const items=$('fo-items').value.trim();if(!items)return;
   const ok=await save('foods',{date:$('fo-date').value,meal:$('fo-meal').value,kind:$('fo-kind').value,items,tags:parseTags(items),amount:$('fo-amount').value.trim(),asi:$('fo-asi').value.trim(),appetite:$('fo-app').value,note:$('fo-note').value.trim(),src:'jurnal'});
-  if(ok){['fo-items','fo-amount','fo-asi','fo-note'].forEach(i=>$(i).value='');$('fo-app').value='';$('fo-tags').innerHTML='';trialHint();toast(queue().length?'Tersimpan di HP, dikirim saat ada sinyal':'Makan tersimpan')}});
+  if(ok){['fo-items','fo-amount','fo-asi','fo-note'].forEach(i=>$(i).value='');$('fo-app').value='';$('fo-tags').innerHTML='';trialHint();toast(offline?'Tersimpan di HP, dikirim saat ada sinyal':'Makan tersimpan')}});
 $('f-issue').addEventListener('submit',async e=>{e.preventDefault();
   const conf=[...$('is-conf').querySelectorAll('input:checked')].map(x=>x.value);
   const after=$('is-after').value;
