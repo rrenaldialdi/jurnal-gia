@@ -124,7 +124,18 @@ fieldset legend{text-transform:uppercase;letter-spacing:.1em;font-size:10.5px}
 #sleep-now-r{display:none}
 .edit-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-4px 0 12px;padding:8px 8px 8px 14px;border-radius:var(--r-sm);background:var(--accent-soft);color:#DCE7FF;font-size:13.5px;font-weight:700}
 .edit-bar button{padding:6px 14px}
-form.editing{box-shadow:0 0 0 2px var(--accent)}
+#edm{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.62);display:flex;align-items:flex-end;justify-content:center;animation:fadein .15s}
+#edm[hidden]{display:none}
+.edm-card{width:min(100%,560px);max-height:90vh;overflow:auto;overscroll-behavior:contain;background:var(--surface);border-radius:26px 26px 0 0;padding:0 18px calc(22px + env(safe-area-inset-bottom,0px));animation:sheetup .2s ease-out}
+.edm-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:16px 0 10px;background:var(--surface)}
+.edm-top b{font-family:var(--font-display);font-weight:400;font-size:21px}
+#edm-body>form{background:none;box-shadow:none;border:0;padding:0;margin:0}
+#edm-body>form>h2{display:none}
+#edm-body>form.row{flex-direction:column;align-items:stretch}
+#edm-body>form.row label{flex:1 1 auto!important}
+@keyframes sheetup{from{transform:translateY(40px);opacity:.6}}@keyframes fadein{from{opacity:0}}
+.bs-pic{display:inline-grid;place-items:center;width:40px;height:28px;border-radius:9px;background:var(--surface2);margin-right:6px;vertical-align:middle}
+.bs-pic svg{width:30px;height:20px}
 .tl[data-act]{cursor:pointer}
 .tl[data-act]:active{background:var(--surface2)}
 .hsec{font-size:19px;margin:22px 2px 10px}
@@ -381,20 +392,14 @@ button.sm{padding:7px 13px;font-size:12.5px}
       </div>
       <div class="tags" id="fo-tags" aria-live="polite"></div>
       <div id="fo-trial" aria-live="polite"></div>
-      <div class="stack baby-only" style="margin-top:14px">
-      <label>Gia makannya gimana?<select id="fo-app"><option value="">Biasa</option><option value="lahap">Lahap</option><option value="sedikit">Sedikit</option><option value="tidak mau">Tidak mau</option></select></label>
-      </div>
-      <div style="margin-top:14px"><label class="photo-in" style="margin-top:10px"><span>Foto makanan <span class="opt">(opsional)</span></span><input type="file" id="fo-photo" accept="image/*" multiple><span class="pbox"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label></div>
-      <details class="more"><summary>Porsi, susu, catatan <span class="opt">(opsional)</span></summary><div class="fields">
-        <label class="baby-only">Porsi yang habis<input id="fo-amount" placeholder="mis. 5 sdm atau 80 ml"></label>
-        <label class="baby-only">Minum ASI atau susu<input id="fo-asi" placeholder="mis. 100 ml"><span class="help">Isi kalau Gia minum susu di waktu makan ini.</span></label>
-        <label>Catatan<input id="fo-note" placeholder="mis. teksturnya kasar, dicampur ASI"><span class="help">Kalau ada reaksi seperti merah-merah, catat di tab Keluhan supaya ikut dihitung.</span></label>
-      </div></details>
+            <div style="margin-top:14px"><label class="photo-in" style="margin-top:10px"><span>Foto makanan <span class="opt">(opsional)</span></span><input type="file" id="fo-photo" accept="image/*" multiple><span class="pbox"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label></div>
+      <label style="margin-top:14px"><span>Catatan <span class="opt">(opsional)</span></span><input id="fo-note" placeholder="mis. teksturnya kasar, habis setengah"></label>
+      <div hidden><select id="fo-app"><option value="">Biasa</option><option value="lahap">Lahap</option><option value="sedikit">Sedikit</option><option value="tidak mau">Tidak mau</option></select><input id="fo-amount"><input id="fo-asi"></div>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
     <div class="card">
       <div class="row" style="margin-bottom:6px">
-        <label style="flex:1 1 160px">Cari bahan<input id="fo-q" placeholder="mis. tuna"></label>
+        <label style="flex:1 1 100%">Cari bahan<input id="fo-q" type="search" placeholder="mis. tuna"><span class="help">Untuk cek kapan saja Gia makan bahan tertentu, misalnya saat curiga alergi. Ketik "tuna" untuk lihat semua hari Gia makan tuna.</span></label>
         <label style="flex:0 1 150px">Tampilkan<select id="fo-who"><option value="all">Semua</option><option value="bayi">Gia</option><option value="mom">Ibu</option></select></label>
       </div>
       <div id="food-list"></div>
@@ -405,32 +410,22 @@ button.sm{padding:7px 13px;font-size:12.5px}
     <form class="card" id="f-issue" autocomplete="off">
       <h2 style="margin-bottom:12px">Catat keluhan</h2>
       <div class="stack">
-      <label>Keluhan apa?<select id="is-type"><option value="kulit">Kulit / ruam</option><option value="pencernaan">Perut / muntah</option><option value="tidur">Tidur</option><option value="mood">Rewel / mood</option><option value="nafsu makan">Susah makan</option><option value="lain">Lainnya</option></select></label>
-      <label>Ceritakan singkat<input id="is-title" placeholder="mis. bintik merah di paha" required></label>
+      <label>Ceritakan singkat<input id="is-title" placeholder="mis. bintik merah di paha, rewel, muntah" required></label>
       <div class="grid2">
         <label>Tanggal<input type="date" id="is-date" required></label>
         <label><span>Jam <span class="opt">(opsional)</span></span><input type="time" id="is-time"></label>
       </div>
       <label>Seberapa parah?<select id="is-sev"><option value="1">Ringan</option><option value="2" selected>Sedang</option><option value="3">Berat</option></select><span class="help">Ringan: Gia tetap nyaman. Sedang: rewel atau garuk-garuk. Berat: menyebar, sangat rewel, atau perlu ke dokter.</span></label>
-      <label>Muncul setelah makan?<select id="is-after"><option value="">Tidak / belum tahu</option><option>pagi</option><option>siang</option><option>sore</option><option>malam</option></select><span class="help">Pilih makan terakhir sebelum keluhan muncul. Dipakai untuk mencari bahan pemicu.</span></label>
-      <label class="chk" style="align-items:flex-start"><input type="checkbox" id="is-flare" style="margin-top:2px"> <span>Kejadian baru / kambuh<span class="help">Centang kalau ini baru muncul, bukan ruam lama yang masih ada. Ini yang dihitung sebagai "merah-merah" di Ringkasan.</span></span></label>
       <label class="photo-in"><span>Foto <span class="opt">(opsional)</span></span><input type="file" id="is-photo" accept="image/*" multiple><span class="pbox" id="is-photo-lbl"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label>
       </div>
-      <details class="more"><summary>Detail lain <span class="opt">(opsional)</span></summary><div class="fields">
-        <label>Bagian tubuh<input id="is-area" placeholder="mis. pipi, paha"></label>
-        <label>Sudah hilang tanggal<input type="date" id="is-until"><span class="help">Kosongkan kalau masih ada.</span></label>
-        <fieldset style="border:0;padding:0;margin:0"><legend class="lbl" style="padding:0;margin-bottom:4px">Ada hal lain hari itu?</legend><span class="help" style="margin-bottom:8px">Bisa juga jadi pemicu, jadi ikut dicatat.</span>
-        <div class="row" id="is-conf" style="gap:4px 14px">
+      <div hidden><select id="is-type"><option value="kulit">Kulit / ruam</option><option value="pencernaan">Perut / muntah</option><option value="tidur">Tidur</option><option value="mood">Rewel / mood</option><option value="nafsu makan">Susah makan</option><option value="lain">Lainnya</option></select><select id="is-after"><option value="">Tidak / belum tahu</option><option>pagi</option><option>siang</option><option>sore</option><option>malam</option></select><input type="checkbox" id="is-flare"><input id="is-area"><input type="date" id="is-until"><textarea id="is-note"></textarea><div class="row" id="is-conf" style="gap:4px 14px">
           <label class="chk"><input type="checkbox" value="Matahari / grounding"> Matahari / grounding</label>
           <label class="chk"><input type="checkbox" value="Keringat / panas"> Keringat / panas</label>
           <label class="chk"><input type="checkbox" value="Produk baru (sabun, detergen, krim)"> Produk baru</label>
           <label class="chk"><input type="checkbox" value="Gigitan serangga"> Gigitan serangga</label>
           <label class="chk"><input type="checkbox" value="Makanan baru"> Makanan baru</label>
           <label class="chk"><input type="checkbox" value="Sedang sakit / pilek"> Sedang sakit</label>
-        </div>
-        </fieldset>
-        <label>Catatan<textarea id="is-note"></textarea></label>
-      </div></details>
+        </div></div>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
     <div class="card">
@@ -449,21 +444,20 @@ button.sm{padding:7px 13px;font-size:12.5px}
       <p class="lbl" id="st-bs-l">Bentuk pupnya seperti apa?</p>
       <div class="bsrow" id="st-bs" role="group" aria-labelledby="st-bs-l" style="margin-top:8px"></div>
       <div class="bsgrp" aria-hidden="true"><span class="k">keras</span><span class="n">normal</span><span class="c">lembek / cair</span></div>
-      <div class="bs-cap" id="st-bs-cap" aria-live="polite">Ketuk gambar yang paling mirip.</div>
+      <div class="bs-cap" id="st-bs-cap" aria-live="polite" hidden>Ketuk gambar yang paling mirip.</div>
       <div class="stack" style="margin-top:14px">
       <div class="grid2">
         <label>Tanggal<input type="date" id="st-date" required></label>
         <label><span>Jam <span class="opt">(opsional)</span></span><input type="time" id="st-time"></label>
       </div>
-      <label>Warna<select id="st-color"><option value="">Tidak dicatat</option><option>kuning</option><option>hijau</option><option>coklat muda</option><option>coklat</option><option>coklat gelap</option><option>hitam</option><option>ada darah</option></select></label>
-      <label class="chk"><input type="checkbox" id="st-strain"> Mengejan keras atau kesakitan</label>
+      <div hidden><select id="st-color"><option value="">Tidak dicatat</option><option>kuning</option><option>hijau</option><option>coklat muda</option><option>coklat</option><option>coklat gelap</option><option>hitam</option><option>ada darah</option></select><input type="checkbox" id="st-strain"></div>
       <label class="photo-in"><span>Foto <span class="opt">(opsional)</span></span><input type="file" id="st-photo" accept="image/*" multiple><span class="pbox"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label>
       <label><span>Catatan <span class="opt">(opsional)</span></span><input id="st-note"></label>
       </div>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
-    <div class="card"><h2>Grafik 60 hari</h2><div class="legend" style="margin:4px 0 6px"><span>Angka kiri = bentuk pup (1 keras, 7 cair)</span><span>Pita hijau = normal (3-4)</span><span>Titik kuning = keras, merah = cair</span><span>Kotak = catatan beberapa hari sekaligus</span></div><div class="scroll" id="stool-chart"></div></div>
-    <div class="card"><h2>Popok basah</h2><p class="muted small" style="margin:2px 0 8px">Tekan +1 tiap ganti popok yang basah pipis. Membantu menilai Gia cukup minum atau tidak.</p><div id="wet"></div></div>
+    <div class="card" hidden><h2>Grafik 60 hari</h2><div class="legend" style="margin:4px 0 6px"><span>Angka kiri = bentuk pup (1 keras, 7 cair)</span><span>Pita hijau = normal (3-4)</span><span>Titik kuning = keras, merah = cair</span><span>Kotak = catatan beberapa hari sekaligus</span></div><div class="scroll" id="stool-chart"></div></div>
+    <div class="card" hidden><h2>Popok basah</h2><p class="muted small" style="margin:2px 0 8px">Tekan +1 tiap ganti popok yang basah pipis. Membantu menilai Gia cukup minum atau tidak.</p><div id="wet"></div></div>
     <div class="card"><h2 style="margin-bottom:4px">Riwayat BAB</h2><div id="stool-list"></div></div>
   </section>
 
@@ -484,8 +478,8 @@ button.sm{padding:7px 13px;font-size:12.5px}
       </div>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
-    <div class="card"><h2>7 hari terakhir</h2><p class="muted small" style="margin:2px 0 8px">Tidur dihitung di tanggal mulai tidur.</p><div class="scroll" id="sleep-week"></div></div>
     <div class="card"><h2 style="margin-bottom:4px">Riwayat tidur</h2><div id="sleep-list"></div></div>
+    <div class="card"><h2>7 hari terakhir</h2><p class="muted small" style="margin:2px 0 8px">Tidur dihitung di tanggal mulai tidur.</p><div class="scroll" id="sleep-week"></div></div>
   </section>
 
   <section class="panel" id="p-aktivitas">
@@ -565,6 +559,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
   <button type="button" class="bi" data-grp="grow"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5h16"/><path d="M6.5 16l4-5 3 3 4.5-6.5"/><path d="M15 7.5h3v3"/></svg></i>Tumbuh</button>
   <button type="button" class="bi" data-grp="rep"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5h6v2.5H9z"/><path d="M7.5 5.5H6a1.5 1.5 0 0 0-1.5 1.5v12A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 18 5.5h-1.5"/><path d="M8.5 12.5l2 2 4.5-4.5"/></svg></i>Laporan</button>
 </nav>
+<div id="edm" hidden role="dialog" aria-modal="true" aria-labelledby="edm-t"><div class="edm-card"><div class="edm-top"><b id="edm-t">Ubah catatan</b><button type="button" class="ghost icon-btn" data-act="edit-cancel" aria-label="Tutup">✕</button></div><div id="edm-body"></div></div></div>
 <div id="toast" hidden></div>
 <input type="file" id="ph-input" accept="image/*" multiple hidden>
 <div id="viewer" hidden role="dialog" aria-modal="true" aria-label="Foto kulit"><div class="vw-top"><span id="vw-cap"></span><button type="button" id="vw-cmp" aria-pressed="false">Banding</button><button type="button" id="vw-x" aria-label="Tutup">✕</button></div><div class="vw-body" id="vw-body"></div><div class="vw-nav"><button type="button" id="vw-prev">‹ Sebelumnya</button><button type="button" id="vw-del" class="ghost danger">Hapus</button><button type="button" id="vw-next">Berikutnya ›</button></div></div>
@@ -899,7 +894,7 @@ let heroP='';
 function paintHero(){const h=new Date().getHours();const p=h>=5&&h<10?'pagi':h>=10&&h<15?'siang':h>=15&&h<18?'sore':'malam';
   const g=document.getElementById('greet');if(g)g.textContent='selamat '+p;if(p===heroP)return;heroP=p;const a=document.getElementById('hero-art');if(a)a.innerHTML=heroArt(p)}
 const HEADS={aktivitas:['main, mandi, jemur','Aktivitas','forest',['Teddy bear','Bathtub','Sun']],tidur:['tidur siang dan malam','Tidur','dusk',['Sleeping face','Crescent moon','Teddy bear']],makan:['apa yang Gia makan','Makan','sunset',['Bowl with spoon','Carrot','Fish']],keluhan:['kulit, perut, tidur, mood','Keluhan','dusk',['Lotion bottle','Crescent moon','Adhesive bandage']],bab:['pup dan popok basah','BAB','ocean',['Pile of poo','Droplet','Roll of paper']],tumbuh:['berat dan panjang badan','Tumbuh','forest',['Balance scale','Straight ruler','Seedling']],pola:['benang merah dari catatan','Pola','dusk',['Magnifying glass tilted left','Light bulb','Bar chart']],dokter:['bawa ini saat kontrol','Dokter','ocean',['Stethoscope','Pill','Clipboard']]};
-Object.entries(HEADS).forEach(([k,[a,b,p,ic]])=>{const s=document.getElementById('p-'+k);if(s&&!s.querySelector('.sec-hero'))s.insertAdjacentHTML('afterbegin',`<div class="sec-hero">${scene(p,'h')}<div class="sec-ill">${ic.map(n=>`<img alt="" src="${fe(n)}">`).join('')}</div><div class="sec-txt"><h2>${b}</h2><p class="sub">${a}</p></div></div>`)});
+Object.entries(HEADS).forEach(([k,[a,b,p,ic]])=>{const s=document.getElementById('p-'+k);if(s&&!s.querySelector('.sec-hero'))s.insertAdjacentHTML('afterbegin',`<div class="sec-hero">${scene(p,'h')}<div class="sec-ill">${ic.map(n=>`<img alt="" src="${fe(n)}">`).join('')}</div><div class="sec-txt"><h2>${b}</h2></div></div>`)});
 const H2I={'Catat aktivitas':'Teddy bear','Riwayat aktivitas':'Spiral notepad','Catat tidur':'Sleeping face','7 hari terakhir':'Bar chart','Riwayat tidur':'Spiral notepad','14 hari terakhir':'Calendar','Grafik 60 hari':'Chart increasing','Popok basah':'Droplet','Riwayat BAB':'Spiral notepad','Berat badan':'Balance scale','Panjang badan':'Straight ruler','Bahan makanan dan kejadian merah-merah':'Magnifying glass tilted left','Bahan baru, urut pertama dicoba':'Seedling','Ringkasan untuk dokter':'Clipboard','Pertanyaan untuk dokter':'Light bulb','Obat dan suplemen':'Pill','Riwayat kesehatan':'Spiral notepad','Catat makan':'Bowl with spoon','Catat keluhan':'Lotion bottle','Catat BAB':'Pile of poo','Timbang dan ukur':'Balance scale','Foto kulit':'Camera with flash'};
 document.querySelectorAll('.card>h2').forEach(h=>{const n=H2I[h.textContent.trim()];if(n&&!h.querySelector('.h-ico'))h.insertAdjacentHTML('afterbegin',`<img class="h-ico" alt="" src="${fe(n)}">`)});
 function chipify(id,o={}){const sel=document.getElementById(id);if(!sel||sel._sync)return;const w=document.createElement('div');w.className='chips'+(o.cls?' '+o.cls:'');w.setAttribute('role','radiogroup');
@@ -917,12 +912,9 @@ chipify('sl-kind',{icon:{siang:'Sun',malam:'Crescent moon'}});
 chipify('ac-kind',{icon:{main:'Teddy bear',mandi:'Bathtub',jemur:'Sun',tummy:'Baby',jalan:'Baby bottle',lain:'Sparkles'}});
 function kindUI(){const m=$('fo-kind').value==='mom';document.querySelectorAll('#f-food .baby-only').forEach(x=>x.hidden=m);$('fo-items').placeholder=m?'mis. nasi, sayur bayam, ayam goreng':'mis. labu siam, ikan nila, VCO'}
 $('fo-kind').addEventListener('change',kindUI);
-chipify('fo-app',{icon:{'':'Smiling face with smiling eyes',lahap:'Face savoring food',sedikit:'Neutral face','tidak mau':'Pouting face'}});
 chipify('fo-who',{cls:'scrollx',icon:{bayi:GIA_URI,mom:'Woman'}});
-chipify('is-type',{icon:{kulit:'Lotion bottle',pencernaan:'Pile of poo',tidur:'Crescent moon',mood:'Crying face','nafsu makan':'Fork and knife',lain:'Memo'}});
 chipify('is-sev',{sw:{'1':'#7AD9AE','2':'#F5C55A','3':'#FF7B6B'},label:{'1':'Ringan','2':'Sedang','3':'Berat'}});
-chipify('is-after',{icon:TIMES});
-chipify('st-color',{sw:{kuning:'#E3C14B',hijau:'#6E9B3A','coklat muda':'#BF8C54',coklat:'#8A5A2B','coklat gelap':'#5A3A1E',hitam:'#151515','ada darah':'#C0392B'},label:{'':'Tidak dicatat'}});
+0&&chipify('st-color',{sw:{kuning:'#E3C14B',hijau:'#6E9B3A','coklat muda':'#BF8C54',coklat:'#8A5A2B','coklat gelap':'#5A3A1E',hitam:'#151515','ada darah':'#C0392B'},label:{'':'Tidak dicatat'}});
 chipify('il-type',{cls:'scrollx',icon:{kulit:'Lotion bottle',pencernaan:'Pile of poo',tidur:'Crescent moon',mood:'Crying face','nafsu makan':'Fork and knife',lain:'Memo'}});
 chipify('il-status',{cls:'scrollx'});
 chipify('sum-days',{cls:'scrollx'});
@@ -938,7 +930,8 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('#sheet'))toggleSheet(false);
 });
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){toggleSheet(false);if($('viewer')&&!$('viewer').hidden)closeViewer()}if($('viewer')&&!$('viewer').hidden){if(e.key==='ArrowLeft'&&vw.prev){vw.id=vw.prev;renderViewer()}if(e.key==='ArrowRight'&&vw.next){vw.id=vw.next;renderViewer()}}if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('scene')){e.preventDefault();e.target.click()}});
+$('edm').addEventListener('click',e=>{if(e.target.id==='edm')endEdit(true)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){toggleSheet(false);if(EDIT)endEdit(true);if($('viewer')&&!$('viewer').hidden)closeViewer()}if($('viewer')&&!$('viewer').hidden){if(e.key==='ArrowLeft'&&vw.prev){vw.id=vw.prev;renderViewer()}if(e.key==='ArrowRight'&&vw.next){vw.id=vw.next;renderViewer()}}if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('scene')){e.preventDefault();e.target.click()}});
 
 /* ---------- render ---------- */
 function renderAll(){
@@ -1047,7 +1040,7 @@ function renderBAB(){
   $('wet').innerHTML=w+'</div>';
   const list=D.stools.slice().sort(byDate).reverse();
   $('stool-list').innerHTML=list.length?list.map(s=>`<div class="entry" style="grid-template-columns:78px 1fr auto"><div class="meta">${fmt(s.date)}${s.until?'<br>s/d '+fmt(s.until):''}${s.time?'<br>'+esc(s.time):''}</div>
-    <div class="what"><span class="bs ${bsCls(s.bristol,s.bristolMax)}">${bsText(s)}</span>${s.est?' <span class="pill gray">perkiraan</span>':''}${s.color?' <span class="pill gray">'+esc(s.color)+'</span>':''}${s.strain?' <span class="pill warn">sulit mengejan</span>':''}${s.note?'<div class="small muted" style="margin-top:3px">'+esc(s.note)+'</div>':''}${thumbs('stools:'+s.id)}</div><div class="act">${camBtn('stools:'+s.id)}${delBtn('stools',s.id)}</div></div>`).join(''):'<div class="empty">Belum ada catatan BAB.</div>';
+    <div class="what"><span class="bs-pic"><svg viewBox="0 0 34 22" fill="#B07A47" aria-hidden="true">${BS_SVG[(s.bristol||4)-1]}</svg></span><span class="bs ${bsCls(s.bristol,s.bristolMax)}">${bsText(s)}</span>${s.est?' <span class="pill gray">perkiraan</span>':''}${s.color?' <span class="pill gray">'+esc(s.color)+'</span>':''}${s.strain?' <span class="pill warn">sulit mengejan</span>':''}${s.note?'<div class="small muted" style="margin-top:3px">'+esc(s.note)+'</div>':''}${thumbs('stools:'+s.id)}</div><div class="act">${camBtn('stools:'+s.id)}${delBtn('stools',s.id)}</div></div>`).join(''):'<div class="empty">Belum ada catatan BAB.</div>';
 }
 function hm2m(t){const m=/^(\d{1,2})[:.](\d{2})/.exec(t||'');return m?+m[1]*60+ +m[2]:null}
 function nowHM(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
@@ -1067,7 +1060,7 @@ const ED_FORM={foods:'f-food',issues:'f-issue',stools:'f-stool',growth:'f-growth
 let EDIT=null;
 function setV(id,v){const e=$(id);if(!e)return;e.value=v==null?'':v;e.dispatchEvent(new Event('change',{bubbles:true}))}
 function startEdit(col,id){const o=(D[col]||[]).find(x=>x.id===id);if(!o)return toast('Catatan tidak ditemukan');
-  if(EDIT)endEdit(true);EDIT={col,id,o};setTab(ED_TAB[col]);const f=$(ED_FORM[col]);
+  if(EDIT)endEdit(true);const f=$(ED_FORM[col]),ph=document.createComment('edit');f.before(ph);EDIT={col,id,o,ph};$('edm-body').appendChild(f);
   if(col==='foods'){setV('fo-date',o.date);setV('fo-meal',o.meal);setV('fo-kind',o.kind==='mom'?'mom':'bayi');setV('fo-items',o.items);$('fo-items').dispatchEvent(new Event('input'));setV('fo-amount',o.amount);setV('fo-asi',o.asi);setV('fo-app',o.appetite||'');setV('fo-note',o.note);kindUI();if(o.amount||o.asi||o.note)f.querySelector('details').open=true}
   if(col==='issues'){setV('is-date',o.date);setV('is-time',o.time);setV('is-type',o.type);setV('is-title',o.title);setV('is-area',o.area);setV('is-sev',String(o.severity||2));setV('is-after',o.afterMeal||'');setV('is-until',o.until);setV('is-note',o.note);$('is-flare').checked=!!o.flare;$('is-conf').querySelectorAll('input').forEach(x=>x.checked=(o.confounders||[]).includes(x.value));if(o.area||o.until||o.note||(o.confounders||[]).length)f.querySelector('details').open=true}
   if(col==='stools'){const b=$('st-bs').querySelector(`[data-bs="${o.bristol}"]`);if(b)b.click();setV('st-date',o.date);setV('st-time',o.time);setV('st-color',o.color||'');$('st-strain').checked=!!o.strain;setV('st-note',o.note)}
@@ -1077,11 +1070,11 @@ function startEdit(col,id){const o=(D[col]||[]).find(x=>x.id===id);if(!o)return 
   if(col==='meds'){setV('md-date',o.date);setV('md-name',o.name);setV('md-dose',o.dose)}
   if(col==='history'){setV('hi-when',o.when);setV('hi-text',o.text)}
   window.__syncChips&&window.__syncChips();
-  f.classList.add('editing');let bar=f.querySelector('.edit-bar');if(!bar){bar=document.createElement('div');bar.className='edit-bar';f.prepend(bar)}
-  bar.innerHTML=`<span>Mengubah catatan ${esc(fmt(o.date)||'')}</span><button type="button" class="ghost" data-act="edit-cancel">Batal</button>`;
+  const ED_L={foods:'makan',issues:'keluhan',stools:'BAB',growth:'timbangan',sleeps:'tidur',activities:'aktivitas',meds:'obat',history:'riwayat'};
+  $('edm-t').textContent='Ubah '+ED_L[col]+(o.date?' · '+fmt(o.date):'');
   const sb=f.querySelector('button[type=submit]');sb.dataset.t0=sb.dataset.t0||sb.textContent;sb.textContent='Simpan perubahan';
-  setTimeout(()=>window.scrollTo({top:f.getBoundingClientRect().top+scrollY-($('subnav').hidden?16:84),behavior:'smooth'}),60)}
-function endEdit(silent){if(!EDIT)return;const f=$(ED_FORM[EDIT.col]);f.classList.remove('editing');const bar=f.querySelector('.edit-bar');if(bar)bar.remove();const sb=f.querySelector('button[type=submit]');if(sb.dataset.t0)sb.textContent=sb.dataset.t0;
+  $('edm').hidden=false;document.body.style.overflow='hidden';$('edm').querySelector('.edm-card').scrollTop=0}
+function endEdit(silent){if(!EDIT)return;const f=$(ED_FORM[EDIT.col]);if(EDIT.ph&&EDIT.ph.parentNode)EDIT.ph.replaceWith(f);$('edm').hidden=true;document.body.style.overflow='';const sb=f.querySelector('button[type=submit]');if(sb.dataset.t0)sb.textContent=sb.dataset.t0;
   f.querySelectorAll('input:not([type=checkbox]):not([type=file]),textarea').forEach(x=>{if(x.type==='date')x.value=todayS();else x.value=''});f.querySelectorAll('input[type=checkbox]').forEach(x=>x.checked=false);
   if(EDIT.col==='foods'){setV('fo-kind','bayi');setV('fo-app','');$('fo-tags').innerHTML='';kindUI()}if(EDIT.col==='issues'){setV('is-sev','2');setV('is-after','')}if(EDIT.col==='stools'){setV('st-color','');bs=0;$('st-bs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));$('st-bs-cap').textContent='Ketuk gambar yang paling mirip.'}if(EDIT.col==='sleeps')slDurHint();
   window.__syncChips&&window.__syncChips();EDIT=null;if(!silent)toast('Batal mengubah')}
@@ -1091,7 +1084,7 @@ async function saveOrEdit(col,obj){if(!EDIT||EDIT.col!==col)return save(col,obj)
   if(col==='history')delete obj.sort;
   if(col==='stools'){if(obj.bristol===o.bristol)obj.bristolMax=o.bristolMax;obj.until=o.until||'';obj.est=!!o.est}
   if(col==='foods')delete obj.src;if(col==='issues')delete obj.src;
-  await patch(col,id,obj);EDIT=null;const f=$(ED_FORM[col]);setTimeout(()=>{EDIT={col,id,o};endEdit(true)},0);setTimeout(()=>toast('Perubahan tersimpan'),30);return id}
+  const E=EDIT;await patch(col,id,obj);EDIT=null;setTimeout(()=>{EDIT=E;endEdit(true)},0);setTimeout(()=>toast('Perubahan tersimpan'),30);return id}
 function renderAct(){const list=D.activities.slice().sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||'')));
   if(!list.length){$('act-list').innerHTML='<div class="empty">Belum ada catatan aktivitas.</div>';return}
   const g={};list.forEach(a=>(g[a.date]=g[a.date]||[]).push(a));let o='';
@@ -1357,7 +1350,7 @@ document.addEventListener('click',async e=>{
   if(e.target.id==='copy-sum'){const t=$('summary');try{await navigator.clipboard.writeText(t.value);toast('Ringkasan tersalin')}catch(x){t.select();try{document.execCommand('copy');toast('Ringkasan tersalin')}catch(y){toast('Tekan dan tahan untuk menyalin')}}return}
   const b=e.target.closest('[data-act]');if(!b)return;
   if(b.dataset.act==='edit'){startEdit(b.dataset.col,b.dataset.id);return}
-  if(b.dataset.act==='edit-cancel'){endEdit();return}
+  if(b.dataset.act==='edit-cancel'){endEdit(true);return}
   if(b.dataset.act==='sleep'){const k=slKindNow();await save('sleeps',{date:todayS(),start:nowHM(),end:'',kind:k,note:''});toast('Selamat tidur, Gia. Tekan "Gia bangun" nanti.');return}
   if(b.dataset.act==='wake'){await patch('sleeps',b.dataset.id,{end:nowHM()});const z=D.sleeps.find(x=>x.id===b.dataset.id);toast('Tidur '+(z?durTxt(slMin(z)):'')+' tersimpan');return}
   if(b.dataset.act==='del'){if(b.dataset.armed){await remove(b.dataset.col,b.dataset.id);toast('Dihapus')}else{b.dataset.armed='1';const o0=b.innerHTML;b.innerHTML='<span>Hapus?</span>';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.innerHTML=o0}},3000)}}
@@ -1392,6 +1385,8 @@ $('f-food').addEventListener('submit',async e=>{e.preventDefault();
   const fp=[...$('fo-photo').files];if(ok&&fp.length){resetPh('fo-photo');uploadPhotos(fp,'foods:'+ok)}
   if(ok){['fo-items','fo-amount','fo-asi','fo-note'].forEach(i=>$(i).value='');$('fo-app').value='';$('fo-tags').innerHTML='';trialHint();toast(offline?'Tersimpan di HP, dikirim saat ada sinyal':'Makan tersimpan')}});
 $('f-issue').addEventListener('submit',async e=>{e.preventDefault();
+  if(!EDIT){const t=$('is-title').value.toLowerCase(),sk=/merah|ruam|bintik|gatal|bentol|biduran|kulit|bengkak|eksim/.test(t);$('is-type').value=sk?'kulit':/muntah|diare|perut|kembung|mencret|sembelit/.test(t)?'pencernaan':/tidur|begadang/.test(t)?'tidur':/rewel|nangis|mood/.test(t)?'mood':/makan|gtm/.test(t)?'nafsu makan':'lain';$('is-flare').checked=sk;
+    const m=babyFoods().filter(f=>f.date===$('is-date').value).map(f=>f.meal).filter(x=>x!=='snack'),tm=hm2m($('is-time').value);$('is-after').value=sk&&m.length?(tm==null?m.sort((x,y)=>ORD[x]-ORD[y]).pop():(m.filter(x=>SLOT[x]<=tm).sort((x,y)=>ORD[x]-ORD[y]).pop()||'')):''}
   const conf=[...$('is-conf').querySelectorAll('input:checked')].map(x=>x.value);
   const after=$('is-after').value;
   const ok=await saveOrEdit('issues',{date:$('is-date').value,time:$('is-time').value,type:$('is-type').value,title:$('is-title').value.trim(),area:$('is-area').value.trim(),severity:+$('is-sev').value,flare:$('is-flare').checked,afterMeal:after,confounders:conf,note:$('is-note').value.trim(),status:'aktif',until:$('is-until').value,src:'jurnal'});
