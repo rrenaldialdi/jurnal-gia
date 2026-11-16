@@ -681,7 +681,21 @@ function renderToday(){
 
 /* ---------- ringkasan dokter: blok terstruktur, bisa jadi teks, Google Doc, PDF ---------- */
 let lastBlocks=[],lastPhotos=[],lastTitle="";
-function blocksToText(t,B){return [t,...B.map(b=>b.h?'\n'+b.h.toUpperCase():b.li?'- '+b.li:b.ol?'• '+b.ol:b.p)].join('\n')}
+function blocksToText(t,B){return [t,...B.filter(b=>!b.img).map(b=>b.h?'\n'+b.h.toUpperCase():b.li?'- '+b.li:b.ol?'• '+b.ol:b.p)].join('\n')}
+/* grafik untuk dokumen: SVG layar (tema gelap) diubah ke PNG tema terang */
+const LIGHT={'--line':'#E4E4EA','--accent':'#2F63CF','--lime':'#5E8A00','--bad':'#D2412B','--ink':'#1A1A1A','--muted':'#666666','--surface':'#FFFFFF','--good':'#23935F','--warn':'#C08000','--good-soft':'#DFF3E8','--warn-soft':'#FBEFD2','--bad-soft':'#FBE1DC','--surface2':'#F2F2F5','--surface3':'#E6E6EB'};
+function chartPNG(svg){return new Promise(res=>{if(!svg||svg.indexOf('<svg')!==0){res('');return}
+  let s=svg.replace(/var\((--[a-z0-9-]+)\)/g,(m,k)=>LIGHT[k]||'#888').replace(/#8CB4FF/g,'#2F63CF');
+  const vb=s.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/),W=+vb[1],H=+vb[2];
+  s=s.replace(' width="100%"','').replace(' style="min-width:560px"','').replace('<svg ',`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" `);
+  s=s.replace(/(<svg[^>]*>)/,'$1<style>text{font-family:Helvetica,Arial,sans-serif;font-size:11px;fill:#555}</style><rect width="100%" height="100%" fill="#fff"/>');
+  const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),k=2;c.width=W*k;c.height=H*k;const x=c.getContext('2d');x.scale(k,k);x.drawImage(im,0,0,W,H);res(c.toDataURL('image/png').split(',')[1])};
+  im.onerror=()=>res('');im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s)})}
+async function docCharts(){const gs=D.growth.slice().sort(byDate);
+  const wp=gs.filter(g=>g.weight!=null).map(g=>({d:g.date,v:g.weight})),lp=gs.filter(g=>g.length!=null).map(g=>({d:g.date,v:g.length}));
+  const out={},w=await chartPNG(whoChart(wp,'w')),l=await chartPNG(whoChart(lp,'l')),b=await chartPNG(stoolChart());
+  if(w)out.w=w;if(l)out.l=l;if(b)out.bab=b;return out}
+const plain=h=>(h||'').replace(/<p[\s\S]*$/,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').trim();
 
 /* ---------- ilustrasi ---------- */
 const FE='https:\/\/cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/';
@@ -947,6 +961,8 @@ function renderDokter(){
   if(wp.length){const a=wp[wp.length-1];LI('Berat terakhir '+kg(a.v)+' kg ('+fmt(a.d)+'), persentil WHO '+pctOf(zOf(WHO_W,ageM(a.d),a.v))+'.')}
   if(lp.length){const a=lp[lp.length-1];LI('Panjang terakhir '+String(a.v).replace('.',',')+' cm ('+fmt(a.d)+'), persentil WHO '+pctOf(zOf(WHO_L,ageM(a.d),a.v))+'.')}
   LI('Riwayat berat: '+w.filter(g=>g.date>='2026-07-01').map(g=>fmt(g.date)+' '+kg(g.weight)).join(', ')+'.');
+  if(wp.length){B.push({img:'w',cap:'Berat badan dibanding kurva WHO anak perempuan (P3 sampai P97)'});const t=plain(whoNote(wp,'w'));if(t)P(t)}
+  if(lp.length){B.push({img:'l',cap:'Panjang badan dibanding kurva WHO anak perempuan'});const t=plain(whoNote(lp,'l'));if(t)P(t)}
   H('Riwayat');D.history.slice().sort((a,b)=>(a.sort||0)-(b.sort||0)).forEach(h=>LI(h.when+': '+h.text));
   H('Obat dan suplemen');
   const meds={};D.meds.slice().sort(byDate).forEach(m=>{const k=m.name+'|'+m.dose;(meds[k]=meds[k]||{m,first:m.date,last:m.date,n:0});meds[k].last=m.until||m.date;meds[k].n++});
@@ -964,6 +980,7 @@ function renderDokter(){
   const fs=firstSeen(),newF=Object.entries(fs).filter(([n,s])=>inP(s)).sort((a,b)=>a[1].localeCompare(b[1]));
   if(newF.length){H('Bahan baru yang dicoba');newF.forEach(([n,s])=>{const st=explicitSt(n),hit=flares().some(x=>x.date>=s&&x.date<=fromN(dayN(s)+TRIAL)&&exposureFor(x).has(n));LI(n+', mulai '+fmt(s)+(st?' · '+STAT_LABEL[st]:hit?' · ada kejadian dalam 3 hari':diff(s,T)<TRIAL?' · masih diuji':' · tanpa kejadian 3 hari'))})}
   H('BAB (skala Bristol)');
+  if(D.stools.length)B.push({img:'bab',cap:'Skala Bristol per hari, 60 hari terakhir. Pita hijau = normal (3-4), kuning = keras, merah = cair.'});
   const st=D.stools.filter(s=>inP(s.until||s.date)).sort(byDate);(st.length?st:D.stools.slice().sort(byDate).slice(-6)).forEach(s=>LI(fmt(s.date)+(s.until?' sampai '+fmt(s.until):'')+(s.time?' '+s.time:'')+': BS '+bsLabel(s)+(s.color?', '+s.color:'')+(s.strain?', sulit mengejan':'')+(s.note?' ('+s.note+')':'')));
   const md=Math.min(per||7,14);H('Makan '+md+' hari terakhir');
   const byD={};babyFoods().filter(f=>diff(f.date,T)<md&&diff(f.date,T)>=0).sort(byDate).forEach(f=>(byD[f.date]=byD[f.date]||[]).push(f.meal+': '+f.items+(f.appetite?' ['+f.appetite+']':'')));
@@ -990,7 +1007,7 @@ function renderDokter(){
 async function exportDoc(pdf){
   if(!HAS_GS||readOnly){toast('Mode pratinjau.');return}
   const btn=$(pdf?'doc-pdf':'doc-gd'),o=btn.textContent;btn.disabled=true;btn.textContent='Membuat...';
-  try{const r=await call('makeDoc',lastTitle,lastBlocks,lastPhotos,!!pdf);
+  try{btn.textContent='Menyiapkan grafik...';const ch=await docCharts();btn.textContent=pdf?'Membuat PDF...':'Membuat dokumen...';const r=await call('makeDoc',lastTitle,lastBlocks,lastPhotos,!!pdf,ch);
     $('doc-out').innerHTML=`<div class="hint good">Tersimpan di Drive, folder "Jurnal Gia - Foto &amp; Dokumen". <a href="${esc(r.url)}" target="_blank" rel="noopener">Buka Google Doc</a>${r.pdfUrl?` · <a href="${esc(r.pdfUrl)}" target="_blank" rel="noopener">Buka PDF</a>`:''}</div>`;toast(pdf?'PDF siap':'Google Doc siap')}
   catch(e){toast(isNet(e)?'Butuh sinyal untuk membuat dokumen':'Gagal: '+(e&&e.message||'cek izin Drive'))}
   finally{btn.disabled=false;btn.textContent=o}}
