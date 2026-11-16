@@ -310,6 +310,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
         <label>Nafsu makan<select id="fo-app"><option value="">Normal / tidak dicatat</option><option value="lahap">Lahap</option><option value="sedikit">Sedikit</option><option value="tidak mau">Tidak mau</option></select></label>
       </div>
       <label style="margin-top:10px">Catatan<input id="fo-note" placeholder="mis. merah-merah setelahnya"></label>
+      <label class="photo-in" style="margin-top:10px">Foto makanan (opsional)<input type="file" id="fo-photo" accept="image/*" multiple><span class="pbox"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
     <div class="card">
@@ -374,6 +375,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
       </div>
       <div class="row" style="margin-top:10px"><label class="chk"><input type="checkbox" id="st-strain"> Sulit mengejan</label></div>
       <label style="margin-top:10px">Catatan<input id="st-note"></label>
+      <label class="photo-in" style="margin-top:10px">Foto (opsional)<input type="file" id="st-photo" accept="image/*" multiple><span class="pbox"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
     <div class="card"><h2>Grafik 60 hari</h2><div class="legend" style="margin:4px 0 6px"><span>Pita mint = zona normal (3-4)</span><span>Batang = rentang beberapa hari</span></div><div class="scroll" id="stool-chart"></div></div>
@@ -411,7 +413,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
       <label>Periode<select id="sum-days"><option value="14">2 minggu</option><option value="28" selected>4 minggu</option><option value="0">Semua</option></select></label>
       <textarea id="summary" readonly style="margin-top:12px"></textarea>
       <p class="small muted" id="doc-ph" style="margin:8px 0 0"></p>
-      <div class="row" style="margin-top:10px"><button class="primary" id="doc-gd" type="button">Google Doc</button><button id="doc-pdf" type="button">PDF</button><button class="ghost" id="copy-sum" type="button">Salin teks</button></div>
+      <div class="row" style="margin-top:10px"><button class="primary" id="doc-gd" type="button">Google Doc</button><button id="doc-pdf" type="button">PDF</button><button id="doc-xls" type="button">Excel</button><button class="ghost" id="copy-sum" type="button">Salin teks</button></div>
       <div id="doc-out" style="margin-top:10px"></div></div>
     <div class="card"><h2>Pertanyaan untuk dokter</h2><ol id="qs" style="margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px"></ol></div>
     <div class="card"><h2>Obat dan suplemen</h2>
@@ -625,6 +627,19 @@ function whoNote(pts,kind){
 /* ---------- foto kulit (Google Drive) ---------- */
 const PH={},PHQ=new Set();
 const photosOf=issueId=>D.photos.filter(p=>p.issueId===issueId).sort(byDate);
+/* foto bisa menempel di catatan apa saja: keluhan pakai id langsung, lainnya 'foods:id' / 'stools:id' */
+const kindOf=r=>String(r||'').includes(':')?String(r).split(':')[0]:'issues';
+function labelOf(ref){const k=kindOf(ref),id=k==='issues'?ref:String(ref).slice(k.length+1);
+  if(k==='foods'){const f=D.foods.find(x=>x.id===id);return f?'Makan '+f.meal+': '+f.items:'Makan'}
+  if(k==='stools'){const s=D.stools.find(x=>x.id===id);return s?'BAB BS '+bsLabel(s):'BAB'}
+  const i=D.issues.find(x=>x.id===id);return i?i.title+(i.area?' ('+i.area+')':''):''}
+const camBtn=ref=>readOnly?'':`<button type="button" class="ghost icon-btn" data-act="photo" data-id="${esc(ref)}" aria-label="Tambah foto" title="Tambah foto">${CAM}</button>`;
+function resetPh(id){const i=$(id);if(!i)return;i.value='';i.nextElementSibling.lastChild.textContent='Ambil atau pilih foto'}
+function dayRows(from,to){const R=[],ids=ref=>photosOf(ref).filter(p=>!String(p.fileId).startsWith('local-')).map(p=>p.fileId),inR=d=>d>=from&&d<=to;
+  D.foods.filter(f=>inR(f.date)).forEach(f=>R.push({date:f.date,time:'',o:ORD[f.meal]||2,kind:f.kind==='mom'?'Makan ibu':'Makan '+f.meal,text:f.items+(f.amount?' ('+f.amount+')':'')+(f.appetite?' ['+f.appetite+']':'')+(f.note?'. '+f.note:''),ph:ids('foods:'+f.id)}));
+  D.stools.filter(s=>inR(s.date)).forEach(s=>R.push({date:s.date,time:s.time||'',o:2.2,kind:'BAB',text:'BS '+bsLabel(s)+(s.until?' sampai '+fmt(s.until):'')+(s.color?', '+s.color:'')+(s.strain?', sulit mengejan':'')+(s.note?'. '+s.note:''),ph:ids('stools:'+s.id)}));
+  D.issues.filter(i=>inR(i.date)).forEach(i=>R.push({date:i.date,time:i.time||'',o:2.4,kind:'Keluhan',text:i.title+(i.area?' ('+i.area+')':'')+(i.flare?', kambuh':'')+(i.note?'. '+i.note:''),ph:ids(i.id)}));
+  return R.sort((a,b)=>a.date.localeCompare(b.date)||(a.time&&b.time?a.time.localeCompare(b.time):a.o-b.o))}
 function thumbs(issueId){const ps=photosOf(issueId);return ps.length?`<div class="thumbs">${ps.map(p=>`<button type="button" class="thumb" data-act="view" data-pid="${esc(p.id)}" aria-label="Lihat foto ${fmt(p.date)}"><img alt="" data-file="${esc(p.fileId)}"${PH[p.fileId]?` src="${PH[p.fileId]}"`:''}><span>${+p.date.slice(8)} ${MON[+p.date.slice(5,7)-1]}</span></button>`).join('')}</div>`:''}
 async function hydrate(){
   const imgs=[...document.querySelectorAll('section.panel.on img[data-file]:not([src]),#viewer img[data-file]:not([src])')];
@@ -643,17 +658,18 @@ async function uploadPhotos(files,issueId){
       PH[doc.fileId]=url;D.photos=D.photos.filter(p=>p.id!==id).concat([doc]);renderAll();toast('Foto tersimpan di Drive')}
     catch(e){D.photos=D.photos.filter(p=>p.fileId!==tmp);renderAll();toast(isNet(e)?'Butuh sinyal untuk unggah foto':'Gagal unggah: '+(e&&e.message||'cek izin Drive'))}}}
 function renderGallery(){
-  const el=$('gallery');if(!el)return;const ps=D.photos.slice().sort(byDate).reverse();
+  const el=$('gallery');if(!el)return;const ps=D.photos.filter(p=>kindOf(p.issueId)==='issues').sort(byDate).reverse();
   el.innerHTML=ps.length?`<div class="gal">${ps.map(p=>{const i=D.issues.find(x=>x.id===p.issueId);return `<button type="button" class="gcell" data-act="view" data-pid="${esc(p.id)}"><img alt="" data-file="${esc(p.fileId)}"${PH[p.fileId]?` src="${PH[p.fileId]}"`:''}><span><b>${fmt(p.date)}</b>${i?esc(i.area||i.title):''}</span></button>`}).join('')}</div>`
     :'<div class="empty">Belum ada foto. Tekan ikon kamera di keluhan, atau isi kolom foto saat mencatat keluhan.</div>'}
 let vw={id:null,cmp:false};
 function openViewer(pid){vw.id=pid;renderViewer();$('viewer').hidden=false;document.body.style.overflow='hidden'}
 function closeViewer(){$('viewer').hidden=true;document.body.style.overflow=''}
 function renderViewer(){
-  const all=D.photos.slice().sort(byDate),i=all.findIndex(p=>p.id===vw.id);if(i<0){closeViewer();return}
+  const cur=D.photos.find(p=>p.id===vw.id);if(!cur){closeViewer();return}
+  const all=D.photos.filter(p=>kindOf(p.issueId)===kindOf(cur.issueId)).sort(byDate),i=all.findIndex(p=>p.id===vw.id);
   const p=all[i],iss=D.issues.find(x=>x.id===p.issueId),same=all.filter(x=>x.issueId===p.issueId||(iss&&iss.area&&D.issues.find(y=>y.id===x.issueId&&y.area===iss.area)));
   const prevSame=same.slice(0,same.indexOf(p)).pop()||all[i-1];
-  const fig=(x,lbl)=>{const j=D.issues.find(y=>y.id===x.issueId);return `<figure><img alt="Foto ${fmt(x.date)}" data-file="${esc(x.fileId)}"${PH[x.fileId]?` src="${PH[x.fileId]}"`:''}><figcaption><b>${lbl?lbl+' · ':''}${fmt(x.date)}</b>${j?' · '+esc(j.title):''}</figcaption></figure>`};
+  const fig=(x,lbl)=>{const j=labelOf(x.issueId);return `<figure><img alt="Foto ${fmt(x.date)}" data-file="${esc(x.fileId)}"${PH[x.fileId]?` src="${PH[x.fileId]}"`:''}><figcaption><b>${lbl?lbl+' · ':''}${fmt(x.date)}</b>${j?' · '+esc(j):''}</figcaption></figure>`};
   $('vw-body').className='vw-body'+(vw.cmp&&prevSame?' two':'');
   $('vw-body').innerHTML=(vw.cmp&&prevSame?fig(prevSame,'sebelum'):'')+fig(p,vw.cmp&&prevSame?'sesudah':'');
   $('vw-cap').textContent=(i+1)+' / '+all.length;$('vw-prev').disabled=i===0;$('vw-next').disabled=i===all.length-1;
@@ -681,7 +697,8 @@ function renderToday(){
 
 /* ---------- ringkasan dokter: blok terstruktur, bisa jadi teks, Google Doc, PDF ---------- */
 let lastBlocks=[],lastPhotos=[],lastTitle="";
-function blocksToText(t,B){return [t,...B.filter(b=>!b.img).map(b=>b.h?'\n'+b.h.toUpperCase():b.li?'- '+b.li:b.ol?'• '+b.ol:b.p)].join('\n')}
+let lastRows=[];
+function blocksToText(t,B){return [t,...B.filter(b=>!b.img).map(b=>b.h?'\n'+b.h.toUpperCase():b.day?b.day+'\n'+b.rows.map(r=>'  - '+r.t+(r.ph.length?' ['+r.ph.length+' foto]':'')).join('\n'):b.li?'- '+b.li:b.ol?'• '+b.ol:b.p)].join('\n')}
 /* grafik untuk dokumen: SVG layar (tema gelap) diubah ke PNG tema terang */
 const LIGHT={'--line':'#E4E4EA','--accent':'#2F63CF','--lime':'#5E8A00','--bad':'#D2412B','--ink':'#1A1A1A','--muted':'#666666','--surface':'#FFFFFF','--good':'#23935F','--warn':'#C08000','--good-soft':'#DFF3E8','--warn-soft':'#FBEFD2','--bad-soft':'#FBE1DC','--surface2':'#F2F2F5','--surface3':'#E6E6EB'};
 function chartPNG(svg){return new Promise(res=>{if(!svg||svg.indexOf('<svg')!==0){res('');return}
@@ -852,7 +869,7 @@ function renderFoods(){
         ${(f.amount||f.asi)?'<div class="small muted">'+[f.amount,f.asi?'ASI '+f.asi:''].filter(Boolean).map(esc).join(' · ')+'</div>':''}
         <div class="tags">${(f.tags||[]).map(t=>`<span class="tag ${flagged&&hitTags.has(t)?'hit':''}">${esc(t)}</span>`).join('')}</div>
         <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${f.appetite&&f.appetite!=='lahap'?`<span class="pill warn">makan ${esc(f.appetite)}</span>`:''}${f.appetite==='lahap'?'<span class="pill good">lahap</span>':''}${flagged?'<span class="pill bad">merah-merah setelah ini</span>':''}</div>
-        ${f.note?'<div class="small muted" style="margin-top:5px">'+esc(f.note)+'</div>':''}</div><div class="act">${delBtn('foods',f.id)}</div></div>`})});
+        ${f.note?'<div class="small muted" style="margin-top:5px">'+esc(f.note)+'</div>':''}${thumbs('foods:'+f.id)}</div><div class="act">${camBtn('foods:'+f.id)}${delBtn('foods',f.id)}</div></div>`})});
   $('food-list').innerHTML=h;
 }
 function sevDots(n){return n?'<span title="tingkat '+n+'" style="letter-spacing:2px;color:var(--'+(n>=3?'bad':n==2?'warn':'muted')+')">'+'●'.repeat(n)+'○'.repeat(3-n)+'</span>':''}
@@ -890,7 +907,7 @@ function renderBAB(){
   $('wet').innerHTML=w+'</div>';
   const list=D.stools.slice().sort(byDate).reverse();
   $('stool-list').innerHTML=list.length?list.map(s=>`<div class="entry" style="grid-template-columns:78px 1fr auto"><div class="meta">${fmt(s.date)}${s.until?'<br>s/d '+fmt(s.until):''}${s.time?'<br>'+esc(s.time):''}</div>
-    <div class="what"><span class="bs ${bsCls(s.bristol,s.bristolMax)}">BS ${bsLabel(s)}</span>${s.est?' <span class="pill gray">perkiraan</span>':''}${s.color?' <span class="pill gray">'+esc(s.color)+'</span>':''}${s.strain?' <span class="pill warn">sulit mengejan</span>':''}${s.note?'<div class="small muted" style="margin-top:3px">'+esc(s.note)+'</div>':''}</div><div class="act">${delBtn('stools',s.id)}</div></div>`).join(''):'<div class="empty">Belum ada catatan BAB.</div>';
+    <div class="what"><span class="bs ${bsCls(s.bristol,s.bristolMax)}">BS ${bsLabel(s)}</span>${s.est?' <span class="pill gray">perkiraan</span>':''}${s.color?' <span class="pill gray">'+esc(s.color)+'</span>':''}${s.strain?' <span class="pill warn">sulit mengejan</span>':''}${s.note?'<div class="small muted" style="margin-top:3px">'+esc(s.note)+'</div>':''}${thumbs('stools:'+s.id)}</div><div class="act">${camBtn('stools:'+s.id)}${delBtn('stools',s.id)}</div></div>`).join(''):'<div class="empty">Belum ada catatan BAB.</div>';
 }
 function lineChart(pts,opt){
   if(pts.length<2)return '<div class="empty">Belum cukup data.</div>';
@@ -982,9 +999,9 @@ function renderDokter(){
   H('BAB (skala Bristol)');
   if(D.stools.length)B.push({img:'bab',cap:'Skala Bristol per hari, 60 hari terakhir. Pita hijau = normal (3-4), kuning = keras, merah = cair.'});
   const st=D.stools.filter(s=>inP(s.until||s.date)).sort(byDate);(st.length?st:D.stools.slice().sort(byDate).slice(-6)).forEach(s=>LI(fmt(s.date)+(s.until?' sampai '+fmt(s.until):'')+(s.time?' '+s.time:'')+': BS '+bsLabel(s)+(s.color?', '+s.color:'')+(s.strain?', sulit mengejan':'')+(s.note?' ('+s.note+')':'')));
-  const md=Math.min(per||7,14);H('Makan '+md+' hari terakhir');
-  const byD={};babyFoods().filter(f=>diff(f.date,T)<md&&diff(f.date,T)>=0).sort(byDate).forEach(f=>(byD[f.date]=byD[f.date]||[]).push(f.meal+': '+f.items+(f.appetite?' ['+f.appetite+']':'')));
-  Object.keys(byD).sort().forEach(d=>LI(fmt(d)+' | '+byD[d].join(' | ')));
+  const ld=per||60,rows=dayRows(fromN(dayN(T)-ld+1),T);lastRows=rows;
+  if(rows.length){H('Catatan harian'+(rows.some(r=>r.ph.length)?' dengan foto':'')+' ('+ld+' hari)');const byDay={};rows.forEach(r=>(byDay[r.date]=byDay[r.date]||[]).push(r));
+    Object.keys(byDay).sort().forEach(d=>B.push({day:dow(d)+', '+fmt(d),rows:byDay[d].map(r=>({t:(r.time?r.time+' · ':'')+r.kind+': '+r.text,ph:r.ph}))}))}
   const qs=['Berat badan melambat sejak pertengahan September (7,1 ke 7,3 kg dalam 6,5 minggu). Perlu evaluasi atau ditimbang ulang?',
    'Ruam: eksim atopik, alergi makanan, intoleransi, atau iritasi kontak (grounding, matahari)? Perlu tes alergi atau cukup lanjut food journal?',
    'Apakah histamine intolerance bisa dibuktikan pada bayi? Kalau tidak, bagaimana cara aman memilih bahan yang dibatasi?',
@@ -995,15 +1012,22 @@ function renderDokter(){
    'Dosis vitamin D (3 tetes) dan zinc: lanjut atau berhenti?'];
   H('Pertanyaan untuk dokter');qs.forEach(q=>B.push({ol:q}));
   lastBlocks=B;lastTitle=title;
-  lastPhotos=D.photos.filter(p=>inP(p.date)&&!String(p.fileId).startsWith('local-')).sort(byDate).map(p=>{const i=D.issues.find(x=>x.id===p.issueId);return {fileId:p.fileId,cap:fmt(p.date)+(i?' · '+i.title+(i.area?' ('+i.area+')':''):'')}});
+  lastPhotos=[];
   $('summary').value=blocksToText(title.toUpperCase(),B);
-  $('doc-ph').textContent=lastPhotos.length?lastPhotos.length+' foto kulit di periode ini ikut masuk ke dokumen.':'';
+  const nph=rows.reduce((n,r)=>n+r.ph.length,0);$('doc-ph').textContent=nph?nph+' foto di periode ini ikut masuk, di samping catatannya.':'';
   $('qs').innerHTML=qs.map(x=>`<li>${esc(x)}</li>`).join('');
   const m=D.meds.slice().sort(byDate).reverse();
   $('med-list').innerHTML=m.length?m.map(x=>`<div class="entry" style="grid-template-columns:70px 1fr auto"><div class="meta">${fmt(x.date)}</div><div class="what"><b>${esc(x.name)}</b> ${x.dose?esc(x.dose):''} <span class="pill ${x.kind==='obat'?'warn':'gray'}">${esc(x.kind)}</span>${x.until?' <span class="small muted">sampai sekitar '+fmt(x.until)+'</span>':''}${x.note?'<div class="small muted">'+esc(x.note)+'</div>':''}</div><div class="act">${delBtn('meds',x.id)}</div></div>`).join(''):'<div class="empty">Belum ada.</div>';
   const h=D.history.slice().sort((a,b)=>(a.sort||0)-(b.sort||0));
   $('hist-list').innerHTML=h.length?h.map(x=>`<div class="entry" style="grid-template-columns:130px 1fr auto"><div class="meta" style="text-transform:none">${esc(x.when)}</div><div class="what">${esc(x.text)}</div><div class="act">${delBtn('history',x.id)}</div></div>`).join(''):'<div class="empty">Belum ada.</div>';
 }
+async function exportSheet(){
+  if(!HAS_GS||readOnly){toast('Mode pratinjau.');return}
+  const btn=$('doc-xls'),o=btn.textContent;btn.disabled=true;btn.textContent='Membuat...';
+  try{const r=await call('makeSheet',lastTitle.replace('Ringkasan','Catatan'),lastRows);
+    $('doc-out').innerHTML=`<div class="hint good">Tersimpan di Drive, folder "Jurnal Gia - Foto &amp; Dokumen". <a href="${esc(r.url)}" target="_blank" rel="noopener">Buka di Google Sheets</a>${r.xlsxUrl?` · <a href="${esc(r.xlsxUrl)}" target="_blank" rel="noopener">Unduh .xlsx</a>`:''}</div>${r.xlsxErr?'<p class="small muted" style="margin:6px 0 0">File .xlsx belum bisa dibuat otomatis. Dari Google Sheets: File, Download, Microsoft Excel.</p>':''}`;toast('Spreadsheet siap')}
+  catch(e){toast(isNet(e)?'Butuh sinyal untuk membuat spreadsheet':'Gagal: '+(e&&e.message||'cek izin Drive'))}
+  finally{btn.disabled=false;btn.textContent=o}}
 async function exportDoc(pdf){
   if(!HAS_GS||readOnly){toast('Mode pratinjau.');return}
   const btn=$(pdf?'doc-pdf':'doc-gd'),o=btn.textContent;btn.disabled=true;btn.textContent='Membuat...';
@@ -1027,6 +1051,7 @@ document.addEventListener('click',async e=>{
   if(e.target.id==='flush'){flush();return}
   if(e.target.id==='doc-gd'){exportDoc(false);return}
   if(e.target.id==='doc-pdf'){exportDoc(true);return}
+  if(e.target.id==='doc-xls'){exportSheet();return}
   if(e.target.closest('#vw-x')||e.target.id==='viewer'){closeViewer();return}
   if(e.target.id==='vw-prev'&&vw.prev){vw.id=vw.prev;renderViewer();return}
   if(e.target.id==='vw-next'&&vw.next){vw.id=vw.next;renderViewer();return}
@@ -1057,7 +1082,7 @@ $('fo-items').addEventListener('input',()=>{$('fo-tags').innerHTML=parseTags($('
 ['fo-date','fo-kind'].forEach(i=>$(i).addEventListener('change',trialHint));
 $('sum-days').addEventListener('change',renderDokter);
 $('ph-input').addEventListener('change',e=>{const f=[...e.target.files];if(f.length)uploadPhotos(f,e.target.dataset.issue)});
-$('is-photo').addEventListener('change',e=>{const n=e.target.files.length;$('is-photo-lbl').lastChild.textContent=n?n+' foto dipilih':'Ambil atau pilih foto'});
+document.querySelectorAll('.photo-in input[type=file]').forEach(i=>i.addEventListener('change',e=>{const n=e.target.files.length;e.target.nextElementSibling.lastChild.textContent=n?n+' foto dipilih':'Ambil atau pilih foto'}));
 document.addEventListener('submit',async e=>{if(e.target.id!=='f-routine')return;e.preventDefault();const n=$('rt-name').value.trim();if(!n)return;await save('routine',{name:n,dose:$('rt-dose').value.trim(),slot:'',sort:Date.now()/1e12+5,hidden:false},slug(n)+'-'+uid().slice(0,3));toast('Rutin ditambah')});
 $('st-bs').innerHTML=[1,2,3,4,5,6,7].map(n=>`<button type="button" data-bs="${n}" aria-pressed="false" aria-label="Bristol ${n}"><svg viewBox="0 0 34 22" fill="#B07A47" aria-hidden="true">${BS_SVG[n-1]}</svg>${n}</button>`).join('');
 $('st-bs').addEventListener('click',e=>{const b=e.target.closest('[data-bs]');if(!b)return;bs=+b.dataset.bs;$('st-bs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'))});
@@ -1065,6 +1090,7 @@ $('st-bs').addEventListener('click',e=>{const b=e.target.closest('[data-bs]');if
 $('f-food').addEventListener('submit',async e=>{e.preventDefault();
   const items=$('fo-items').value.trim();if(!items)return;
   const ok=await save('foods',{date:$('fo-date').value,meal:$('fo-meal').value,kind:$('fo-kind').value,items,tags:parseTags(items),amount:$('fo-amount').value.trim(),asi:$('fo-asi').value.trim(),appetite:$('fo-app').value,note:$('fo-note').value.trim(),src:'jurnal'});
+  const fp=[...$('fo-photo').files];if(ok&&fp.length){resetPh('fo-photo');uploadPhotos(fp,'foods:'+ok)}
   if(ok){['fo-items','fo-amount','fo-asi','fo-note'].forEach(i=>$(i).value='');$('fo-app').value='';$('fo-tags').innerHTML='';trialHint();toast(offline?'Tersimpan di HP, dikirim saat ada sinyal':'Makan tersimpan')}});
 $('f-issue').addEventListener('submit',async e=>{e.preventDefault();
   const conf=[...$('is-conf').querySelectorAll('input:checked')].map(x=>x.value);
@@ -1075,6 +1101,7 @@ $('f-issue').addEventListener('submit',async e=>{e.preventDefault();
 $('f-stool').addEventListener('submit',async e=>{e.preventDefault();
   if(!bs){toast('Pilih skala Bristol dulu');return}
   const ok=await save('stools',{date:$('st-date').value,time:$('st-time').value,bristol:bs,bristolMax:bs,color:$('st-color').value,strain:$('st-strain').checked,note:$('st-note').value.trim(),until:'',est:false});
+  const sp=[...$('st-photo').files];if(ok&&sp.length){resetPh('st-photo');uploadPhotos(sp,'stools:'+ok)}
   if(ok){bs=0;$('st-bs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));$('st-note').value='';$('st-time').value='';$('st-strain').checked=false;toast('BAB tersimpan')}});
 $('f-growth').addEventListener('submit',async e=>{e.preventDefault();
   const w=num($('gr-w').value),l=num($('gr-l').value);if(w==null&&l==null){toast('Isi berat atau panjang');return}
