@@ -827,14 +827,14 @@ async function hydrate(){
   const imgs=[...document.querySelectorAll('section.panel.on img[data-file]:not([src]),#viewer img[data-file]:not([src])')];
   for(const im of imgs){const id=im.dataset.file;if(PH[id]){im.src=PH[id];continue}if(PHQ.has(id)||id.startsWith('local-')||!HAS_GS)continue;PHQ.add(id);
     try{const r=await call('getPhoto',id);PH[id]='data:'+r.mime+';base64,'+r.b64;document.querySelectorAll(`img[data-file="${CSS.escape(id)}"]`).forEach(x=>x.src=PH[id])}catch(e){}finally{PHQ.delete(id)}}}
-function shrink(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),im=new Image();
-  im.onload=()=>{const k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.82))};
+function shrink(file,sq){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),im=new Image();
+  im.onload=()=>{const c=document.createElement('canvas');if(sq){const m=Math.min(im.width,im.height),o=Math.min(1000,m);c.width=c.height=o;c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,o,o)}else{const k=Math.min(1,1400/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height)}URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.82))};
   im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('Format foto tidak terbaca'))};im.src=u})}
 const fileDay=f=>{const d=new Date(f.lastModified||Date.now());return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
 async function uploadPhotos(files,issueId){
   if(!HAS_GS||readOnly){toast('Mode pratinjau.');return}
   for(const file of files){let tmp;
-    try{const url=await shrink(file),id=uid(),d=fileDay(file);tmp='local-'+id;PH[tmp]=url;
+    try{const url=await shrink(file,String(issueId).startsWith('stools:')),id=uid(),d=fileDay(file);tmp='local-'+id;PH[tmp]=url;
       D.photos.push({id,date:d,issueId,fileId:tmp,note:''});renderAll();toast('Mengunggah foto...');
       const doc=await call('uploadPhoto',url.split(',')[1],'image/jpeg',{id,date:d,issueId,note:''});
       PH[doc.fileId]=url;D.photos=D.photos.filter(p=>p.id!==id).concat([doc]);renderAll();toast('Foto tersimpan di Drive')}
