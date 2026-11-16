@@ -52,7 +52,7 @@ h1{font-size:42px} h2{font-size:21px} h3{font-size:17px}
 .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:99px}
 .seg button{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 4px;border-radius:99px;background:none;box-shadow:none;color:var(--muted);font:700 13.5px/1 var(--font-body);min-height:40px}
 .seg button img{width:18px;height:18px}
-.seg.compact{gap:2px}.seg.compact button{font-size:12.5px;padding:9px 2px;flex-direction:column;gap:3px}.seg.compact button img{width:20px;height:20px}
+.seg.compact{gap:2px}.seg.compact button{font-size:11.5px;letter-spacing:-.01em;padding:9px 2px;flex-direction:column;gap:3px}.seg.compact button img{width:20px;height:20px}
 .seg button[aria-current="page"]{background:var(--surface3);color:var(--ink)}
 .grp-title{font-family:var(--font-display);font-size:30px;margin:6px 0 12px}
 body:not(.g-home) .hero{display:none}
@@ -371,14 +371,10 @@ button.sm{padding:7px 13px;font-size:12.5px}
     <div id="sleep-now-r"></div>
     <h2 class="hsec">Terakhir dicatat</h2>
     <div class="last" id="last"></div>
-    <div class="qgrid" id="qgrid" aria-label="Catat cepat"></div>
     <div class="mini2" id="mini2"></div>
     <h2 class="hsec">Hari ini</h2>
     <div class="card" id="today-tl"></div>
     <div class="card" id="today-card"></div>
-    <div class="card" id="trial-card"></div>
-    <div class="card" id="overall"></div>
-    <details class="card"><summary>Tabel 14 hari</summary><p class="muted small" style="margin:8px 0">Satu kolom per hari, angka = berapa kali. Hari ini paling kanan.</p><div class="scroll" id="strip"></div></details>
       </section>
 
   <section class="panel" id="p-makan">
@@ -497,6 +493,11 @@ button.sm{padding:7px 13px;font-size:12.5px}
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
     <div class="card"><h2 style="margin-bottom:4px">Riwayat aktivitas</h2><div id="act-list"></div></div>
+  </section>
+
+  <section class="panel" id="p-grafik">
+    <div class="card" id="overall"></div>
+    <div class="card"><h2>Tabel 14 hari</h2><p class="muted small" style="margin:4px 0 8px">Satu kolom per hari, angka = berapa kali. Hari ini paling kanan.</p><div class="scroll" id="strip"></div></div>
   </section>
 
   <section class="panel" id="p-tumbuh">
@@ -817,7 +818,7 @@ const checkOf=(d,item)=>D.checks.find(c=>c.id===d+'-'+item);
 let manage=false;
 function renderToday(){
   const el=$('today-card');if(!el)return;const T=todayS(),R=routine(),n=R.filter(r=>checkOf(T,r.id)).length;
-  let h=`<div class="row" style="justify-content:space-between;align-items:center"><h2><img class="h-ico" alt="" src="${fe('Check mark button')}">Rutin hari ini</h2><span class="pill ${R.length&&n===R.length?'good':'gray'}">${n}/${R.length}</span></div>`;
+  let h=`<div class="row" style="justify-content:space-between;align-items:center"><h2><img class="h-ico" alt="" src="${fe('Check mark button')}">Reminder</h2><span class="pill ${R.length&&n===R.length?'good':'gray'}">${n}/${R.length}</span></div>`;
   h+=R.length?'<div class="checks">'+R.map(r=>{const c=checkOf(T,r.id);return `<button type="button" class="ck${c?' on':''}" data-act="check" data-item="${esc(r.id)}" aria-pressed="${c?'true':'false'}"><img alt="" src="${fe(RICON(r.name))}"><span><b>${esc(r.name)}</b><small>${esc([r.dose,c?'dicentang '+c.at:r.slot].filter(Boolean).join(' · '))}</small></span><i aria-hidden="true"></i></button>`}).join('')+'</div>'
     :'<p class="muted small" style="margin:6px 0 0">Belum ada rutin. Tambah lewat Atur.</p>';
   const wk=[];for(let k=6;k>=0;k--){const d=fromN(dayN(T)-k),m=R.filter(r=>checkOf(d,r.id)).length;wk.push(`<span title="${fmt(d)}: ${m}/${R.length}" class="${R.length&&m===R.length?'full':m?'part':''}">${dow(d)[0]}</span>`)}
@@ -893,7 +894,7 @@ const GIA_URI='data:image/svg+xml;utf8,'+encodeURIComponent(giaSVG().replace('<s
 let heroP='';
 function paintHero(){const h=new Date().getHours();const p=h>=5&&h<10?'pagi':h>=10&&h<15?'siang':h>=15&&h<18?'sore':'malam';
   const g=document.getElementById('greet');if(g)g.textContent='selamat '+p;if(p===heroP)return;heroP=p;const a=document.getElementById('hero-art');if(a)a.innerHTML=heroArt(p)}
-const HEADS={aktivitas:['main, mandi, jemur','Aktivitas','forest',['Teddy bear','Bathtub','Sun']],tidur:['tidur siang dan malam','Tidur','dusk',['Sleeping face','Crescent moon','Teddy bear']],makan:['apa yang Gia makan','Makan','sunset',['Bowl with spoon','Carrot','Fish']],keluhan:['kulit, perut, tidur, mood','Keluhan','dusk',['Lotion bottle','Crescent moon','Adhesive bandage']],bab:['pup dan popok basah','BAB','ocean',['Pile of poo','Droplet','Roll of paper']],tumbuh:['berat dan panjang badan','Tumbuh','forest',['Balance scale','Straight ruler','Seedling']],pola:['benang merah dari catatan','Pola','dusk',['Magnifying glass tilted left','Light bulb','Bar chart']],dokter:['bawa ini saat kontrol','Dokter','ocean',['Stethoscope','Pill','Clipboard']]};
+const HEADS={grafik:['','Grafik','ocean',['Bar chart','Chart increasing','Calendar']],aktivitas:['main, mandi, jemur','Aktivitas','forest',['Teddy bear','Bathtub','Sun']],tidur:['tidur siang dan malam','Tidur','dusk',['Sleeping face','Crescent moon','Teddy bear']],makan:['apa yang Gia makan','Makan','sunset',['Bowl with spoon','Carrot','Fish']],keluhan:['kulit, perut, tidur, mood','Keluhan','dusk',['Lotion bottle','Crescent moon','Adhesive bandage']],bab:['pup dan popok basah','BAB','ocean',['Pile of poo','Droplet','Roll of paper']],tumbuh:['berat dan panjang badan','Tumbuh','forest',['Balance scale','Straight ruler','Seedling']],pola:['benang merah dari catatan','Pola','dusk',['Magnifying glass tilted left','Light bulb','Bar chart']],dokter:['bawa ini saat kontrol','Dokter','ocean',['Stethoscope','Pill','Clipboard']]};
 Object.entries(HEADS).forEach(([k,[a,b,p,ic]])=>{const s=document.getElementById('p-'+k);if(s&&!s.querySelector('.sec-hero'))s.insertAdjacentHTML('afterbegin',`<div class="sec-hero">${scene(p,'h')}<div class="sec-ill">${ic.map(n=>`<img alt="" src="${fe(n)}">`).join('')}</div><div class="sec-txt"><h2>${b}</h2></div></div>`)});
 const H2I={'Catat aktivitas':'Teddy bear','Riwayat aktivitas':'Spiral notepad','Catat tidur':'Sleeping face','7 hari terakhir':'Bar chart','Riwayat tidur':'Spiral notepad','14 hari terakhir':'Calendar','Grafik 60 hari':'Chart increasing','Popok basah':'Droplet','Riwayat BAB':'Spiral notepad','Berat badan':'Balance scale','Panjang badan':'Straight ruler','Bahan makanan dan kejadian merah-merah':'Magnifying glass tilted left','Bahan baru, urut pertama dicoba':'Seedling','Ringkasan untuk dokter':'Clipboard','Pertanyaan untuk dokter':'Light bulb','Obat dan suplemen':'Pill','Riwayat kesehatan':'Spiral notepad','Catat makan':'Bowl with spoon','Catat keluhan':'Lotion bottle','Catat BAB':'Pile of poo','Timbang dan ukur':'Balance scale','Foto kulit':'Camera with flash'};
 document.querySelectorAll('.card>h2').forEach(h=>{const n=H2I[h.textContent.trim()];if(n&&!h.querySelector('.h-ico'))h.insertAdjacentHTML('afterbegin',`<img class="h-ico" alt="" src="${fe(n)}">`)});
@@ -1124,7 +1125,7 @@ function renderHome(){if(!$('last'))return;const T=todayS();
     tile('ocean','bab','Pile of poo','BAB terakhir',st?(st.time&&!st.until?ago(tsOf(st.date,st.time)):esc(dayWord(st.until||st.date))):'-',st?bsText(st):'belum ada')+
     tile('forest','bab','Droplet','Popok basah',wet(T)+'x<small>hari ini</small>','kemarin '+wet(Y)+'x');
   const q=(attrs,ill,lbl,sub,on)=>`<button type="button" ${attrs}${on?' class="on"':''}><i><img alt="" src="${fe(ill)}"></i>${lbl}${sub?`<small>${esc(sub)}</small>`:''}</button>`;
-  $('qgrid').innerHTML=readOnly?'':
+  if($('qgrid'))$('qgrid').innerHTML=readOnly?'':
     q('data-quick="makan" data-focus="fo-items"','Bowl with spoon','Makan','')+
     (z?q(`data-act="wake" data-id="${esc(z.id)}"`,'Sun','Gia bangun',durShort(slMin(z,1))+' tidur',1):q('data-act="sleep"','Sleeping face','Mulai tidur',''))+
     q('data-quick="bab" data-focus=""','Pile of poo','BAB','')+
@@ -1143,7 +1144,7 @@ function renderHome(){if(!$('last'))return;const T=todayS();
   D.activities.filter(a=>a.date===T).forEach(a=>ev.push({c:'activities',id:a.id,m:hm2m(a.time)??780,t:a.time||'-',ic:AC_I[a.kind]||'Teddy bear',b:AC_L[a.kind]||a.kind,s:[a.dur?a.dur+' menit':'',a.note].filter(Boolean).join(' · ')}));
   D.checks.filter(c=>c.date===T).forEach(c=>ev.push({m:hm2m(c.at)??480,t:c.at||'-',ic:'Check mark button',b:rn[c.item]||c.item,s:'Rutin dicentang'}));
   ev.sort((p,q)=>p.m-q.m);
-  $('today-tl').innerHTML=`<div class="row" style="justify-content:space-between;align-items:center"><h2 style="font-size:19px">Linimasa</h2><span class="pill gray">${ev.length} catatan</span></div>${ev.length&&!readOnly?'<p class="muted small" style="margin:2px 0 0">Ketuk catatan untuk mengubah.</p>':''}`+(ev.length?'<div style="margin-top:6px">'+ev.map(e=>`<div class="tl"${e.c&&!readOnly?` data-act="edit" data-col="${e.c}" data-id="${esc(e.id)}" role="button" tabindex="0" aria-label="Ubah catatan"`:''}><span class="t">${esc(e.t)}</span><span class="ic"><img alt="" src="${fe(e.ic)}"></span><div style="min-width:0"><b>${esc(e.b)}</b>${e.s?`<small>${esc(e.s)}</small>`:''}</div></div>`).join('')+'</div>':'<div class="empty" style="margin-top:10px">Belum ada catatan hari ini. Ketuk tombol di atas untuk mulai.</div>')+(readOnly?'':'<div class="row" style="margin-top:12px"><button type="button" data-go="dokter" style="width:100%">Export catatan (PDF, Google Doc, Excel)</button></div>');
+  $('today-tl').innerHTML=`<div class="row" style="justify-content:space-between;align-items:center"><h2 style="font-size:19px">Timeline</h2><span class="pill gray">${ev.length} catatan</span></div>${ev.length&&!readOnly?'<p class="muted small" style="margin:2px 0 0">Ketuk catatan untuk mengubah.</p>':''}`+(ev.length?'<div style="margin-top:6px">'+ev.map(e=>`<div class="tl"${e.c&&!readOnly?` data-act="edit" data-col="${e.c}" data-id="${esc(e.id)}" role="button" tabindex="0" aria-label="Ubah catatan"`:''}><span class="t">${esc(e.t)}</span><span class="ic"><img alt="" src="${fe(e.ic)}"></span><div style="min-width:0"><b>${esc(e.b)}</b>${e.s?`<small>${esc(e.s)}</small>`:''}</div></div>`).join('')+'</div>':'<div class="empty" style="margin-top:10px">Belum ada catatan hari ini. Ketuk tombol + Catat di bawah untuk mulai.</div>')+(readOnly?'':'<div class="row" style="margin-top:12px"><button type="button" data-go="dokter" style="width:100%">Export catatan (PDF, Google Doc, Excel)</button></div>');
   renderOverall()}
 function renderOverall(){const T=todayS();
   // pola 24 jam, 7 hari
@@ -1173,7 +1174,7 @@ function renderOverall(){const T=todayS();
       if(k===4){const n=flr.filter(f=>f.date===d).length;if(n)q+=`<circle cx="${cx}" cy="${y0+lh-10}" r="6" fill="var(--bad)"/><text x="${cx}" y="${y0+lh-7}" text-anchor="middle" style="font-size:8px;fill:#fff;font-weight:700">${n}</text>`}})});
   D14.forEach((d,j)=>{if(j%2===1||j===13)q+=`<text x="${L2+j*cw+cw/2}" y="${H2-2}" text-anchor="middle" style="font-size:9px;${j===13?'fill:var(--ink);font-weight:700':''}">${+d.slice(8)}</text>`});
   q+='</svg>';
-  $('overall').innerHTML=`<h2 style="font-size:19px">Grafik semua catatan</h2><p class="muted small" style="margin:2px 0 0">Ketuk kartu di atas untuk detail tiap bagian.</p>
+  $('overall').innerHTML=`<h2 style="font-size:19px">Grafik semua catatan</h2>
   <div class="ov-sub">Pola per jam, 7 hari</div>${p}<div class="ov-leg"><span><i style="background:var(--lav)"></i>Tidur</span><span><i style="border:2px solid var(--warn);border-radius:50%"></i>Makan (perkiraan jam)</span><span><i style="background:#B07A47"></i>BAB (kalau jam diisi)</span><span><i style="background:var(--good)"></i>Aktivitas</span><span><i style="background:var(--bad);border-radius:0;clip-path:polygon(50% 0,100% 100%,0 100%)"></i>Keluhan</span></div>
   <div class="ov-sub">Total per hari, 14 hari</div>${q}<div class="ov-leg"><span>Angka kecil = jam tidur / kali</span><span><i style="background:var(--warn)"></i>Makan sedikit · BAB keras</span><span><i style="background:var(--good)"></i>BAB normal</span><span><i style="background:var(--bad)"></i>BAB cair · merah-merah</span></div>`}
 function lineChart(pts,opt){
@@ -1318,8 +1319,8 @@ async function exportDoc(pdf){
 /* ---------- events ---------- */
 function scrollCharts(){['strip','stool-chart','chart-w','chart-l'].forEach(id=>{const e=$(id);if(e&&!e.dataset.touched)e.scrollLeft=e.scrollWidth})}
 ['strip','stool-chart','chart-w','chart-l'].forEach(id=>['pointerdown','touchstart','wheel'].forEach(ev=>$(id).addEventListener(ev,()=>{$(id).dataset.touched='1'},{passive:true})));
-const GROUPS={home:['ringkasan'],log:['makan','tidur','bab','aktivitas','keluhan'],grow:['tumbuh'],rep:['pola','dokter']};
-const SEG_L={makan:['Makan','Bowl with spoon'],tidur:['Tidur','Sleeping face'],bab:['BAB','Pile of poo'],keluhan:['Keluhan','Lotion bottle'],aktivitas:['Aktivitas','Teddy bear'],pola:['Pola','Magnifying glass tilted left'],dokter:['Untuk dokter','Stethoscope']};
+const GROUPS={home:['ringkasan'],log:['makan','tidur','bab','aktivitas','keluhan','grafik'],grow:['tumbuh'],rep:['pola','dokter']};
+const SEG_L={makan:['Makan','Bowl with spoon'],tidur:['Tidur','Sleeping face'],bab:['BAB','Pile of poo'],keluhan:['Keluhan','Lotion bottle'],aktivitas:['Aktivitas','Teddy bear'],grafik:['Grafik','Bar chart'],pola:['Pola','Magnifying glass tilted left'],dokter:['Untuk dokter','Stethoscope']};
 const lastIn={};let curTab='ringkasan';
 function grpOf(t){return Object.keys(GROUPS).find(g=>GROUPS[g].includes(t))||'home'}
 function setTab(n){const t=n||curTab;const ok=Object.values(GROUPS).flat().includes(t)?t:'ringkasan';curTab=ok;const g=grpOf(ok);lastIn[g]=ok;
