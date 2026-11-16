@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Jurnal Gia">
 <meta name="theme-color" content="#141416">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <style>
 /* Layout: dark storybook app. Slab-serif headlines with orange kicker lines, uppercase underlined tabs,
    illustrated scene cards in a staggered two-column grid, dark rounded sheets, orange "catat" mound fixed at the bottom. */
@@ -15,22 +15,23 @@
   --bg:#141416; --surface:#1F1F22; --surface2:#29292D; --surface3:#34343A; --ink:#F5F1E8; --muted:#A09DA6; --line:#2F2F35;
   --accent:#8CB4FF; --accent-ink:#0B1730; --accent-soft:#1C2A47; --lime:#D9E46C;
   --good:#7AD9AE; --good-soft:#1C3A2F; --warn:#F5C55A; --warn-soft:#3B3017; --bad:#FF7B6B; --bad-soft:#40211D; --lav:#A992F5;
-  --font-display:'Zilla Slab',Rockwell,'Roboto Slab',Georgia,serif;
-  --font-body:'Inter','Segoe UI',system-ui,sans-serif;
+  --font-display:'Young Serif',Georgia,serif;
+  --font-body:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
   --r-lg:26px; --r-md:18px; --r-sm:13px;
   color-scheme:dark;
 }
+[hidden]{display:none!important}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg)}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;
   padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
 .wrap{max-width:560px;margin:0 auto;padding-block:20px calc(124px + env(safe-area-inset-bottom,0px))}
-h1,h2,h3{font-variant-numeric:lining-nums;font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.1;font-weight:700}
+h1,h2,h3{font-variant-numeric:lining-nums;font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.15;font-weight:400;font-synthesis:none;letter-spacing:-.005em}
 h1{font-size:42px} h2{font-size:21px} h3{font-size:17px}
-.kicker{font-family:var(--font-display);color:var(--accent);font-weight:600;font-size:18px;margin:0 0 4px}
+.sub{font-family:var(--font-body);color:var(--accent);font-weight:600;font-size:15px;margin:4px 0 0}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.hello{font-family:var(--font-display);font-size:20px;font-weight:500}
-.hello b{color:var(--lime);font-weight:600}
+.hello{font-family:var(--font-body);font-size:17px;font-weight:500}
+.hello b{color:var(--lime);font-weight:700}
 .avatar{width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 50% 30%,#FFE6C2,#F2A65A);display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 3px var(--surface2);flex:none}
 .avatar img{width:38px;height:38px;margin-top:6px}
 .title-block{margin:30px 0 4px}
@@ -46,7 +47,7 @@ nav::after{content:"";flex:0 0 30px}
 .navwrap.more-r .nav-more{opacity:1;pointer-events:auto;animation:nudge 1.6s ease-in-out 2 1.2s}
 @keyframes nudge{50%{transform:translateX(3px)}}
 nav::-webkit-scrollbar{display:none}
-nav button{flex:none;background:none;border:0;border-radius:0;padding:4px 0 11px;color:var(--muted);font:600 12.5px/1 var(--font-body);letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid transparent;box-shadow:none;transition:color .15s}
+nav button{flex:none;background:none;border:0;border-radius:0;padding:4px 0 11px;color:var(--muted);font:700 14.5px/1 var(--font-body);letter-spacing:0;text-transform:none;border-bottom:2px solid transparent;box-shadow:none;transition:color .15s}
 nav button[aria-current="true"]{color:var(--ink);border-color:var(--ink)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
 section.panel{display:none;gap:16px;flex-direction:column}
@@ -57,7 +58,18 @@ section.panel.on{display:flex}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
 .row>*{min-width:0}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-label{display:flex;flex-direction:column;gap:7px;font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+label,.lbl{display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:700;color:var(--ink);letter-spacing:0;text-transform:none}
+.lbl{margin:0}
+.opt{font-weight:500;color:var(--muted);font-size:12.5px}
+.help{display:block;font-size:12.5px;font-weight:500;color:var(--muted);line-height:1.45;margin-top:-1px}
+label+label,label+.tags+label{margin-top:2px}
+.more{margin-top:12px;border-top:1px solid var(--line);padding-top:4px}
+.more>summary{cursor:pointer;list-style:none;padding:10px 0;font-weight:700;font-size:14px;color:var(--accent);display:flex;align-items:center;gap:8px}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary::before{content:'+';display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent-soft);font-weight:800}
+.more[open]>summary::before{content:'\2212'}
+.more .fields{display:flex;flex-direction:column;gap:12px;padding-bottom:4px}
+.stack{display:flex;flex-direction:column;gap:14px}
 input,select,textarea,button{font:inherit;color:var(--ink)}
 input,select,textarea{background:var(--surface2);border:1.5px solid transparent;border-radius:var(--r-sm);padding:12px 14px;font-size:16px;width:100%;min-width:0;letter-spacing:0;text-transform:none;font-weight:500;transition:border-color .15s,background .15s}
 input::placeholder,textarea::placeholder{color:#6F6C76}
@@ -78,12 +90,12 @@ fieldset legend{text-transform:uppercase;letter-spacing:.1em;font-size:10.5px}
 .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
 .tag{font-size:11.5px;padding:2px 9px;border-radius:99px;background:var(--surface3);color:var(--muted)}
 .tag.hit{color:var(--bad);background:var(--bad-soft)}
-.day{font-variant-numeric:lining-nums;font-family:var(--font-display);font-weight:600;font-size:18px;margin:20px 0 10px;color:var(--accent);display:flex;gap:8px;align-items:baseline}
+.day{font-variant-numeric:lining-nums;font-family:var(--font-display);font-weight:400;font-size:18px;margin:20px 0 10px;color:var(--accent);display:flex;gap:8px;align-items:baseline}
 .day:first-child{margin-top:4px}
 .entry{display:grid;grid-template-columns:52px 1fr auto;gap:12px;padding:12px;margin-bottom:9px;border-radius:var(--r-md);background:var(--surface2);align-items:start}
 .entry .ico{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--surface3)}
 .entry .ico img{width:32px;height:32px}
-.entry .meta{font-size:10.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.09em}
+.entry .meta{font-size:12.5px;color:var(--muted);font-weight:600}
 .entry .what{overflow-wrap:anywhere;min-width:0}
 .entry .what>b{display:block;font-weight:600;margin-top:2px}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
@@ -95,8 +107,8 @@ fieldset legend{text-transform:uppercase;letter-spacing:.1em;font-size:10.5px}
 .scene svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
 .scene .ill{position:absolute;right:12px;top:12px;width:52px;height:52px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
 .scene .cap{position:absolute;left:14px;right:14px;bottom:14px}
-.scene .lbl{font:700 10px/1.2 var(--font-body);letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.9)}
-.scene .val{font-variant-numeric:lining-nums;font-family:var(--font-display);font-weight:700;font-size:27px;color:#fff;line-height:1.05;margin:5px 0 9px;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+.scene .lbl{font:700 12.5px/1.2 var(--font-body);color:rgba(255,255,255,.92)}
+.scene .val{font-variant-numeric:lining-nums;font-family:var(--font-display);font-weight:400;font-size:27px;color:#fff;line-height:1.05;margin:5px 0 9px;text-shadow:0 2px 12px rgba(0,0,0,.45)}
 .scene .chip{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#1A1A1A;border-radius:99px;padding:4px 10px;font-size:11.5px;font-weight:700;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .scene .chip i{flex:none;width:7px;height:7px;border-radius:50%;background:var(--accent)}
 .alert{padding:12px 14px;border-radius:var(--r-md);background:var(--surface);display:flex;gap:12px;align-items:center;font-size:13.5px;line-height:1.45}
@@ -114,14 +126,31 @@ td:last-child{white-space:nowrap}
 .bs{white-space:nowrap;display:inline-block;min-width:24px;padding:1px 7px;border-radius:99px;font-weight:700;font-size:12.5px;background:var(--good-soft);color:var(--good)}
 .bs.hard{background:var(--warn-soft);color:var(--warn)} .bs.loose{background:var(--bad-soft);color:var(--bad)}
 .bsrow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.bsrow button{padding:12px 0;text-align:center;font-family:var(--font-display);font-size:19px;font-weight:700;border-radius:14px}
+.bsgrp{display:grid;grid-template-columns:2fr 2fr 3fr;gap:6px;margin-top:6px;font-size:11.5px;font-weight:700;text-align:center}
+.bsgrp span{border-top:3px solid;padding-top:4px}
+.bsgrp .k{border-color:var(--warn);color:var(--warn)}.bsgrp .n{border-color:var(--good);color:var(--good)}.bsgrp .c{border-color:var(--bad);color:var(--bad)}
+.bs-cap{margin-top:10px;padding:10px 12px;border-radius:var(--r-sm);background:var(--surface2);font-size:13.5px;min-height:42px}
+.bs-cap b{color:var(--accent)}
+.sleep-now{display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--r-lg);background:linear-gradient(135deg,#1C2A47,#2A2350);margin-bottom:14px}
+.sleep-now img{width:44px;height:44px;flex:none}
+.sleep-now .tx{flex:1;min-width:0}
+.sleep-now .tx b{display:block;font-family:var(--font-display);font-weight:400;font-size:20px;line-height:1.2}
+.sleep-now .tx small{color:#C9D6F5;font-size:13px}
+.sleep-now button{flex:none}
+.sl-week{width:100%;border-collapse:collapse;font-size:13.5px}
+.sl-week th,.sl-week td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--line)}
+.sl-week th{color:var(--muted);font-weight:600;font-size:12.5px}
+.sl-week td:not(:first-child),.sl-week th:not(:first-child){text-align:right}
+.dur{font-weight:700}
+.bsrow button{padding:12px 0;text-align:center;font-family:var(--font-body);font-size:16px;font-weight:800;border-radius:14px}
 .bsrow button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
 .banner{border:1.5px dashed var(--accent);background:var(--accent-soft);border-radius:var(--r-md);padding:14px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.finding{background:var(--surface2);border-radius:var(--r-md);padding:14px 16px;border-left:4px solid var(--line)}
+.finding{background:var(--surface2);border-radius:var(--r-md);padding:14px 16px;border:1px solid var(--line);--c:var(--muted)}
+.finding h3::before{content:'';display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--c);margin-right:8px;vertical-align:2px}
 .finding h3{margin-bottom:4px}
 .finding p{margin:7px 0 0;color:#D7D2C9;font-size:14px}
-.finding.k{border-color:var(--bad)} .finding.b{border-color:var(--warn)} .finding.w{border-color:var(--accent)} .finding.o{border-color:var(--lav)} .finding.d{border-color:var(--muted)}
+.finding.k{--c:var(--bad)} .finding.b{--c:var(--warn)} .finding.w{--c:var(--accent)} .finding.o{--c:var(--lav)} .finding.d{--c:var(--muted)}
 .bar{height:6px;border-radius:99px;background:var(--surface3);overflow:hidden;margin-top:7px}
 .bar>span{display:block;height:100%;border-radius:99px;background:var(--accent)}
 .bar.bad>span{background:var(--bad)}
@@ -157,7 +186,7 @@ svg text{font-family:var(--font-body);fill:var(--muted);font-size:11px}
 .sec-hero{position:relative;height:150px;border-radius:var(--r-lg);overflow:hidden;isolation:isolate;box-shadow:0 18px 40px -24px rgba(0,0,0,.9)}
 .sec-hero svg.bg{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
 .sec-txt{position:absolute;left:18px;bottom:16px;right:118px}
-.sec-txt .kicker{color:#FFDDB0;font-size:15px;margin:0 0 2px}
+.sec-txt .sub{color:#FFE6C4;font-size:14px;margin:4px 0 0;text-shadow:0 1px 8px rgba(0,0,0,.5)}
 .sec-txt h2{color:#fff;font-size:34px;text-shadow:0 3px 16px rgba(0,0,0,.45)}
 .sec-ill{position:absolute;right:12px;top:10px;width:124px;height:128px}
 .sec-ill img{position:absolute;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35))}
@@ -271,46 +300,50 @@ button.sm{padding:7px 13px;font-size:12.5px}
   <header class="hero">
     <div class="hero-art" id="hero-art" aria-hidden="true"></div>
     <div class="hero-top"><div class="hello">Halo, <b>Mama &amp; Papa!</b></div><div class="avatar"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Baby/Default/Flat/baby_flat_default.svg"></div></div>
-    <div class="hero-txt"><p class="kicker" id="greet">selamat datang</p><h1>Si Kecil Gia</h1><span class="age-pill" id="age"></span></div>
+    <div class="hero-txt"><h1>Si Kecil Gia</h1><p class="sub" id="greet">selamat datang</p><span class="age-pill" id="age"></span></div>
   </header>
   <nav id="tabs" aria-label="Bagian jurnal">
-    <button type="button" data-tab="ringkasan">Ringkasan</button><button type="button" data-tab="makan">Makan</button><button type="button" data-tab="keluhan">Keluhan</button><button type="button" data-tab="bab">BAB</button><button type="button" data-tab="tumbuh">Tumbuh</button><button type="button" data-tab="pola">Pola</button><button type="button" data-tab="dokter">Dokter</button>
+    <button type="button" data-tab="ringkasan">Ringkasan</button><button type="button" data-tab="makan">Makan</button><button type="button" data-tab="keluhan">Keluhan</button><button type="button" data-tab="bab">BAB</button><button type="button" data-tab="tidur">Tidur</button><button type="button" data-tab="tumbuh">Tumbuh</button><button type="button" data-tab="pola">Pola</button><button type="button" data-tab="dokter">Dokter</button>
   </nav>
   <button class="mound" id="mound" type="button" aria-label="Catat cepat" aria-expanded="false"><svg viewBox="0 0 230 76" preserveAspectRatio="none" aria-hidden="true"><path d="M0 76 C58 76 72 6 115 6 C158 6 172 76 230 76Z" fill="var(--accent)"/><path class="chev" d="M108 27 l7 -7 l7 7" stroke="var(--accent-ink)" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>CATAT</span></button>
   <div class="sheet" id="sheet" role="menu">
     <button type="button" data-quick="makan" data-focus="fo-items"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Bowl%20with%20spoon/Flat/bowl_with_spoon_flat.svg">Makan</button>
     <button type="button" data-quick="bab" data-focus=""><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Pile%20of%20poo/Flat/pile_of_poo_flat.svg">BAB</button>
     <button type="button" data-quick="keluhan" data-focus="is-title"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Lotion%20bottle/Flat/lotion_bottle_flat.svg">Keluhan</button>
+    <button type="button" data-quick="tidur" data-focus=""><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Sleeping%20face/Flat/sleeping_face_flat.svg">Tidur</button>
     <button type="button" data-quick="tumbuh" data-focus="gr-w"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Balance%20scale/Flat/balance_scale_flat.svg">Timbang</button>
   </div>
   <div id="banner"></div>
 
   <section class="panel" id="p-ringkasan">
+    <div id="sleep-now-r"></div>
     <div id="alerts" style="display:flex;flex-direction:column;gap:8px"></div>
     <div class="stats" id="stats"></div>
     <div class="card" id="today-card"></div>
     <div class="card" id="trial-card"></div>
-    <div class="card"><h2>14 hari terakhir</h2><p class="muted small" style="margin:2px 0 8px">Satu kolom per hari. Merah = kejadian muncul setelah makan.</p><div class="scroll" id="strip"></div></div>
+    <div class="card"><h2>14 hari terakhir</h2><p class="muted small" style="margin:2px 0 8px">Satu kolom per hari, angka = berapa kali. Hari ini paling kanan, geser ke kiri untuk hari sebelumnya.</p><div class="scroll" id="strip"></div></div>
       </section>
 
   <section class="panel" id="p-makan">
     <form class="card" id="f-food" autocomplete="off">
-      <h2 style="margin-bottom:10px">Catat makan</h2>
-      <div class="grid2">
-        <label>Tanggal<input type="date" id="fo-date" required></label>
-        <label>Waktu makan<select id="fo-meal"><option>pagi</option><option>siang</option><option>sore</option><option>malam</option><option>snack</option></select></label>
-        <label>Siapa<select id="fo-kind"><option value="bayi">Gia</option><option value="mom">Ibu (lewat ASI)</option></select></label>
+      <h2 style="margin-bottom:12px">Catat makan</h2>
+      <div class="stack">
+      <label>Tanggal<input type="date" id="fo-date" required></label>
+      <label>Waktu makan<select id="fo-meal"><option>pagi</option><option>siang</option><option>sore</option><option>malam</option><option>snack</option></select></label>
+      <label>Ini makanan siapa?<select id="fo-kind"><option value="bayi">Gia</option><option value="mom">Mama (menyusui)</option></select><span class="help" id="fo-kind-help">Pilih Mama untuk mencatat menu Mama, karena bisa ikut lewat ASI.</span></label>
+      <label>Apa saja yang dimakan<input id="fo-items" placeholder="mis. labu siam, ikan nila, VCO" required><span class="help">Pisahkan tiap bahan dengan koma, supaya tiap bahan bisa dilacak.</span></label>
       </div>
-      <label style="margin-top:10px">Menu (pisahkan bahan dengan koma)<input id="fo-items" placeholder="mis. labu siam, ikan nila, VCO" required></label>
       <div class="tags" id="fo-tags" aria-live="polite"></div>
       <div id="fo-trial" aria-live="polite"></div>
-      <div class="grid2" style="margin-top:10px">
-        <label>Jumlah<input id="fo-amount" placeholder="mis. 80 ml"></label>
-        <label>ASI<input id="fo-asi" placeholder="mis. 100 ml"></label>
-        <label>Nafsu makan<select id="fo-app"><option value="">Normal / tidak dicatat</option><option value="lahap">Lahap</option><option value="sedikit">Sedikit</option><option value="tidak mau">Tidak mau</option></select></label>
+      <div class="stack baby-only" style="margin-top:14px">
+      <label>Gia makannya gimana?<select id="fo-app"><option value="">Biasa</option><option value="lahap">Lahap</option><option value="sedikit">Sedikit</option><option value="tidak mau">Tidak mau</option></select></label>
       </div>
-      <label style="margin-top:10px">Catatan<input id="fo-note" placeholder="mis. merah-merah setelahnya"></label>
-      <label class="photo-in" style="margin-top:10px">Foto makanan (opsional)<input type="file" id="fo-photo" accept="image/*" multiple><span class="pbox"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label>
+      <div style="margin-top:14px"><label class="photo-in" style="margin-top:10px"><span>Foto makanan <span class="opt">(opsional)</span></span><input type="file" id="fo-photo" accept="image/*" multiple><span class="pbox"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label></div>
+      <details class="more"><summary>Porsi, susu, catatan <span class="opt">(opsional)</span></summary><div class="fields">
+        <label class="baby-only">Porsi yang habis<input id="fo-amount" placeholder="mis. 5 sdm atau 80 ml"></label>
+        <label class="baby-only">Minum ASI atau susu<input id="fo-asi" placeholder="mis. 100 ml"><span class="help">Isi kalau Gia minum susu di waktu makan ini.</span></label>
+        <label>Catatan<input id="fo-note" placeholder="mis. teksturnya kasar, dicampur ASI"><span class="help">Kalau ada reaksi seperti merah-merah, catat di tab Keluhan supaya ikut dihitung.</span></label>
+      </div></details>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
     <div class="card">
@@ -324,23 +357,23 @@ button.sm{padding:7px 13px;font-size:12.5px}
 
   <section class="panel" id="p-keluhan">
     <form class="card" id="f-issue" autocomplete="off">
-      <h2 style="margin-bottom:10px">Catat keluhan</h2>
+      <h2 style="margin-bottom:12px">Catat keluhan</h2>
+      <div class="stack">
+      <label>Keluhan apa?<select id="is-type"><option value="kulit">Kulit / ruam</option><option value="pencernaan">Perut / muntah</option><option value="tidur">Tidur</option><option value="mood">Rewel / mood</option><option value="nafsu makan">Susah makan</option><option value="lain">Lainnya</option></select></label>
+      <label>Ceritakan singkat<input id="is-title" placeholder="mis. bintik merah di paha" required></label>
       <div class="grid2">
         <label>Tanggal<input type="date" id="is-date" required></label>
-        <label>Jam<input type="time" id="is-time"></label>
-        <label>Jenis<select id="is-type"><option value="kulit">Kulit / ruam</option><option value="pencernaan">Pencernaan</option><option value="tidur">Tidur</option><option value="mood">Mood</option><option value="nafsu makan">Nafsu makan</option><option value="lain">Lainnya</option></select></label>
-        <label>Tingkat<select id="is-sev"><option value="1">1 ringan</option><option value="2" selected>2 sedang</option><option value="3">3 berat</option></select></label>
+        <label><span>Jam <span class="opt">(opsional)</span></span><input type="time" id="is-time"></label>
       </div>
-      <label style="margin-top:10px">Apa yang terjadi<input id="is-title" placeholder="mis. merah-merah di paha" required></label>
-      <div class="grid2" style="margin-top:10px">
+      <label>Seberapa parah?<select id="is-sev"><option value="1">Ringan</option><option value="2" selected>Sedang</option><option value="3">Berat</option></select><span class="help">Ringan: Gia tetap nyaman. Sedang: rewel atau garuk-garuk. Berat: menyebar, sangat rewel, atau perlu ke dokter.</span></label>
+      <label>Muncul setelah makan?<select id="is-after"><option value="">Tidak / belum tahu</option><option>pagi</option><option>siang</option><option>sore</option><option>malam</option></select><span class="help">Pilih makan terakhir sebelum keluhan muncul. Dipakai untuk mencari bahan pemicu.</span></label>
+      <label class="chk" style="align-items:flex-start"><input type="checkbox" id="is-flare" style="margin-top:2px"> <span>Kejadian baru / kambuh<span class="help">Centang kalau ini baru muncul, bukan ruam lama yang masih ada. Ini yang dihitung sebagai "merah-merah" di Ringkasan.</span></span></label>
+      <label class="photo-in"><span>Foto <span class="opt">(opsional)</span></span><input type="file" id="is-photo" accept="image/*" multiple><span class="pbox" id="is-photo-lbl"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label>
+      </div>
+      <details class="more"><summary>Detail lain <span class="opt">(opsional)</span></summary><div class="fields">
         <label>Bagian tubuh<input id="is-area" placeholder="mis. pipi, paha"></label>
-        <label>Muncul setelah makan<select id="is-after"><option value="">Tidak terkait makan</option><option>pagi</option><option>siang</option><option>sore</option><option>malam</option></select></label>
-        <label>Berlangsung sampai<input type="date" id="is-until"></label>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <label class="chk"><input type="checkbox" id="is-flare"> Kejadian mendadak (kambuh)</label>
-      </div>
-      <fieldset style="border:0;padding:0;margin:10px 0 0"><legend class="small muted" style="font-weight:600;padding:0">Hal lain yang terjadi hari itu</legend>
+        <label>Sudah hilang tanggal<input type="date" id="is-until"><span class="help">Kosongkan kalau masih ada.</span></label>
+        <fieldset style="border:0;padding:0;margin:0"><legend class="lbl" style="padding:0;margin-bottom:4px">Ada hal lain hari itu?</legend><span class="help" style="margin-bottom:8px">Bisa juga jadi pemicu, jadi ikut dicatat.</span>
         <div class="row" id="is-conf" style="gap:4px 14px">
           <label class="chk"><input type="checkbox" value="Matahari / grounding"> Matahari / grounding</label>
           <label class="chk"><input type="checkbox" value="Keringat / panas"> Keringat / panas</label>
@@ -348,15 +381,16 @@ button.sm{padding:7px 13px;font-size:12.5px}
           <label class="chk"><input type="checkbox" value="Gigitan serangga"> Gigitan serangga</label>
           <label class="chk"><input type="checkbox" value="Makanan baru"> Makanan baru</label>
           <label class="chk"><input type="checkbox" value="Sedang sakit / pilek"> Sedang sakit</label>
-        </div></fieldset>
-      <label style="margin-top:10px">Catatan<textarea id="is-note"></textarea></label>
-      <label class="photo-in" style="margin-top:10px">Foto kulit (opsional)<input type="file" id="is-photo" accept="image/*" multiple><span class="pbox" id="is-photo-lbl"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label>
+        </div>
+        </fieldset>
+        <label>Catatan<textarea id="is-note"></textarea></label>
+      </div></details>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
     <div class="card">
       <div class="row" style="margin-bottom:6px">
-        <label style="flex:1 1 140px">Jenis<select id="il-type"><option value="">Semua</option><option value="kulit">Kulit</option><option value="pencernaan">Pencernaan</option><option value="tidur">Tidur</option><option value="mood">Mood</option><option value="nafsu makan">Nafsu makan</option><option value="lain">Lainnya</option></select></label>
-        <label style="flex:1 1 140px">Status<select id="il-status"><option value="">Semua</option><option value="aktif">Aktif</option><option value="membaik">Membaik</option><option value="selesai">Selesai</option></select></label>
+        <label style="flex:1 1 140px">Jenis<select id="il-type"><option value="">Semua</option><option value="kulit">Kulit</option><option value="pencernaan">Perut</option><option value="tidur">Tidur</option><option value="mood">Rewel / mood</option><option value="nafsu makan">Susah makan</option><option value="lain">Lainnya</option></select></label>
+        <label style="flex:1 1 140px">Status<select id="il-status"><option value="">Semua</option><option value="aktif">Masih ada</option><option value="membaik">Membaik</option><option value="selesai">Sudah hilang</option></select></label>
       </div>
       <div id="issue-list"></div>
     </div>
@@ -365,22 +399,47 @@ button.sm{padding:7px 13px;font-size:12.5px}
 
   <section class="panel" id="p-bab">
     <form class="card" id="f-stool" autocomplete="off">
-      <h2 style="margin-bottom:4px">Catat BAB</h2>
-      <p class="muted small" style="margin:0 0 10px">Skala Bristol: 1-2 keras, 3-4 normal, 5-7 cair.</p>
-      <div class="bsrow" id="st-bs" role="group" aria-label="Skala Bristol"></div>
-      <div class="grid2" style="margin-top:10px">
+      <h2 style="margin-bottom:12px">Catat BAB</h2>
+      <p class="lbl" id="st-bs-l">Bentuk pupnya seperti apa?</p>
+      <div class="bsrow" id="st-bs" role="group" aria-labelledby="st-bs-l" style="margin-top:8px"></div>
+      <div class="bsgrp" aria-hidden="true"><span class="k">keras</span><span class="n">normal</span><span class="c">lembek / cair</span></div>
+      <div class="bs-cap" id="st-bs-cap" aria-live="polite">Ketuk gambar yang paling mirip.</div>
+      <div class="stack" style="margin-top:14px">
+      <div class="grid2">
         <label>Tanggal<input type="date" id="st-date" required></label>
-        <label>Jam<input type="time" id="st-time"></label>
-        <label>Warna<select id="st-color"><option value="">Tidak dicatat</option><option>kuning</option><option>hijau</option><option>coklat muda</option><option>coklat</option><option>coklat gelap</option><option>hitam</option><option>ada darah</option></select></label>
+        <label><span>Jam <span class="opt">(opsional)</span></span><input type="time" id="st-time"></label>
       </div>
-      <div class="row" style="margin-top:10px"><label class="chk"><input type="checkbox" id="st-strain"> Sulit mengejan</label></div>
-      <label style="margin-top:10px">Catatan<input id="st-note"></label>
-      <label class="photo-in" style="margin-top:10px">Foto (opsional)<input type="file" id="st-photo" accept="image/*" multiple><span class="pbox"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label>
+      <label>Warna<select id="st-color"><option value="">Tidak dicatat</option><option>kuning</option><option>hijau</option><option>coklat muda</option><option>coklat</option><option>coklat gelap</option><option>hitam</option><option>ada darah</option></select></label>
+      <label class="chk"><input type="checkbox" id="st-strain"> Mengejan keras atau kesakitan</label>
+      <label class="photo-in"><span>Foto <span class="opt">(opsional)</span></span><input type="file" id="st-photo" accept="image/*" multiple><span class="pbox"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Camera%20with%20flash/Flat/camera_with_flash_flat.svg">Ambil atau pilih foto</span></label>
+      <label><span>Catatan <span class="opt">(opsional)</span></span><input id="st-note"></label>
+      </div>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
-    <div class="card"><h2>Grafik 60 hari</h2><div class="legend" style="margin:4px 0 6px"><span>Pita mint = zona normal (3-4)</span><span>Batang = rentang beberapa hari</span></div><div class="scroll" id="stool-chart"></div></div>
-    <div class="card"><h2>Popok basah</h2><p class="muted small" style="margin:2px 0 8px">Hitungan per hari membantu menilai cairan saat makan sedikit atau BAB keras.</p><div id="wet"></div></div>
+    <div class="card"><h2>Grafik 60 hari</h2><div class="legend" style="margin:4px 0 6px"><span>Angka kiri = bentuk pup (1 keras, 7 cair)</span><span>Pita hijau = normal (3-4)</span><span>Titik kuning = keras, merah = cair</span><span>Kotak = catatan beberapa hari sekaligus</span></div><div class="scroll" id="stool-chart"></div></div>
+    <div class="card"><h2>Popok basah</h2><p class="muted small" style="margin:2px 0 8px">Tekan +1 tiap ganti popok yang basah pipis. Membantu menilai Gia cukup minum atau tidak.</p><div id="wet"></div></div>
     <div class="card"><h2 style="margin-bottom:4px">Riwayat BAB</h2><div id="stool-list"></div></div>
+  </section>
+
+  <section class="panel" id="p-tidur">
+    <div id="sleep-now-t"></div>
+    <form class="card" id="f-sleep" autocomplete="off">
+      <h2 style="margin-bottom:4px">Catat tidur</h2>
+      <p class="muted small" style="margin:0 0 12px">Lupa tekan tombol? Isi jam tidur dan jam bangun di sini.</p>
+      <div class="stack">
+      <label>Tidur apa?<select id="sl-kind"><option value="siang">Tidur siang</option><option value="malam">Tidur malam</option></select></label>
+      <label>Tanggal mulai tidur<input type="date" id="sl-date" required></label>
+      <div class="grid2">
+        <label>Jam tidur<input type="time" id="sl-start" required></label>
+        <label>Jam bangun<input type="time" id="sl-end"></label>
+      </div>
+      <p class="help" id="sl-dur" style="margin-top:-6px">Kosongkan jam bangun kalau Gia masih tidur.</p>
+      <label><span>Catatan <span class="opt">(opsional)</span></span><input id="sl-note" placeholder="mis. kebangun 2x, nenen lalu tidur lagi"></label>
+      </div>
+      <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
+    </form>
+    <div class="card"><h2>7 hari terakhir</h2><p class="muted small" style="margin:2px 0 8px">Tidur dihitung di tanggal mulai tidur.</p><div class="scroll" id="sleep-week"></div></div>
+    <div class="card"><h2 style="margin-bottom:4px">Riwayat tidur</h2><div id="sleep-list"></div></div>
   </section>
 
   <section class="panel" id="p-tumbuh">
@@ -388,10 +447,11 @@ button.sm{padding:7px 13px;font-size:12.5px}
       <h2 style="margin-bottom:10px">Timbang dan ukur</h2>
       <div class="grid2">
         <label>Tanggal<input type="date" id="gr-date" required></label>
-        <label>Berat (kg)<input id="gr-w" inputmode="decimal" placeholder="7,3"></label>
-        <label>Panjang (cm)<input id="gr-l" inputmode="decimal" placeholder="70"></label>
+        <label>Berat (kg)<input id="gr-w" inputmode="decimal" placeholder="mis. 7,3"></label>
+        <label>Panjang (cm)<input id="gr-l" inputmode="decimal" placeholder="mis. 70"></label>
       </div>
-      <label style="margin-top:10px">Catatan (timbangan, jam)<input id="gr-note"></label>
+      <p class="help" style="margin-top:6px">Isi salah satu atau dua-duanya.</p>
+      <label style="margin-top:12px"><span>Catatan <span class="opt">(opsional)</span></span><input id="gr-note" placeholder="mis. timbangan posyandu, sebelum makan"></label>
       <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
     </form>
     <div class="card"><h2>Berat badan</h2><div class="scroll" id="chart-w"></div><div id="who-w"></div></div>
@@ -409,25 +469,25 @@ button.sm{padding:7px 13px;font-size:12.5px}
   </section>
 
   <section class="panel" id="p-dokter">
-    <div class="card"><h2>Ringkasan untuk dokter</h2><p class="muted small" style="margin:2px 0 10px">Dibuat otomatis dari catatan. Simpan jadi Google Doc atau PDF untuk dikirim atau dicetak.</p>
-      <label>Periode<select id="sum-days"><option value="14">2 minggu</option><option value="28" selected>4 minggu</option><option value="0">Semua</option></select></label>
+    <div class="card"><h2>Ringkasan untuk dokter</h2><p class="muted small" style="margin:2px 0 10px">Dibuat otomatis dari catatan, lengkap dengan grafik dan foto. Pilih periode, lalu simpan.</p>
+      <label>Periode catatan<select id="sum-days"><option value="14">2 minggu</option><option value="28" selected>4 minggu</option><option value="0">Semua</option></select></label>
       <textarea id="summary" readonly style="margin-top:12px"></textarea>
       <p class="small muted" id="doc-ph" style="margin:8px 0 0"></p>
-      <div class="row" style="margin-top:10px"><button class="primary" id="doc-gd" type="button">Google Doc</button><button id="doc-pdf" type="button">PDF</button><button id="doc-xls" type="button">Excel</button><button class="ghost" id="copy-sum" type="button">Salin teks</button></div>
-      <div class="row" style="margin-top:8px"><button class="ghost" id="db-view" type="button">Lihat seluruh database (lihat saja)</button></div>
+      <div class="row" style="margin-top:10px"><button class="primary" id="doc-pdf" type="button">Buat PDF</button><button id="doc-gd" type="button">Buat Google Doc</button><button id="doc-xls" type="button">Perbarui Excel</button><button class="ghost" id="copy-sum" type="button">Salin teks</button></div>
+      <div class="row" style="margin-top:8px"><button class="ghost" id="db-view" type="button">Lihat semua data (tabel, tidak bisa diubah)</button></div>
       <div id="doc-out" style="margin-top:10px"></div></div>
     <div class="card"><h2>Pertanyaan untuk dokter</h2><ol id="qs" style="margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px"></ol></div>
     <div class="card"><h2>Obat dan suplemen</h2>
       <form id="f-med" class="row" style="margin:8px 0" autocomplete="off">
         <label style="flex:0 1 150px">Tanggal<input type="date" id="md-date" required></label>
-        <label style="flex:1 1 160px">Nama<input id="md-name" required></label>
-        <label style="flex:0 1 110px">Dosis<input id="md-dose"></label>
+        <label style="flex:1 1 160px">Nama obat / suplemen<input id="md-name" required placeholder="mis. Vitamin D"></label>
+        <label style="flex:0 1 130px">Dosis<input id="md-dose" placeholder="mis. 1 tetes"></label>
         <button class="primary" type="submit">Tambah</button>
       </form><div id="med-list"></div></div>
     <div class="card"><h2>Riwayat kesehatan</h2>
       <form id="f-hist" class="row" style="margin:8px 0" autocomplete="off">
         <label style="flex:0 1 190px">Kapan<input id="hi-when" placeholder="mis. Usia 8 bulan" required></label>
-        <label style="flex:1 1 220px">Apa<input id="hi-text" required></label>
+        <label style="flex:1 1 220px">Apa yang terjadi<input id="hi-text" required placeholder="mis. sembelit, diberi obat"></label>
         <button class="primary" type="submit">Tambah</button>
       </form><div id="hist-list"></div></div>
     <div class="card" style="border-color:var(--bad);box-shadow:none"><h3 style="color:var(--bad)">Segera ke dokter atau IGD bila</h3>
@@ -441,7 +501,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
 <script>
 (function(){
 let SEED=null;const SEED_GZ="";
-const COLS=['foods','issues','stools','growth','meds','history','diapers','ingredients','photos','routine','checks'];
+const COLS=['foods','issues','stools','growth','meds','history','diapers','ingredients','photos','routine','checks','sleeps'];
 const D={};COLS.forEach(c=>D[c]=[]);
 const BIRTH='2026-01-31';
 const MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
@@ -469,6 +529,10 @@ function parseTags(s){return [...new Set(s.toLowerCase().replace(/\([^)]*\)/g,''
   .map(x=>x.replace(/\b\d+([.,]\d+)?\s*(ml|sdt|sdm|tetes|butir|gelas|gr|g|%)?\b/g,'').replace(/\b(sedikit|dikit)\b/g,'').replace(/\s+/g,' ').trim())
   .filter(x=>x&&x.length<28))]}
 const bsCls=(a,b)=>b<=2?'hard':a>=5?'loose':'';
+const BS_DESC=['Butiran kecil keras, seperti kotoran kambing','Lonjong tapi bergerindil dan keras','Seperti sosis, permukaannya retak','Lembut dan halus, seperti pisang','Gumpalan lembek, pinggirnya jelas','Lembek seperti bubur','Cair, tanpa gumpalan'];
+function bsWord(s){const a=s.bristol,b=s.bristolMax||a;return b<=2?'keras':a>=5?'cair':a>=3&&b<=4?'normal':'campur'}
+function bsText(s){return bsLabel(s)+' · '+bsWord(s)}
+function bsFull(n){return n+' · '+(n<=2?'keras':n<=4?'normal':'lembek/cair')+': '+BS_DESC[n-1]}
 function bsLabel(s){return s.bristolMax&&s.bristolMax!==s.bristol?s.bristol+'-'+s.bristolMax:String(s.bristol)}
 
 /* ---------- data layer (Google Sheets lewat Apps Script) ---------- */
@@ -638,7 +702,8 @@ const camBtn=ref=>readOnly?'':`<button type="button" class="ghost icon-btn" data
 function resetPh(id){const i=$(id);if(!i)return;i.value='';i.nextElementSibling.lastChild.textContent='Ambil atau pilih foto'}
 function dayRows(from,to){const R=[],ids=ref=>photosOf(ref).filter(p=>!String(p.fileId).startsWith('local-')).map(p=>p.fileId),inR=d=>d>=from&&d<=to;
   D.foods.filter(f=>inR(f.date)).forEach(f=>R.push({date:f.date,time:'',o:ORD[f.meal]||2,kind:f.kind==='mom'?'Makan ibu':'Makan '+f.meal,text:f.items+(f.amount?' ('+f.amount+')':'')+(f.appetite?' ['+f.appetite+']':'')+(f.note?'. '+f.note:''),ph:ids('foods:'+f.id)}));
-  D.stools.filter(s=>inR(s.date)).forEach(s=>R.push({date:s.date,time:s.time||'',o:2.2,kind:'BAB',text:'BS '+bsLabel(s)+(s.until?' sampai '+fmt(s.until):'')+(s.color?', '+s.color:'')+(s.strain?', sulit mengejan':'')+(s.note?'. '+s.note:''),ph:ids('stools:'+s.id)}));
+  D.stools.filter(s=>inR(s.date)).forEach(s=>R.push({date:s.date,time:s.time||'',o:2.2,kind:'BAB',text:'Bentuk '+bsText(s)+(s.until?' sampai '+fmt(s.until):'')+(s.color?', '+s.color:'')+(s.strain?', sulit mengejan':'')+(s.note?'. '+s.note:''),ph:ids('stools:'+s.id)}));
+  D.sleeps.filter(z=>inR(z.date)).forEach(z=>R.push({date:z.date,time:z.start||'',o:3.5,kind:z.kind==='malam'?'Tidur malam':'Tidur siang',text:(z.start||'?')+' sampai '+(z.end||'belum bangun')+(z.end?' ('+durTxt(slMin(z))+')':'')+(z.note?'. '+z.note:''),ph:[]}));
   D.issues.filter(i=>inR(i.date)).forEach(i=>R.push({date:i.date,time:i.time||'',o:2.4,kind:'Keluhan',text:i.title+(i.area?' ('+i.area+')':'')+(i.flare?', kambuh':'')+(i.note?'. '+i.note:''),ph:ids(i.id)}));
   return R.sort((a,b)=>a.date.localeCompare(b.date)||(a.time&&b.time?a.time.localeCompare(b.time):a.o-b.o))}
 function thumbs(issueId){const ps=photosOf(issueId);return ps.length?`<div class="thumbs">${ps.map(p=>`<button type="button" class="thumb" data-act="view" data-pid="${esc(p.id)}" aria-label="Lihat foto ${fmt(p.date)}"><img alt="" data-file="${esc(p.fileId)}"${PH[p.fileId]?` src="${PH[p.fileId]}"`:''}><span>${+p.date.slice(8)} ${MON[+p.date.slice(5,7)-1]}</span></button>`).join('')}</div>`:''}
@@ -761,9 +826,9 @@ const GIA_URI='data:image/svg+xml;utf8,'+encodeURIComponent(giaSVG().replace('<s
 let heroP='';
 function paintHero(){const h=new Date().getHours();const p=h>=5&&h<10?'pagi':h>=10&&h<15?'siang':h>=15&&h<18?'sore':'malam';
   const g=document.getElementById('greet');if(g)g.textContent='selamat '+p;if(p===heroP)return;heroP=p;const a=document.getElementById('hero-art');if(a)a.innerHTML=heroArt(p)}
-const HEADS={makan:['apa yang Gia makan','Makan','sunset',['Bowl with spoon','Carrot','Fish']],keluhan:['kulit, perut, tidur, mood','Keluhan','dusk',['Lotion bottle','Crescent moon','Adhesive bandage']],bab:['pantau pup si kecil','BAB','ocean',['Pile of poo','Droplet','Roll of paper']],tumbuh:['berat dan panjang badan','Tumbuh','forest',['Balance scale','Straight ruler','Seedling']],pola:['benang merah dari catatan','Pola','dusk',['Magnifying glass tilted left','Light bulb','Bar chart']],dokter:['bawa ini saat kontrol','Dokter','ocean',['Stethoscope','Pill','Clipboard']]};
-Object.entries(HEADS).forEach(([k,[a,b,p,ic]])=>{const s=document.getElementById('p-'+k);if(s&&!s.querySelector('.sec-hero'))s.insertAdjacentHTML('afterbegin',`<div class="sec-hero">${scene(p,'h')}<div class="sec-ill">${ic.map(n=>`<img alt="" src="${fe(n)}">`).join('')}</div><div class="sec-txt"><p class="kicker">${a}</p><h2>${b}</h2></div></div>`)});
-const H2I={'14 hari terakhir':'Calendar','Grafik 60 hari':'Chart increasing','Popok basah':'Droplet','Riwayat BAB':'Spiral notepad','Berat badan':'Balance scale','Panjang badan':'Straight ruler','Bahan makanan dan kejadian merah-merah':'Magnifying glass tilted left','Bahan baru, urut pertama dicoba':'Seedling','Ringkasan untuk dokter':'Clipboard','Pertanyaan untuk dokter':'Light bulb','Obat dan suplemen':'Pill','Riwayat kesehatan':'Spiral notepad','Catat makan':'Bowl with spoon','Catat keluhan':'Lotion bottle','Catat BAB':'Pile of poo','Timbang dan ukur':'Balance scale','Foto kulit':'Camera with flash'};
+const HEADS={tidur:['tidur siang dan malam','Tidur','dusk',['Sleeping face','Crescent moon','Teddy bear']],makan:['apa yang Gia makan','Makan','sunset',['Bowl with spoon','Carrot','Fish']],keluhan:['kulit, perut, tidur, mood','Keluhan','dusk',['Lotion bottle','Crescent moon','Adhesive bandage']],bab:['pup dan popok basah','BAB','ocean',['Pile of poo','Droplet','Roll of paper']],tumbuh:['berat dan panjang badan','Tumbuh','forest',['Balance scale','Straight ruler','Seedling']],pola:['benang merah dari catatan','Pola','dusk',['Magnifying glass tilted left','Light bulb','Bar chart']],dokter:['bawa ini saat kontrol','Dokter','ocean',['Stethoscope','Pill','Clipboard']]};
+Object.entries(HEADS).forEach(([k,[a,b,p,ic]])=>{const s=document.getElementById('p-'+k);if(s&&!s.querySelector('.sec-hero'))s.insertAdjacentHTML('afterbegin',`<div class="sec-hero">${scene(p,'h')}<div class="sec-ill">${ic.map(n=>`<img alt="" src="${fe(n)}">`).join('')}</div><div class="sec-txt"><h2>${b}</h2><p class="sub">${a}</p></div></div>`)});
+const H2I={'Catat tidur':'Sleeping face','7 hari terakhir':'Bar chart','Riwayat tidur':'Spiral notepad','14 hari terakhir':'Calendar','Grafik 60 hari':'Chart increasing','Popok basah':'Droplet','Riwayat BAB':'Spiral notepad','Berat badan':'Balance scale','Panjang badan':'Straight ruler','Bahan makanan dan kejadian merah-merah':'Magnifying glass tilted left','Bahan baru, urut pertama dicoba':'Seedling','Ringkasan untuk dokter':'Clipboard','Pertanyaan untuk dokter':'Light bulb','Obat dan suplemen':'Pill','Riwayat kesehatan':'Spiral notepad','Catat makan':'Bowl with spoon','Catat keluhan':'Lotion bottle','Catat BAB':'Pile of poo','Timbang dan ukur':'Balance scale','Foto kulit':'Camera with flash'};
 document.querySelectorAll('.card>h2').forEach(h=>{const n=H2I[h.textContent.trim()];if(n&&!h.querySelector('.h-ico'))h.insertAdjacentHTML('afterbegin',`<img class="h-ico" alt="" src="${fe(n)}">`)});
 function chipify(id,o={}){const sel=document.getElementById(id);if(!sel||sel._sync)return;const w=document.createElement('div');w.className='chips'+(o.cls?' '+o.cls:'');w.setAttribute('role','radiogroup');
   [...sel.options].forEach(op=>{const b=document.createElement('button');b.type='button';b.className='chipbtn';b.dataset.v=op.value;b.setAttribute('role','radio');
@@ -776,11 +841,14 @@ window.__syncChips=()=>document.querySelectorAll('select').forEach(s=>s._sync&&s
 const TIMES={pagi:'Sunrise',siang:'Sun',sore:'Sunset',malam:'Crescent moon'};
 chipify('fo-meal',{icon:{...TIMES,snack:'Cookie'}});
 chipify('fo-kind',{icon:{bayi:GIA_URI,mom:'Woman'}});
-chipify('fo-app',{icon:{'':'Smiling face with smiling eyes',lahap:'Face savoring food',sedikit:'Neutral face','tidak mau':'Pouting face'},label:{'':'Biasa'}});
+chipify('sl-kind',{icon:{siang:'Sun',malam:'Crescent moon'}});
+function kindUI(){const m=$('fo-kind').value==='mom';document.querySelectorAll('#f-food .baby-only').forEach(x=>x.hidden=m);$('fo-items').placeholder=m?'mis. nasi, sayur bayam, ayam goreng':'mis. labu siam, ikan nila, VCO'}
+$('fo-kind').addEventListener('change',kindUI);
+chipify('fo-app',{icon:{'':'Smiling face with smiling eyes',lahap:'Face savoring food',sedikit:'Neutral face','tidak mau':'Pouting face'}});
 chipify('fo-who',{cls:'scrollx',icon:{bayi:GIA_URI,mom:'Woman'}});
-chipify('is-type',{icon:{kulit:'Lotion bottle',pencernaan:'Pile of poo',tidur:'Crescent moon',mood:'Crying face','nafsu makan':'Fork and knife',lain:'Memo'},label:{kulit:'Kulit',pencernaan:'Perut'}});
+chipify('is-type',{icon:{kulit:'Lotion bottle',pencernaan:'Pile of poo',tidur:'Crescent moon',mood:'Crying face','nafsu makan':'Fork and knife',lain:'Memo'}});
 chipify('is-sev',{sw:{'1':'#7AD9AE','2':'#F5C55A','3':'#FF7B6B'},label:{'1':'Ringan','2':'Sedang','3':'Berat'}});
-chipify('is-after',{icon:TIMES,label:{'':'Tidak terkait'}});
+chipify('is-after',{icon:TIMES});
 chipify('st-color',{sw:{kuning:'#E3C14B',hijau:'#6E9B3A','coklat muda':'#BF8C54',coklat:'#8A5A2B','coklat gelap':'#5A3A1E',hitam:'#151515','ada darah':'#C0392B'},label:{'':'Tidak dicatat'}});
 chipify('il-type',{cls:'scrollx',icon:{kulit:'Lotion bottle',pencernaan:'Pile of poo',tidur:'Crescent moon',mood:'Crying face','nafsu makan':'Fork and knife',lain:'Memo'}});
 chipify('il-status',{cls:'scrollx'});
@@ -808,7 +876,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){toggleSheet(false);
 /* ---------- render ---------- */
 function renderAll(){
   $('age').textContent='Usia '+ageText(todayS())+' · lahir 31 Jan 2026';sceneN=0;paintHero();
-  renderBanner();renderSummary();renderToday();renderTrials();renderFoods();renderIssues();renderGallery();renderBAB();renderGrowth();renderPola();renderDokter();if($('viewer')&&!$('viewer').hidden)renderViewer();trialHint();scrollCharts();setTimeout(hydrate,30);
+  renderBanner();renderSummary();renderToday();renderTrials();renderFoods();renderIssues();renderGallery();renderBAB();renderSleep();renderGrowth();renderPola();renderDokter();if($('viewer')&&!$('viewer').hidden)renderViewer();trialHint();scrollCharts();setTimeout(hydrate,30);
 }
 function renderBanner(){
   const b=$('banner');
@@ -839,18 +907,19 @@ function renderSummary(){
   const todayMeals=babyFoods().filter(f=>f.date===T).length;
   const fl14n=fl14.length,lastFl=fl14n?fmt(fl14[fl14n-1].date):'';
   const card=(pal,tall,go,ill,lbl,val,chip)=>`<div class="scene${tall?' tall':''}" data-go="${go}" role="button" tabindex="0">${scene(pal)}<img class="ill" alt="" src="${fe(ill)}"><div class="cap"><div class="lbl">${lbl}</div><div class="val">${esc(val)}</div>${chip?`<span class="chip"><i></i>${esc(chip)}</span>`:''}</div></div>`;
-  $('stats').innerHTML=`<div class="col">${card('forest',1,'tumbuh','Balance scale','Berat terakhir',w?kg(w.weight)+' kg':'-',w?fmt(w.date)+(l?' · '+l.length+' cm':''):'belum ada')}${card('sunset',0,'makan','Bowl with spoon','Makan hari ini',todayMeals+'x',todayMeals?'lihat menu':'belum dicatat')}</div><div class="col">${card('ocean',0,'bab','Pile of poo','BAB terakhir',st?'BS '+bsLabel(st):'-',st?fmt(st.until||st.date)+(st.strain?' · mengejan':''):'belum ada')}${card('dusk',1,'keluhan','Lotion bottle','Merah-merah 14 hari',fl14n+'x',fl14n?'terakhir '+lastFl:'tidak ada')}</div>`;
+  $('stats').innerHTML=`<div class="col">${card('forest',1,'tumbuh','Balance scale','Berat terakhir',w?kg(w.weight)+' kg':'-',w?fmt(w.date)+(l?' · '+l.length+' cm':''):'belum ada')}${card('sunset',0,'makan','Bowl with spoon','Makan hari ini',todayMeals+'x',todayMeals?'lihat menu':'belum dicatat')}</div><div class="col">${card('ocean',0,'bab','Pile of poo','BAB terakhir',st?bsText(st):'-',st?fmt(st.until||st.date)+(st.strain?' · mengejan':''):'belum ada')}${card('dusk',1,'keluhan','Lotion bottle','Merah-merah 14 hari',fl14n+'x',fl14n?'terakhir '+lastFl:'tidak ada')}</div>`;
   const days=[];for(let i=13;i>=0;i--)days.push(fromN(dayN(T)-i));
   const fls=flares();
   let h='<table class="strip"><thead><tr><th></th>'+days.map(d=>`<th>${+d.slice(8)}<br><span style="font-weight:500">${dow(d)}</span></th>`).join('')+'</tr></thead><tbody>';
   h+='<tr><td>Makan</td>'+days.map(d=>{const n=babyFoods().filter(f=>f.date===d).length;return `<td>${n||'<span class="muted">-</span>'}</td>`}).join('')+'</tr>';
-  h+='<tr><td>Sedikit</td>'+days.map(d=>{const n=babyFoods().filter(f=>f.date===d&&(f.appetite==='sedikit'||f.appetite==='tidak mau')).length;return `<td>${n?'<span class="pill warn">'+n+'</span>':''}</td>`}).join('')+'</tr>';
+  h+='<tr><td>Makan sedikit</td>'+days.map(d=>{const n=babyFoods().filter(f=>f.date===d&&(f.appetite==='sedikit'||f.appetite==='tidak mau')).length;return `<td>${n?'<span class="pill warn">'+n+'</span>':''}</td>`}).join('')+'</tr>';
   h+='<tr><td>BAB</td>'+days.map(d=>{const s=stoolOn(d);return `<td>${s.map(x=>`<span class="bs ${bsCls(x.bristol,x.bristolMax)}">${bsLabel(x)}</span>`).join(' ')}</td>`}).join('')+'</tr>';
-  h+='<tr><td>Merah</td>'+days.map(d=>{const n=fls.filter(f=>f.date===d).length;return `<td>${n?'<span class="pill bad">'+n+'</span>':''}</td>`}).join('')+'</tr>';
+  h+='<tr><td>Merah-merah</td>'+days.map(d=>{const n=fls.filter(f=>f.date===d).length;return `<td>${n?'<span class="pill bad">'+n+'</span>':''}</td>`}).join('')+'</tr>';
   const fsn=firstSeen(),R0=routine();
-  h+='<tr><td>Baru</td>'+days.map(d=>{const n=Object.values(fsn).filter(s=>s===d).length;return `<td>${n?'<span class="pill">'+n+'</span>':''}</td>`}).join('')+'</tr>';
+  h+='<tr><td>Bahan baru</td>'+days.map(d=>{const n=Object.values(fsn).filter(s=>s===d).length;return `<td>${n?'<span class="pill">'+n+'</span>':''}</td>`}).join('')+'</tr>';
   if(R0.length)h+='<tr><td>Rutin</td>'+days.map(d=>{const n=R0.filter(r=>checkOf(d,r.id)).length;return `<td>${n?`<span class="pill ${n===R0.length?'good':'gray'}">${n}/${R0.length}</span>`:''}</td>`}).join('')+'</tr>';
-  h+='<tr><td>Popok</td>'+days.map(d=>{const x=D.diapers.find(q=>q.date===d);return `<td>${x?x.wet:''}</td>`}).join('')+'</tr></tbody></table>';
+  h+='<tr><td>Tidur</td>'+days.map(d=>{const m=slDay(d);return `<td>${m?'<span class="small">'+durShort(m)+'</span>':''}</td>`}).join('')+'</tr>';
+  h+='<tr><td>Popok basah</td>'+days.map(d=>{const x=D.diapers.find(q=>q.date===d);return `<td>${x?x.wet:''}</td>`}).join('')+'</tr></tbody></table>';
   $('strip').innerHTML=h;
 }
 function delBtn(col,id){return readOnly?'':`<button class="ghost danger icon-btn" data-act="del" data-col="${col}" data-id="${esc(id)}" aria-label="Hapus" title="Hapus">${TRASH}</button>`}
@@ -866,25 +935,26 @@ function renderFoods(){
       const hit=flr.filter(fl=>fl.date===d&&f.kind!=='mom'&&(ORD[f.meal]||1)<=(ORD[fl.afterMeal]||9));
       const hitTags=new Set();hit.forEach(fl=>exposureFor(fl).forEach(t=>hitTags.add(t)));
       const flagged=flr.some(fl=>fl.date===d&&f.kind!=='mom'&&f.meal===fl.afterMeal);
-      h+=`<div class="entry"><div class="ico" style="background:${TINT[f.meal]||'var(--surface3)'}"><img alt="" loading="lazy" src="${foodIcon(f)}"></div><div class="what"><div class="meta">${esc(f.meal)}${f.kind==='mom'?' · ibu (ASI)':''}</div><b>${esc(f.items)}</b>
-        ${(f.amount||f.asi)?'<div class="small muted">'+[f.amount,f.asi?'ASI '+f.asi:''].filter(Boolean).map(esc).join(' · ')+'</div>':''}
-        <div class="tags">${(f.tags||[]).map(t=>`<span class="tag ${flagged&&hitTags.has(t)?'hit':''}">${esc(t)}</span>`).join('')}</div>
-        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${f.appetite&&f.appetite!=='lahap'?`<span class="pill warn">makan ${esc(f.appetite)}</span>`:''}${f.appetite==='lahap'?'<span class="pill good">lahap</span>':''}${flagged?'<span class="pill bad">merah-merah setelah ini</span>':''}</div>
+      h+=`<div class="entry"><div class="ico" style="background:${TINT[f.meal]||'var(--surface3)'}"><img alt="" loading="lazy" src="${foodIcon(f)}"></div><div class="what"><div class="meta">${esc(f.meal[0].toUpperCase()+f.meal.slice(1))}${f.kind==='mom'?' · menu Mama':''}</div><b>${esc(f.items)}</b>
+        ${(f.amount||f.asi)?'<div class="small muted">'+[f.amount?'Porsi '+f.amount:'',f.asi?'Susu '+f.asi:''].filter(Boolean).map(esc).join(' · ')+'</div>':''}
+        ${flagged?`<div class="tags">${(f.tags||[]).map(t=>`<span class="tag ${hitTags.has(t)?'hit':''}">${esc(t)}</span>`).join('')}</div>`:''}
+        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${f.appetite&&f.appetite!=='lahap'?`<span class="pill warn">${f.appetite==='tidak mau'?'tidak mau makan':'makan sedikit'}</span>`:''}${f.appetite==='lahap'?'<span class="pill good">lahap</span>':''}${flagged?'<span class="pill bad">merah-merah setelah makan ini</span>':''}</div>
         ${f.note?'<div class="small muted" style="margin-top:5px">'+esc(f.note)+'</div>':''}${thumbs('foods:'+f.id)}</div><div class="act">${camBtn('foods:'+f.id)}${delBtn('foods',f.id)}</div></div>`})});
   $('food-list').innerHTML=h;
 }
+const TYPE_L={kulit:'Kulit',pencernaan:'Perut',tidur:'Tidur',mood:'Rewel / mood','nafsu makan':'Susah makan',lain:'Lainnya'},ST_L={aktif:'Masih ada',membaik:'Membaik',selesai:'Sudah hilang'},SEV_L={1:'ringan',2:'sedang',3:'berat'};
 function sevDots(n){return n?'<span title="tingkat '+n+'" style="letter-spacing:2px;color:var(--'+(n>=3?'bad':n==2?'warn':'muted')+')">'+'●'.repeat(n)+'○'.repeat(3-n)+'</span>':''}
 function renderIssues(){
   const ty=$('il-type').value,stt=$('il-status').value;
   const list=D.issues.filter(i=>(!ty||i.type===ty)&&(!stt||i.status===stt)).sort(byDate).reverse();
   if(!list.length){$('issue-list').innerHTML='<div class="empty">'+(ready?'Belum ada keluhan yang cocok.':'')+'</div>';return}
   $('issue-list').innerHTML=list.map(i=>`<div class="entry" style="grid-template-columns:70px 1fr auto"><div class="meta">${fmt(i.date)}${i.until?'<br>s/d '+fmt(i.until):''}${i.time?'<br>'+esc(i.time):''}</div>
-    <div class="what"><b>${esc(i.title)}</b> ${sevDots(i.severity)}
-      <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="pill gray">${esc(i.type)}</span>${i.flare?'<span class="pill bad">kambuh</span>':''}${i.area?'<span class="pill gray">'+esc(i.area)+'</span>':''}${i.afterMeal?'<span class="pill warn">setelah makan '+esc(i.afterMeal)+'</span>':''}
-      <span class="pill ${i.status==='aktif'?'bad':i.status==='membaik'?'warn':'good'}">${esc(i.status||'aktif')}</span></div>
-      ${(i.confounders||[]).length?'<div class="small muted" style="margin-top:4px">Juga terjadi: '+i.confounders.map(esc).join(', ')+'</div>':''}
+    <div class="what"><b>${esc(i.title)}</b>
+      <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="pill gray">${esc(TYPE_L[i.type]||i.type)}</span>${i.severity?`<span class="pill ${i.severity>=3?'bad':i.severity==2?'warn':'gray'}">${SEV_L[i.severity]}</span>`:''}${i.flare?'<span class="pill bad">kejadian baru</span>':''}${i.area?'<span class="pill gray">'+esc(i.area)+'</span>':''}${i.afterMeal?'<span class="pill warn">setelah makan '+esc(i.afterMeal)+'</span>':''}
+      <span class="pill ${(i.status||'aktif')==='aktif'?'bad':i.status==='membaik'?'warn':'good'}">${ST_L[i.status||'aktif']}</span></div>
+      ${(i.confounders||[]).length?'<div class="small muted" style="margin-top:4px">Hal lain hari itu: '+i.confounders.map(esc).join(', ')+'</div>':''}
       ${i.note?'<div class="small muted" style="margin-top:3px">'+esc(i.note)+'</div>':''}${thumbs(i.id)}</div>
-    <div class="act">${readOnly?'':`<button type="button" class="ghost icon-btn" data-act="photo" data-id="${esc(i.id)}" aria-label="Tambah foto" title="Tambah foto">${CAM}</button><select data-act="status" data-id="${esc(i.id)}" aria-label="Status" style="width:auto;padding:4px 6px;font-size:13px"><option${i.status==='aktif'?' selected':''}>aktif</option><option${i.status==='membaik'?' selected':''}>membaik</option><option${i.status==='selesai'?' selected':''}>selesai</option></select>`}${delBtn('issues',i.id)}</div></div>`).join('');
+    <div class="act">${readOnly?'':`<button type="button" class="ghost icon-btn" data-act="photo" data-id="${esc(i.id)}" aria-label="Tambah foto" title="Tambah foto">${CAM}</button><select data-act="status" data-id="${esc(i.id)}" aria-label="Ubah status" style="width:auto;padding:4px 6px;font-size:13px">${Object.keys(ST_L).map(k=>`<option value="${k}"${(i.status||'aktif')===k?' selected':''}>${ST_L[k]}</option>`).join('')}</select>`}${delBtn('issues',i.id)}</div></div>`).join('');
 }
 function stoolChart(){
   const T=todayS(),N=60,x0=dayN(T)-N+1,W=640,H=190,L=28,R=8,Tp=10,B=24,pw=(W-L-R)/N;
@@ -908,8 +978,33 @@ function renderBAB(){
   $('wet').innerHTML=w+'</div>';
   const list=D.stools.slice().sort(byDate).reverse();
   $('stool-list').innerHTML=list.length?list.map(s=>`<div class="entry" style="grid-template-columns:78px 1fr auto"><div class="meta">${fmt(s.date)}${s.until?'<br>s/d '+fmt(s.until):''}${s.time?'<br>'+esc(s.time):''}</div>
-    <div class="what"><span class="bs ${bsCls(s.bristol,s.bristolMax)}">BS ${bsLabel(s)}</span>${s.est?' <span class="pill gray">perkiraan</span>':''}${s.color?' <span class="pill gray">'+esc(s.color)+'</span>':''}${s.strain?' <span class="pill warn">sulit mengejan</span>':''}${s.note?'<div class="small muted" style="margin-top:3px">'+esc(s.note)+'</div>':''}${thumbs('stools:'+s.id)}</div><div class="act">${camBtn('stools:'+s.id)}${delBtn('stools',s.id)}</div></div>`).join(''):'<div class="empty">Belum ada catatan BAB.</div>';
+    <div class="what"><span class="bs ${bsCls(s.bristol,s.bristolMax)}">${bsText(s)}</span>${s.est?' <span class="pill gray">perkiraan</span>':''}${s.color?' <span class="pill gray">'+esc(s.color)+'</span>':''}${s.strain?' <span class="pill warn">sulit mengejan</span>':''}${s.note?'<div class="small muted" style="margin-top:3px">'+esc(s.note)+'</div>':''}${thumbs('stools:'+s.id)}</div><div class="act">${camBtn('stools:'+s.id)}${delBtn('stools',s.id)}</div></div>`).join(''):'<div class="empty">Belum ada catatan BAB.</div>';
 }
+function hm2m(t){const m=/^(\d{1,2})[:.](\d{2})/.exec(t||'');return m?+m[1]*60+ +m[2]:null}
+function nowHM(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+function slMin(z,now){const a=hm2m(z.start);if(a==null)return 0;let b;if(z.end)b=hm2m(z.end);else{if(!now)return 0;const T=todayS();b=hm2m(nowHM())+(diff(z.date,T)||0)*1440;return Math.max(0,b-a)}if(b==null)return 0;if(b<a)b+=1440;return b-a}
+function durTxt(m){const h=Math.floor(m/60),n=m%60;return (h?h+' jam ':'')+(n||!h?n+' menit':'').trim()}
+function durShort(m){const h=Math.floor(m/60),n=m%60;return h+'j'+(n?String(n).padStart(2,'0'):'')}
+function slDay(d,k){return D.sleeps.filter(z=>z.date===d&&z.end&&(!k||z.kind===k)).reduce((a,z)=>a+slMin(z),0)}
+function slOngoing(){return D.sleeps.filter(z=>!z.end&&z.start&&diff(z.date,todayS())<=1).sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start)).pop()}
+function slKindNow(){const h=new Date().getHours();return h>=6&&h<18?'siang':'malam'}
+function sleepNowHTML(){const z=slOngoing();
+  if(readOnly)return z?`<div class="sleep-now"><img alt="" src="${fe('Sleeping face')}"><div class="tx"><b>Gia sedang tidur</b><small>sejak ${esc(z.start)}</small></div></div>`:'';
+  if(z){const m=slMin(z,1);return `<div class="sleep-now"><img alt="" src="${fe('Sleeping face')}"><div class="tx"><b>Gia sedang tidur ${z.kind==='malam'?'malam':'siang'}</b><small>sejak ${esc(z.start)} · sudah ${durTxt(m)}</small></div><button class="primary" type="button" data-act="wake" data-id="${esc(z.id)}">Gia bangun</button></div>`}
+  return `<div class="sleep-now"><img alt="" src="${fe('Crescent moon')}"><div class="tx"><b>Gia mau tidur?</b><small>Tekan saat Gia mulai tidur, lalu tekan lagi saat bangun.</small></div><button class="primary" type="button" data-act="sleep">Mulai tidur</button></div>`}
+function renderSleep(){
+  const h=sleepNowHTML();$('sleep-now-t').innerHTML=h;$('sleep-now-r').innerHTML=slOngoing()?h:'';
+  const T=todayS();let w='<table class="sl-week"><thead><tr><th>Hari</th><th>Siang</th><th>Malam</th><th>Total</th></tr></thead><tbody>';
+  for(let i=0;i<7;i++){const d=fromN(dayN(T)-i),si=D.sleeps.filter(z=>z.date===d&&z.end&&z.kind!=='malam'),a=slDay(d,'siang'),b=slDay(d,'malam');
+    w+=`<tr><td>${i?dow(d)+', '+fmt(d):'Hari ini'}</td><td>${a?durShort(a)+' <span class="muted small">('+si.length+'x)</span>':'<span class="muted">-</span>'}</td><td>${b?durShort(b):'<span class="muted">-</span>'}</td><td class="dur">${a+b?durShort(a+b):'-'}</td></tr>`}
+  $('sleep-week').innerHTML=w+'</tbody></table>';
+  const list=D.sleeps.slice().sort((a,b)=>(b.date+(b.start||'')).localeCompare(a.date+(a.start||'')));
+  if(!list.length){$('sleep-list').innerHTML='<div class="empty">Belum ada catatan tidur. Tekan "Mulai tidur" saat Gia tidur.</div>';return}
+  const g={};list.forEach(z=>(g[z.date]=g[z.date]||[]).push(z));
+  let o='';Object.keys(g).forEach(d=>{o+=`<div class="day">${dow(d)}, ${fmt(d)}</div>`;g[d].forEach(z=>{
+    o+=`<div class="entry"><div class="ico" style="background:${z.kind==='malam'?'#2A2350':'#3B3017'}"><img alt="" loading="lazy" src="${fe(z.kind==='malam'?'Crescent moon':'Sun')}"></div><div class="what"><div class="meta">${z.kind==='malam'?'Tidur malam':'Tidur siang'}</div><b>${esc(z.start||'?')} sampai ${z.end?esc(z.end):'sekarang'}</b>${z.end?`<div class="small muted">${durTxt(slMin(z))}</div>`:'<div><span class="pill good">masih tidur</span></div>'}${z.note?'<div class="small muted" style="margin-top:4px">'+esc(z.note)+'</div>':''}</div><div class="act">${delBtn('sleeps',z.id)}</div></div>`})});
+  $('sleep-list').innerHTML=o}
+function slDurHint(){const a=$('sl-start').value,b=$('sl-end').value;$('sl-dur').textContent=a&&b?'Lama tidur: '+durTxt(slMin({start:a,end:b})):'Kosongkan jam bangun kalau Gia masih tidur.'}
 function lineChart(pts,opt){
   if(pts.length<2)return '<div class="empty">Belum cukup data.</div>';
   const W=640,H=220,L=40,R=26,Tp=16,B=26,t0=dayN(pts[0].d),t1=Math.max(dayN(pts[pts.length-1].d),t0+1);
@@ -945,12 +1040,12 @@ function renderPola(){
   $('exposure').innerHTML=h;
   const fr=ex.rows.slice().sort((a,b)=>b.first.localeCompare(a.first)||a.name.localeCompare(b.name)).slice(0,24);
   $('firsts').innerHTML=fr.length?fr.map(r=>`<span class="tag" style="margin:0 4px 4px 0;display:inline-block">${esc(r.name)} <b style="color:var(--ink)">${fmt(r.first)}</b></span>`).join(''):'<div class="empty">Belum ada data.</div>';
-  $('analysis').innerHTML=`<h2>Analisis awal, 15 Nov 2026</h2><p class="muted small" style="margin:2px 0 12px">Dibaca dari seluruh catatan yang digabung. Bukan diagnosis. Keputusan diet dan pengobatan tetap bersama dokter anak.</p>
+  $('analysis').innerHTML=`<h2>Catatan analisis, 15 Nov 2026</h2><p class="muted small" style="margin:2px 0 12px">Ditulis dari catatan sampai 15 Nov dan tidak ikut berubah saat ada catatan baru. Angka terbaru ada di kartu-kartu di bawah. Bukan diagnosis. Keputusan diet dan pengobatan tetap bersama dokter anak.</p>
   <div style="display:flex;flex-direction:column;gap:14px">
   <div class="finding k"><h3>Kulit: empat kejadian setelah makan, dua pertama berkaitan dengan tuna</h3><p>Kejadian merah-merah tercatat pada 28 Okt (kentang, tuna, butternut), 30 Okt (makanan bekas kena tuna, jadi lewat kontaminasi silang) dan dua kali pada 14 Nov (setelah makan siang dan sore). Tuna hadir di dua kejadian pertama dan tidak ada di dua terakhir. Ikan lain (kembung, gabus, patin, nila, lele, dori) tidak punya kejadian tercatat.</p><p>Pada 14 Nov tidak ada makanan baru. Yang menonjol: labu siam dimakan tiga kali hari itu, dan ada grounding di bawah matahari pagi dan sore, jadi pemicu makanan dan pemicu luar belum bisa dipisahkan. Ruam pipi kronis sempat membaik 9 Okt dan memudar lagi 14 Nov.</p></div>
   <div class="finding b"><h3>BAB: pola naik turun, sekarang keras lagi</h3><p>Urutan tercatat: sembelit (Sep) lalu obat sekitar 1 bulan, BS 1 saat obat dilepas (4 Okt), cair BS 5-6 (6-16 Okt), normal (17 Okt), BS 2 (25 Okt), BS 3-4 (26 Okt-6 Nov), dan BS 1 lagi pada 14-15 Nov dengan sulit mengejan. Dugaan Ibu soal lemak berlebih pada masa cair masuk akal, tapi masa itu juga berbarengan dengan obat berhenti dan banyak bahan baru (bakso udang, lele, mangga, babi, ghee), jadi satu penyebab tidak bisa dipastikan.</p><p>Sekarang menu menyempit (labu siam, nila atau ayam, kaldu) dan makan sedikit. Dua hal itu bisa ikut memperkeras BAB. Buah (pepaya, kiwi, naga) tetap mau.</p></div>
   <div class="finding w"><h3>Berat: melambat sejak pertengahan September</h3><p>19 Agu ke 15 Sep: 6,6 ke 7,1 kg (sekitar 18 g per hari). 15 Sep ke 30 Okt: 7,1 ke 7,3 kg (sekitar 4 g per hari), dengan puncak 7,4 kg pada 1 Okt dan turun ke 7,0 kg pada 11 Okt saat BAB cair. Sebelumnya ada juga fase datar Jul-Agu (6,6 ke 6,45 kg). Berat terakhir sudah 16 hari lalu, jadi kondisi sekarang belum diketahui. Timbang ulang di timbangan yang sama sebelum menyempitkan diet lebih jauh.</p></div>
-  <div class="finding o"><h3>Obat: ada satu hal yang layak ditanyakan</h3><p>Heptasan (cyproheptadine) yang dipakai 2 Sep sampai sekitar 2 Okt setahu saya dipakai sebagai penambah nafsu makan dan juga bersifat antihistamin. Kejadian merah-merah pertama tercatat 26 hari setelah obat dilepas. Ini hanya pertanyaan untuk dokter, bukan kesimpulan.</p></div>
+  <div class="finding o"><h3>Obat: ada satu hal yang layak ditanyakan</h3><p>Heptasan (cyproheptadine) yang dipakai 2 Sep sampai sekitar 2 Okt umumnya dipakai sebagai penambah nafsu makan dan juga bersifat antihistamin. Kejadian merah-merah pertama tercatat 26 hari setelah obat dilepas. Ini hanya pertanyaan untuk dokter, bukan kesimpulan.</p></div>
   <div class="finding d"><h3>Sebelum Oktober, data kejadian tipis</h3><p>Pencatatan kejadian kulit baru rapi sejak akhir Oktober. Bahan yang tidak punya kejadian tercatat sebelum itu belum bisa disebut aman. Selama 26 Okt-6 Nov ruam juga disebut masih ada walau menunya butternut, kentang dan kembang kol saja, jadi bagian ruam kronis kemungkinan tidak hanya soal makanan.</p></div>
   </div>
   <h3 style="margin:16px 0 6px">Langkah yang membantu memisahkan penyebab</h3>
@@ -1052,7 +1147,7 @@ async function exportDoc(pdf){
 /* ---------- events ---------- */
 function scrollCharts(){['strip','stool-chart','chart-w','chart-l'].forEach(id=>{const e=$(id);if(e&&!e.dataset.touched)e.scrollLeft=e.scrollWidth})}
 ['strip','stool-chart','chart-w','chart-l'].forEach(id=>['pointerdown','touchstart','wheel'].forEach(ev=>$(id).addEventListener(ev,()=>{$(id).dataset.touched='1'},{passive:true})));
-let curTab='ringkasan';function setTab(n){const t=n||curTab;curTab=t;const ok=['ringkasan','makan','keluhan','bab','tumbuh','pola','dokter'].includes(t)?t:'ringkasan';
+let curTab='ringkasan';function setTab(n){const t=n||curTab;curTab=t;const ok=['ringkasan','makan','keluhan','bab','tidur','tumbuh','pola','dokter'].includes(t)?t:'ringkasan';
   document.querySelectorAll('section.panel').forEach(s=>s.classList.toggle('on',s.id==='p-'+ok));
   scrollCharts();
   document.querySelectorAll('#tabs button').forEach(a=>a.setAttribute('aria-current',a.dataset.tab===ok?'true':'false'));
@@ -1075,6 +1170,8 @@ document.addEventListener('click',async e=>{
     try{await call('delPhoto',p.id,p.fileId);D.photos=D.photos.filter(x=>x.id!==p.id);if(nx){vw.id=nx}else closeViewer();renderAll();toast('Foto dihapus')}catch(x){toast(isNet(x)?'Butuh sinyal untuk menghapus foto':'Gagal menghapus foto')}return}
   if(e.target.id==='copy-sum'){const t=$('summary');try{await navigator.clipboard.writeText(t.value);toast('Ringkasan tersalin')}catch(x){t.select();try{document.execCommand('copy');toast('Ringkasan tersalin')}catch(y){toast('Tekan dan tahan untuk menyalin')}}return}
   const b=e.target.closest('[data-act]');if(!b)return;
+  if(b.dataset.act==='sleep'){const k=slKindNow();await save('sleeps',{date:todayS(),start:nowHM(),end:'',kind:k,note:''});toast('Selamat tidur, Gia. Tekan "Gia bangun" nanti.');return}
+  if(b.dataset.act==='wake'){await patch('sleeps',b.dataset.id,{end:nowHM()});const z=D.sleeps.find(x=>x.id===b.dataset.id);toast('Tidur '+(z?durTxt(slMin(z)):'')+' tersimpan');return}
   if(b.dataset.act==='del'){if(b.dataset.armed){await remove(b.dataset.col,b.dataset.id);toast('Dihapus')}else{b.dataset.armed='1';const o0=b.innerHTML;b.innerHTML='<span>Hapus?</span>';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.innerHTML=o0}},3000)}}
   if(b.dataset.act==='trial'){await save('ingredients',{name:b.dataset.name,status:b.dataset.st,note:b.dataset.st==='waspada'?'uji 3 hari':''},slug(b.dataset.name));toast(b.dataset.name+': '+STAT_LABEL[b.dataset.st])}
   if(b.dataset.act==='check'){const T=todayS(),id=T+'-'+b.dataset.item;if(checkOf(T,b.dataset.item))await remove('checks',id);else{const n=new Date();await save('checks',{date:T,item:b.dataset.item,at:pad(n.getHours())+'.'+pad(n.getMinutes())},id)}}
@@ -1098,9 +1195,9 @@ $('sum-days').addEventListener('change',renderDokter);
 $('ph-input').addEventListener('change',e=>{const f=[...e.target.files];if(f.length)uploadPhotos(f,e.target.dataset.issue)});
 document.querySelectorAll('.photo-in input[type=file]').forEach(i=>i.addEventListener('change',e=>{const n=e.target.files.length;e.target.nextElementSibling.lastChild.textContent=n?n+' foto dipilih':'Ambil atau pilih foto'}));
 document.addEventListener('submit',async e=>{if(e.target.id!=='f-routine')return;e.preventDefault();const n=$('rt-name').value.trim();if(!n)return;await save('routine',{name:n,dose:$('rt-dose').value.trim(),slot:'',sort:Date.now()/1e12+5,hidden:false},slug(n)+'-'+uid().slice(0,3));toast('Rutin ditambah')});
-$('st-bs').innerHTML=[1,2,3,4,5,6,7].map(n=>`<button type="button" data-bs="${n}" aria-pressed="false" aria-label="Bristol ${n}"><svg viewBox="0 0 34 22" fill="#B07A47" aria-hidden="true">${BS_SVG[n-1]}</svg>${n}</button>`).join('');
-$('st-bs').addEventListener('click',e=>{const b=e.target.closest('[data-bs]');if(!b)return;bs=+b.dataset.bs;$('st-bs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'))});
-['fo-date','is-date','st-date','gr-date','md-date'].forEach(i=>$(i).value=todayS());
+$('st-bs').innerHTML=[1,2,3,4,5,6,7].map(n=>`<button type="button" data-bs="${n}" aria-pressed="false" aria-label="${esc(bsFull(n))}"><svg viewBox="0 0 34 22" fill="#B07A47" aria-hidden="true">${BS_SVG[n-1]}</svg>${n}</button>`).join('');
+$('st-bs').addEventListener('click',e=>{const b=e.target.closest('[data-bs]');if(!b)return;bs=+b.dataset.bs;$('st-bs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));$('st-bs-cap').innerHTML='<b>'+bs+' · '+(bs<=2?'keras':bs<=4?'normal':'lembek / cair')+'</b><br>'+esc(BS_DESC[bs-1])});
+['fo-date','is-date','st-date','gr-date','md-date','sl-date'].forEach(i=>$(i).value=todayS());$('sl-kind').value=slKindNow();$('sl-kind').dispatchEvent(new Event('change'));setInterval(()=>{if(slOngoing()&&document.visibilityState==='visible'){const h=sleepNowHTML();$('sleep-now-t').innerHTML=h;$('sleep-now-r').innerHTML=h}},60000);
 $('f-food').addEventListener('submit',async e=>{e.preventDefault();
   const items=$('fo-items').value.trim();if(!items)return;
   const ok=await save('foods',{date:$('fo-date').value,meal:$('fo-meal').value,kind:$('fo-kind').value,items,tags:parseTags(items),amount:$('fo-amount').value.trim(),asi:$('fo-asi').value.trim(),appetite:$('fo-app').value,note:$('fo-note').value.trim(),src:'jurnal'});
@@ -1113,10 +1210,15 @@ $('f-issue').addEventListener('submit',async e=>{e.preventDefault();
   const pf=[...$('is-photo').files];if(ok&&pf.length){$('is-photo').value='';$('is-photo-lbl').lastChild.textContent='Ambil atau pilih foto';uploadPhotos(pf,ok)}
   if(ok){['is-title','is-area','is-note','is-time','is-until'].forEach(i=>$(i).value='');$('is-flare').checked=false;$('is-after').value='';$('is-conf').querySelectorAll('input').forEach(x=>x.checked=false);toast('Keluhan tersimpan')}});
 $('f-stool').addEventListener('submit',async e=>{e.preventDefault();
-  if(!bs){toast('Pilih skala Bristol dulu');return}
+  if(!bs){toast('Pilih bentuk pup dulu');$('st-bs').scrollIntoView({block:'center',behavior:'smooth'});return}
   const ok=await save('stools',{date:$('st-date').value,time:$('st-time').value,bristol:bs,bristolMax:bs,color:$('st-color').value,strain:$('st-strain').checked,note:$('st-note').value.trim(),until:'',est:false});
   const sp=[...$('st-photo').files];if(ok&&sp.length){resetPh('st-photo');uploadPhotos(sp,'stools:'+ok)}
-  if(ok){bs=0;$('st-bs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));$('st-note').value='';$('st-time').value='';$('st-strain').checked=false;toast('BAB tersimpan')}});
+  if(ok){bs=0;$('st-bs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));$('st-bs-cap').textContent='Ketuk gambar yang paling mirip.';$('st-note').value='';$('st-time').value='';$('st-strain').checked=false;toast('BAB tersimpan')}});
+['sl-start','sl-end'].forEach(i=>$(i).addEventListener('input',slDurHint));
+$('f-sleep').addEventListener('submit',async e=>{e.preventDefault();
+  const a=$('sl-start').value;if(!a){toast('Isi jam tidur');return}
+  const ok=await save('sleeps',{date:$('sl-date').value,start:a,end:$('sl-end').value,kind:$('sl-kind').value,note:$('sl-note').value.trim()});
+  if(ok){['sl-start','sl-end','sl-note'].forEach(i=>$(i).value='');slDurHint();toast('Tidur tersimpan')}});
 $('f-growth').addEventListener('submit',async e=>{e.preventDefault();
   const w=num($('gr-w').value),l=num($('gr-l').value);if(w==null&&l==null){toast('Isi berat atau panjang');return}
   const ok=await save('growth',{date:$('gr-date').value,weight:w,length:l,note:$('gr-note').value.trim()});
