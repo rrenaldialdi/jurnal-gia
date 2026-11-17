@@ -579,6 +579,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
       <h2 style="margin-bottom:12px">Catat aktivitas</h2>
       <div class="stack">
       <label>Aktivitas apa?<select id="ac-kind"><option value="main">Main</option><option value="mandi">Mandi</option><option value="jemur">Jemur / matahari</option><option value="tummy">Tummy time</option><option value="jalan">Jalan-jalan</option><option value="lain">Lainnya</option></select></label>
+      <label id="ac-other-l" hidden>Aktivitas apa namanya?<input id="ac-other" maxlength="40" placeholder="mis. pijat bayi, renang"></label>
       <div class="grid2">
         <label>Tanggal<input type="date" id="ac-date" required></label>
         <label>Jam<input type="time" id="ac-time"></label>
@@ -596,7 +597,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
       <h2 style="margin-bottom:12px">Catat suplemen</h2>
       <div class="stack">
       <label>Suplemen apa?<input id="sp-name" list="sp-list" required placeholder="mis. Vitamin D"><datalist id="sp-list"></datalist></label>
-      <div class="chips" id="sp-quick"></div>
+      <div class="chips" id="sp-quick" hidden></div>
       <div class="grid2">
         <label>Tanggal<input type="date" id="sp-date" required></label>
         <label>Jam<input type="time" id="sp-time"></label>
@@ -672,7 +673,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
     <button type="button" class="bi" data-grp="rep" aria-haspopup="menu" aria-expanded="false" aria-controls="gmenu"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5h6v2.5H9z"/><path d="M7.5 5.5H6a1.5 1.5 0 0 0-1.5 1.5v12A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 18 5.5h-1.5"/><path d="M8.5 12.5l2 2 4.5-4.5"/></svg></i><span>Laporan<svg class="car" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 6.5 5 3.5l3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
 </nav>
 <div id="gmenu-bg" hidden></div><div id="gmenu" role="menu" hidden></div>
-<div id="pnm" hidden role="dialog" aria-modal="true" aria-labelledby="pnm-t"><div class="edm-card"><div class="edm-top"><b id="pnm-t">Yang baru di Jurnal Gia</b><button type="button" class="ghost icon-btn" data-act="pn-close" aria-label="Tutup">✕</button></div><div class="pn-v"><h3>17 Nov<span>Terbaru</span></h3><ul><li>Catatan dan Tulis digabung jadi satu menu Catatan yang menyala di navigasi bawah. Ketuk, pilih jenisnya, langsung bisa nulis atau lihat riwayatnya.</li><li>Tiap pilihan di menu Catatan nunjukin sudah berapa kali dicatat hari ini.</li><li>Buka halaman catatan ga langsung munculin keyboard lagi. Keyboard baru keluar pas kolomnya diketuk.</li><li>Tumbuh kembang pindah ke dalam menu Catatan. Navigasi bawah tinggal Beranda, Catatan, Laporan.</li><li>Menu Laporan muncul dari tombolnya di bawah, tab di atas layar dihapus.</li><li>Tombol tidur jadi lebih ringkas: Tidur dan Bangun.</li><li>Riwayat Tumbuh kembang lebih rapi: satuan kg dan cm ada di bawah angkanya.</li></ul></div><div class="pn-v"><h3>16 Nov</h3><ul><li>Laporan: export tinggal PDF dan Excel. PDF-nya sekarang didesain ala Jurnal Gia, lengkap dengan grafik, sebaran BAB, foto pup, dan catatan harian.</li><li>Obat dan suplemen di Laporan dihapus, pakai halaman Suplemen.</li><li>Tombol + sekarang namanya Tulis, menu Tumbuh Kembang di bawah jadi Tumbang.</li><li>Sapaan dan menu jadi Mommy dan Daddy.</li><li>62 foto pup masuk sesuai tanggal dan jamnya, semua kotak 1:1. Foto BAB baru otomatis dipotong kotak.</li><li>Foto pup yang sempat error sudah diganti.</li><li>Timeline Beranda bisa digeser ke hari lain.</li><li>Kondisi: pilihan seberapa parah dihapus, keluhan perut dan makan tidak dobel lagi di riwayat Kondisi.</li><li>Ketuk Beranda 3 kali buat buka catatan update ini.</li></ul></div><div class="pn-v"><h3>Sebelumnya</h3><ul><li>Export Excel ke samping, satu baris per hari: menu, suplemen, BAB, tidur, respon, aktivitas.</li><li>Semua riwayat tinggal ketuk untuk ubah atau hapus, lewat popup.</li><li>Keluhan jadi Kondisi, ada pilihan Lagi bagus.</li><li>Catatan Suplemen baru, Reminder seperti app reminder biasa.</li><li>Grafik dan timeline harian pindah ke Laporan.</li><li>Data 9 sampai 12 Nov dari spreadsheet sudah masuk.</li><li>Navigasi bawah baru dengan tombol + di tengah, plus catatan Aktivitas.</li></ul></div></div></div>
+<div id="pnm" hidden role="dialog" aria-modal="true" aria-labelledby="pnm-t"><div class="edm-card"><div class="edm-top"><b id="pnm-t">Yang baru di Jurnal Gia</b><button type="button" class="ghost icon-btn" data-act="pn-close" aria-label="Tutup">✕</button></div><div class="pn-v"><h3>17 Nov<span>Terbaru</span></h3><ul><li>Catatan dan Tulis digabung jadi satu menu Catatan yang menyala di navigasi bawah. Ketuk, pilih jenisnya, langsung bisa nulis atau lihat riwayatnya.</li><li>Tiap pilihan di menu Catatan nunjukin sudah berapa kali dicatat hari ini.</li><li>Buka halaman catatan ga langsung munculin keyboard lagi. Keyboard baru keluar pas kolomnya diketuk.</li><li>Tumbuh kembang pindah ke dalam menu Catatan. Navigasi bawah tinggal Beranda, Catatan, Laporan.</li><li>Menu Laporan muncul dari tombolnya di bawah, tab di atas layar dihapus.</li><li>Tombol tidur jadi lebih ringkas: Tidur dan Bangun.</li><li>Aktivitas Lainnya sekarang bisa diisi namanya, dan nama itu yang muncul di riwayat.</li><li>Tombol pilihan cepat Vitamin D di Suplemen dihapus. Nama suplemen yang pernah dicatat tetap muncul sebagai saran saat mengetik.</li><li>Riwayat Tumbuh kembang lebih rapi: satuan kg dan cm ada di bawah angkanya.</li></ul></div><div class="pn-v"><h3>16 Nov</h3><ul><li>Laporan: export tinggal PDF dan Excel. PDF-nya sekarang didesain ala Jurnal Gia, lengkap dengan grafik, sebaran BAB, foto pup, dan catatan harian.</li><li>Obat dan suplemen di Laporan dihapus, pakai halaman Suplemen.</li><li>Tombol + sekarang namanya Tulis, menu Tumbuh Kembang di bawah jadi Tumbang.</li><li>Sapaan dan menu jadi Mommy dan Daddy.</li><li>62 foto pup masuk sesuai tanggal dan jamnya, semua kotak 1:1. Foto BAB baru otomatis dipotong kotak.</li><li>Foto pup yang sempat error sudah diganti.</li><li>Timeline Beranda bisa digeser ke hari lain.</li><li>Kondisi: pilihan seberapa parah dihapus, keluhan perut dan makan tidak dobel lagi di riwayat Kondisi.</li><li>Ketuk Beranda 3 kali buat buka catatan update ini.</li></ul></div><div class="pn-v"><h3>Sebelumnya</h3><ul><li>Export Excel ke samping, satu baris per hari: menu, suplemen, BAB, tidur, respon, aktivitas.</li><li>Semua riwayat tinggal ketuk untuk ubah atau hapus, lewat popup.</li><li>Keluhan jadi Kondisi, ada pilihan Lagi bagus.</li><li>Catatan Suplemen baru, Reminder seperti app reminder biasa.</li><li>Grafik dan timeline harian pindah ke Laporan.</li><li>Data 9 sampai 12 Nov dari spreadsheet sudah masuk.</li><li>Navigasi bawah baru dengan tombol + di tengah, plus catatan Aktivitas.</li></ul></div></div></div>
 <div id="edm" hidden role="dialog" aria-modal="true" aria-labelledby="edm-t"><div class="edm-card"><div class="edm-top"><b id="edm-t">Ubah catatan</b><button type="button" class="ghost icon-btn" data-act="edit-cancel" aria-label="Tutup">✕</button></div><div id="edm-body"></div><div id="edm-foot"></div></div></div>
 <div id="toast" hidden></div>
 <input type="file" id="ph-input" accept="image/*" multiple hidden>
@@ -884,7 +885,7 @@ function dayRows(from,to){const R=[],ids=ref=>photosOf(ref).filter(p=>!String(p.
   D.foods.filter(f=>inR(f.date)).forEach(f=>R.push({date:f.date,time:'',o:ORD[f.meal]||2,kind:f.kind==='mom'?'Makan ibu':'Makan '+f.meal,text:f.items+(f.amount?' ('+f.amount+')':'')+(f.appetite?' ['+f.appetite+']':'')+(f.note?'. '+f.note:''),ph:ids('foods:'+f.id)}));
   D.stools.filter(s=>inR(s.date)).forEach(s=>R.push({date:s.date,time:s.time||'',o:2.2,kind:'BAB',text:'Bentuk '+bsText(s)+(s.until?' sampai '+fmt(s.until):'')+(s.color?', '+s.color:'')+(s.strain?', sulit mengejan':'')+(s.note?'. '+s.note:''),ph:ids('stools:'+s.id)}));
   D.supps.filter(x=>inR(x.date)).forEach(x=>R.push({date:x.date,time:x.time||'',o:1.5,kind:'Suplemen',text:x.name+(x.dose?' ('+x.dose+')':'')+(x.note?'. '+x.note:''),ph:[]}));
-  D.activities.filter(a=>inR(a.date)).forEach(a=>R.push({date:a.date,time:a.time||'',o:2.6,kind:'Aktivitas',text:(AC_L[a.kind]||a.kind)+(a.dur?' ('+a.dur+' menit)':'')+(a.note?'. '+a.note:''),ph:[]}));
+  D.activities.filter(a=>inR(a.date)).forEach(a=>R.push({date:a.date,time:a.time||'',o:2.6,kind:'Aktivitas',text:(acName(a))+(a.dur?' ('+a.dur+' menit)':'')+(a.note?'. '+a.note:''),ph:[]}));
   D.sleeps.filter(z=>inR(z.date)).forEach(z=>R.push({date:z.date,time:z.start||'',o:3.5,kind:z.kind==='malam'?'Tidur malam':'Tidur siang',text:(z.start||'?')+' sampai '+(z.end||'belum bangun')+(z.end?' ('+durTxt(slMin(z))+')':'')+(z.note?'. '+z.note:''),ph:[]}));
   D.issues.filter(i=>inR(i.date)).forEach(i=>R.push({date:i.date,time:i.time||'',o:2.4,kind:i.type==='baik'?'Kondisi bagus':'Kondisi',text:i.title+(i.area?' ('+i.area+')':'')+(i.flare?', kambuh':'')+(i.note?'. '+i.note:''),ph:ids(i.id)}));
   return R.sort((a,b)=>a.date.localeCompare(b.date)||(a.time&&b.time?a.time.localeCompare(b.time):a.o-b.o))}
@@ -962,7 +963,7 @@ function wideRows(from,to){const out=[],ids=ref=>photosOf(ref).filter(p=>!String
     const sts=D.stools.filter(x=>x.date===d).sort(bt),st=sts.map(x=>(x.time?hm(x.time)+' ':'')+'BS '+bsLabel(x)+(x.color?' '+x.color:'')+(x.strain?', mengejan':'')+(x.note?', '+x.note:'')).join('\n');
     const sl=[...D.sleeps.filter(z=>z.date===d).sort((a,b)=>(a.start||'').localeCompare(b.start||'')).map(z=>(z.kind==='malam'?'Malam ':'Siang ')+hm(z.start||'?')+'-'+(z.end?hm(z.end):'?')+(z.end?' ('+durShort(slMin(z))+')':'')+(z.note?', '+z.note:'')),...D.issues.filter(i=>i.date===d&&i.type==='tidur').map(i=>i.title+(i.note?' ('+i.note+')':''))].join('\n');
     const iss=D.issues.filter(i=>i.date===d&&i.type!=='tidur'),rs=iss.map(i=>(i.time?hm(i.time)+' ':'')+i.title+(i.type==='baik'?' (bagus)':'')+(i.note?'. '+i.note:'')).join('\n');
-    const ac=D.activities.filter(a=>a.date===d).sort(bt).map(a=>(a.time?hm(a.time)+' ':'')+(AC_L[a.kind]||a.kind)+(a.dur?' '+a.dur+' mnt':'')+(a.note?', '+a.note:'')).join('\n');
+    const ac=D.activities.filter(a=>a.date===d).sort(bt).map(a=>(a.time?hm(a.time)+' ':'')+(acName(a))+(a.dur?' '+a.dur+' mnt':'')+(a.note?', '+a.note:'')).join('\n');
     const ph=[...fo.flatMap(f=>ids('foods:'+f.id)),...sts.flatMap(x=>ids('stools:'+x.id)),...iss.flatMap(i=>ids(i.id))];
     if(!(menu||sp||st||sl||rs||ac||ph.length))continue;
     out.push({cells:[dow(d)+', '+fmt(d),menu,sp,st,sl,rs,ac],ph})}
@@ -1050,6 +1051,8 @@ function kindIssueUI(){const g=$('is-kind').value==='baik';$('is-st-l').hidden=g
 $('is-kind').addEventListener('change',kindIssueUI);
 chipify('sl-kind',{icon:{siang:'Sun',malam:'Crescent moon'}});
 chipify('ac-kind',{icon:{main:'Teddy bear',mandi:'Bathtub',jemur:'Sun',tummy:'Baby',jalan:'Baby bottle',lain:'Sparkles'}});
+function acOther(){const on=$('ac-kind').value==='lain';$('ac-other-l').hidden=!on;$('ac-other').required=on}
+$('ac-kind').addEventListener('change',acOther);
 function kindUI(){const m=$('fo-kind').value==='mom';document.querySelectorAll('#f-food .baby-only').forEach(x=>x.hidden=m);$('fo-items').placeholder=m?'mis. nasi, sayur bayam, ayam goreng':'mis. labu siam, ikan nila, VCO'}
 $('fo-kind').addEventListener('change',kindUI);
 chipify('fo-who',{cls:'scrollx',icon:{bayi:GIA_URI,mom:'Woman'}});
@@ -1197,6 +1200,7 @@ function sleepNowHTML(){const z=slOngoing();
   if(z){const m=slMin(z,1);return `<div class="sleep-now"><img alt="" src="${fe('Sleeping face')}"><div class="tx"><b>Gia sedang tidur ${z.kind==='malam'?'malam':'siang'}</b><small>sejak ${esc(z.start)} · sudah ${durTxt(m)}</small></div><button class="primary" type="button" data-act="wake" data-id="${esc(z.id)}">Bangun</button></div>`}
   return `<div class="sleep-now"><img alt="" src="${fe('Crescent moon')}"><div class="tx"><b>Gia mau tidur?</b><small>Tekan saat Gia mulai tidur, lalu tekan lagi saat bangun.</small></div><button class="primary" type="button" data-act="sleep">Tidur</button></div>`}
 const AC_L={main:'Main',mandi:'Mandi',jemur:'Jemur / matahari',tummy:'Tummy time',jalan:'Jalan-jalan',lain:'Aktivitas lain'},AC_I={main:'Teddy bear',mandi:'Bathtub',jemur:'Sun',tummy:'Baby',jalan:'Baby bottle',lain:'Sparkles'};
+const acName=a=>a.kind==='lain'&&a.what?a.what:(AC_L[a.kind]||a.kind);
 const ED_TAB={supps:'suplemen',foods:'makan',issues:'keluhan',stools:'bab',growth:'tumbuh',sleeps:'tidur',activities:'aktivitas',meds:'dokter',history:'dokter'};
 const ED_FORM={supps:'f-supp',foods:'f-food',issues:'f-issue',stools:'f-stool',growth:'f-growth',sleeps:'f-sleep',activities:'f-act',meds:'f-med',history:'f-hist'};
 let EDIT=null;
@@ -1209,7 +1213,7 @@ function startEdit(col,id){const o=(D[col]||[]).find(x=>x.id===id);if(!o)return 
   if(col==='growth'){setV('gr-date',o.date);setV('gr-w',o.weight!=null?kg(o.weight):'');setV('gr-l',o.length!=null?String(o.length).replace('.',','):'');setV('gr-note',o.note)}
   if(col==='sleeps'){setV('sl-kind',o.kind||'siang');setV('sl-date',o.date);setV('sl-start',(o.start||'').replace('.',':'));setV('sl-end',(o.end||'').replace('.',':'));setV('sl-note',o.note);slDurHint()}
   if(col==='supps'){setV('sp-name',o.name);setV('sp-date',o.date);setV('sp-time',(o.time||'').replace('.',':'));setV('sp-dose',o.dose);setV('sp-note',o.note)}
-  if(col==='activities'){setV('ac-kind',o.kind||'main');setV('ac-date',o.date);setV('ac-time',(o.time||'').replace('.',':'));setV('ac-dur',o.dur);setV('ac-note',o.note)}
+  if(col==='activities'){setV('ac-kind',o.kind||'main');setV('ac-other',o.what||'');acOther();setV('ac-date',o.date);setV('ac-time',(o.time||'').replace('.',':'));setV('ac-dur',o.dur);setV('ac-note',o.note)}
   if(col==='meds'){setV('md-date',o.date);setV('md-name',o.name);setV('md-dose',o.dose)}
   if(col==='history'){setV('hi-when',o.when);setV('hi-text',o.text)}
   window.__syncChips&&window.__syncChips();
@@ -1229,7 +1233,7 @@ async function saveOrEdit(col,obj){if(!EDIT||EDIT.col!==col)return save(col,obj)
   if(col==='stools'){if(obj.bristol===o.bristol)obj.bristolMax=o.bristolMax;obj.until=o.until||'';obj.est=!!o.est}
   if(col==='foods')delete obj.src;if(col==='issues')delete obj.src;
   const E=EDIT;await patch(col,id,obj);EDIT=null;setTimeout(()=>{EDIT=E;endEdit(true)},0);setTimeout(()=>toast('Perubahan tersimpan'),30);return id}
-function renderSupp(){const names=[...new Set(['Vitamin D',...D.supps.slice().sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||''))).map(x=>x.name)])].slice(0,6);
+function renderSupp(){const names=[...new Set([...D.supps.slice().sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||''))).map(x=>x.name)])].slice(0,6);
   $('sp-list').innerHTML=names.map(n=>`<option value="${esc(n)}">`).join('');
   $('sp-quick').innerHTML=names.map(n=>`<button type="button" class="chipbtn" data-act="spname" data-name="${esc(n)}"><img alt="" src="${fe('Pill')}"><span>${esc(n)}</span></button>`).join('');
   const list=D.supps.slice().sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||'')));
@@ -1240,7 +1244,7 @@ function renderSupp(){const names=[...new Set(['Vitamin D',...D.supps.slice().so
 function renderAct(){const list=D.activities.slice().sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||'')));
   if(!list.length){$('act-list').innerHTML='<div class="empty">Belum ada catatan aktivitas.</div>';return}
   const g={};list.forEach(a=>(g[a.date]=g[a.date]||[]).push(a));let o='';
-  Object.keys(g).forEach(d=>{o+=`<div class="day">${dow(d)}, ${fmt(d)}</div>`;g[d].forEach(a=>{o+=`<div class="entry"><div class="ico" style="background:var(--good-soft)"><img alt="" loading="lazy" src="${fe(AC_I[a.kind]||'Teddy bear')}"></div><div class="what"><div class="meta">${esc(a.time||'')}</div><b>${esc(AC_L[a.kind]||a.kind)}</b>${a.dur?`<div class="small muted">${esc(a.dur)} menit</div>`:''}${a.note?'<div class="small muted" style="margin-top:4px">'+esc(a.note)+'</div>':''}</div><div class="act">${delBtn('activities',a.id)}</div></div>`})});
+  Object.keys(g).forEach(d=>{o+=`<div class="day">${dow(d)}, ${fmt(d)}</div>`;g[d].forEach(a=>{o+=`<div class="entry"><div class="ico" style="background:var(--good-soft)"><img alt="" loading="lazy" src="${fe(AC_I[a.kind]||'Teddy bear')}"></div><div class="what"><div class="meta">${esc(a.time||'')}</div><b>${esc(acName(a))}</b>${a.dur?`<div class="small muted">${esc(a.dur)} menit</div>`:''}${a.note?'<div class="small muted" style="margin-top:4px">'+esc(a.note)+'</div>':''}</div><div class="act">${delBtn('activities',a.id)}</div></div>`})});
   $('act-list').innerHTML=o}
 function renderSleep(){
   const h=sleepNowHTML();$('sleep-now-t').innerHTML=h;$('sleep-now-r').innerHTML=slOngoing()?h:'';
@@ -1269,7 +1273,7 @@ function dayEvents(T){
   D.sleeps.filter(x=>x.date===T||(x.end&&diff(x.date,T)===1&&hm2m(x.end)<hm2m(x.start))).forEach(x=>{const st0=x.date===T?hm2m(x.start):0;ev.push({c:'sleeps',id:x.id,m:st0,t:x.date===T?x.start:'00.00',ic:x.kind==='malam'?'Crescent moon':'Sleeping face',b:(x.kind==='malam'?'Tidur malam':'Tidur siang')+(x.end?' sampai '+x.end:', masih tidur'),s:x.end?durTxt(slMin(x)):'sejak '+x.start})});
   D.stools.filter(x=>x.date===T).forEach(x=>ev.push({c:'stools',id:x.id,m:hm2m(x.time)??800,t:x.time||'-',ic:'Pile of poo',b:'BAB · '+bsText(x),s:[x.color,x.strain?'mengejan':''].filter(Boolean).join(' · ')}));
   D.issues.filter(x=>x.date===T).forEach(x=>ev.push({c:'issues',id:x.id,m:hm2m(x.time)??810,t:x.time||'-',ic:x.type==='baik'?'Smiling face with hearts':'Lotion bottle',b:x.title,s:x.type==='baik'?'Kondisi bagus':'Kondisi'+(x.flare?' · kejadian baru':'')}));
-  D.activities.filter(a=>a.date===T).forEach(a=>ev.push({c:'activities',id:a.id,m:hm2m(a.time)??780,t:a.time||'-',ic:AC_I[a.kind]||'Teddy bear',b:AC_L[a.kind]||a.kind,s:[a.dur?a.dur+' menit':'',a.note].filter(Boolean).join(' · ')}));
+  D.activities.filter(a=>a.date===T).forEach(a=>ev.push({c:'activities',id:a.id,m:hm2m(a.time)??780,t:a.time||'-',ic:AC_I[a.kind]||'Teddy bear',b:acName(a),s:[a.dur?a.dur+' menit':'',a.note].filter(Boolean).join(' · ')}));
   D.supps.filter(x=>x.date===T).forEach(x=>ev.push({c:'supps',id:x.id,m:hm2m(x.time)??500,t:x.time||'-',ic:'Pill',b:x.name,s:['Suplemen',x.dose,x.note].filter(Boolean).join(' · ')}));
   D.checks.filter(c=>c.date===T).forEach(c=>ev.push({m:hm2m(c.at)??480,t:c.at||'-',ic:'Check mark button',b:rn[c.item]||c.item,s:'Reminder selesai'}));
   ev.sort((p,q)=>p.m-q.m);
@@ -1293,7 +1297,7 @@ function renderHome(){if(!$('last'))return;const T=todayS();
     tile('sunset','makan','Bowl with spoon','Makan terakhir',lf?esc(lf.date===T?cap1(lf.meal):dayWord(lf.date)):'-',lf?lf.items:'belum ada')+
     (z?tile('dusk','tidur','Sleeping face','Sedang tidur',esc(durShort(slMin(z,1))),'sejak '+z.start):tile('dusk','tidur','Crescent moon',done?'Bangun':'Tidur',done?ago(done.t):'-',done?'tidur '+durShort(slMin(done.x)):'belum ada'))+
     tile('ocean','bab','Pile of poo','BAB terakhir',st?(st.time&&!st.until?ago(tsOf(st.date,st.time)):esc(dayWord(st.until||st.date))):'-',st?bsText(st):'belum ada')+
-    (()=>{const la=D.activities.slice().sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||''))).pop();return tile('forest','aktivitas',la?(AC_I[la.kind]||'Teddy bear'):'Teddy bear','Aktivitas terakhir',la?(la.time?ago(tsOf(la.date,la.time)):esc(dayWord(la.date))):'-',la?(AC_L[la.kind]||la.kind)+(la.dur?' · '+la.dur+' mnt':''):'belum ada')})();
+    (()=>{const la=D.activities.slice().sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||''))).pop();return tile('forest','aktivitas',la?(AC_I[la.kind]||'Teddy bear'):'Teddy bear','Aktivitas terakhir',la?(la.time?ago(tsOf(la.date,la.time)):esc(dayWord(la.date))):'-',la?(acName(la))+(la.dur?' · '+la.dur+' mnt':''):'belum ada')})();
   const q=(attrs,ill,lbl,sub,on)=>`<button type="button" ${attrs}${on?' class="on"':''}><i><img alt="" src="${fe(ill)}"></i>${lbl}${sub?`<small>${esc(sub)}</small>`:''}</button>`;
   if($('qgrid'))$('qgrid').innerHTML=readOnly?'':
     q('data-quick="makan" data-focus="fo-items"','Bowl with spoon','Makan','')+
@@ -1765,8 +1769,8 @@ $('f-supp').addEventListener('submit',async e=>{e.preventDefault();const n=$('sp
   if(ok){['sp-name','sp-time','sp-dose','sp-note'].forEach(i=>$(i).value='');toast('Suplemen tersimpan')}});
 $('f-act').addEventListener('submit',async e=>{e.preventDefault();
   const t=$('ac-time').value||($('ac-date').value===todayS()?nowHM():'');
-  const ok=await saveOrEdit('activities',{date:$('ac-date').value,time:t,kind:$('ac-kind').value,dur:$('ac-dur').value.replace(/[^0-9]/g,''),note:$('ac-note').value.trim()});
-  if(ok){['ac-time','ac-dur','ac-note'].forEach(i=>$(i).value='');toast('Aktivitas tersimpan')}});
+  const ok=await saveOrEdit('activities',{date:$('ac-date').value,time:t,kind:$('ac-kind').value,what:$('ac-kind').value==='lain'?$('ac-other').value.trim():'',dur:$('ac-dur').value.replace(/[^0-9]/g,''),note:$('ac-note').value.trim()});
+  if(ok){['ac-time','ac-dur','ac-note','ac-other'].forEach(i=>$(i).value='');toast('Aktivitas tersimpan')}});
 $('f-growth').addEventListener('submit',async e=>{e.preventDefault();
   const w=num($('gr-w').value),l=num($('gr-l').value);if(w==null&&l==null){toast('Isi berat atau panjang');return}
   const ok=await saveOrEdit('growth',{date:$('gr-date').value,weight:w,length:l,note:$('gr-note').value.trim()});
