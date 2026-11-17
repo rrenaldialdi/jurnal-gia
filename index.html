@@ -1411,9 +1411,9 @@ function renderPola(){
   $('exp-note').textContent='Dihitung dari makanan sebelum tiap kejadian ('+ex.total+' kejadian). Pola paparan, bukan bukti penyebab.';
   {const N=ex.rows.length,T=todayS(),c14=fromN(dayN(T)-13),n14=ex.rows.filter(r=>r.first>=c14).length;$('ing-count').innerHTML=`<b>${N}</b><span>bahan sudah Gia coba${n14?`<small>+${n14} bahan baru dalam 14 hari terakhir</small>`:''}</span>`}
   let h='';const maxN=Math.max(1,...ex.rows.map(r=>r.n));
-  ex.rows.slice(0,60).forEach((r,ix)=>{const st=statusOf(r.name);
+  ex.rows.forEach((r,ix)=>{const st=statusOf(r.name);
     h+=`<div class="ing${ix>=8?' ing-x':''}"><div class="ico"><img alt="" loading="lazy" src="${iconFor(r.name)}"></div><div style="min-width:0"><b>${esc(r.name)}</b> <span class="small muted">${r.n}x · ${fmt(r.last)}</span>${r.fl?` <span class="pill bad">${r.fl}/${ex.total} kejadian</span>`:''}<div class="bar ${r.fl?'bad':''}"><span style="width:${Math.round((r.fl?r.fl/Math.max(1,ex.total):r.n/maxN)*100)}%"></span></div></div><div>${readOnly?`<span class="pill">${STAT_LABEL[st]}</span>`:`<select data-act="ing" data-name="${esc(r.name)}" aria-label="Status ${esc(r.name)}">${Object.keys(STAT_LABEL).map(k=>`<option value="${k}"${k===st?' selected':''}>${STAT_LABEL[k]}</option>`).join('')}</select>`}</div></div>`});
-  const nx=Math.min(60,ex.rows.length);if(nx>8)h+=`<button type="button" class="more-btn ghost" data-act="ing-all">Lihat semua ${nx} bahan</button>`;
+  const nx=ex.rows.length;if(nx>8)h+=`<button type="button" class="more-btn ghost" data-act="ing-all">Lihat semua ${nx} bahan</button>`;
   $('exposure').innerHTML=h;$('exposure').classList.remove('all');
   const fr=ex.rows.slice().sort((a,b)=>b.first.localeCompare(a.first)||a.name.localeCompare(b.name)).slice(0,12);
   $('firsts').innerHTML=fr.length?fr.map(r=>`<span class="tag" style="margin:0 4px 4px 0;display:inline-block">${esc(r.name)} <b style="color:var(--ink)">${fmt(r.first)}</b></span>`).join(''):'<div class="empty">Belum ada data.</div>';
