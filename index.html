@@ -145,6 +145,27 @@ fieldset legend{text-transform:uppercase;letter-spacing:.1em;font-size:10.5px}
 #edm-body>form.row{flex-direction:column;align-items:stretch}
 #edm-body>form.row label{flex:1 1 auto!important}
 @keyframes sheetup{from{transform:translateY(40px);opacity:.6}}@keyframes fadein{from{opacity:0}}
+#gmenu-bg{position:fixed;inset:0;z-index:19;background:rgba(8,8,10,.42);opacity:0;transition:opacity .18s ease-out}
+#gmenu-bg.on{opacity:1}
+#gmenu{position:fixed;z-index:21;bottom:calc(74px + env(safe-area-inset-bottom,0px));width:248px;background:var(--surface2);border-radius:22px;padding:6px;box-shadow:0 18px 44px -10px rgba(0,0,0,.75),0 2px 8px rgba(0,0,0,.35);opacity:0;transform:translateY(10px) scale(.94);transition:opacity .2s cubic-bezier(.16,1,.3,1),transform .26s cubic-bezier(.16,1,.3,1)}
+#gmenu.on{opacity:1;transform:none}
+#gmenu.out{transition-duration:.12s;transition-timing-function:ease-in}
+.gm-i{display:flex;align-items:center;gap:12px;width:100%;background:transparent;border:0;border-radius:16px;padding:9px 12px;min-height:52px;text-align:left;color:var(--ink);box-shadow:none;opacity:0;transform:translateY(6px);transition:opacity .18s ease-out,transform .24s cubic-bezier(.16,1,.3,1),background-color .12s}
+#gmenu.on .gm-i{opacity:1;transform:none}
+.gm-i img{width:28px;height:28px;flex:none}
+.gm-i span{min-width:0}
+.gm-i b{display:block;font-size:15px;font-weight:700;line-height:1.25}
+.gm-i small{display:block;font-size:12.5px;color:var(--muted);line-height:1.3;margin-top:1px}
+.gm-i[aria-current="page"]{background:var(--accent-soft)}
+.gm-i[aria-current="page"] b{color:var(--accent)}
+.gm-i:active{background:var(--surface3)}
+.gm-i:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+#bnav .bi .car{width:9px;height:9px;margin-left:3px;vertical-align:0;transition:transform .22s cubic-bezier(.16,1,.3,1)}
+#bnav .bi[aria-expanded="true"]{color:var(--ink)}
+#bnav .bi[aria-expanded="true"] .car{transform:rotate(180deg)}
+#bnav .bi[aria-expanded="true"] i{background:var(--surface3)}
+@media (prefers-reduced-motion:reduce){#gmenu,.gm-i,#bnav .bi .car{transform:none!important;transition:opacity .1s linear!important}}
+
 .bs-pic{display:inline-grid;place-items:center;width:40px;height:28px;border-radius:9px;background:var(--surface2);margin-right:6px;vertical-align:middle}
 .bs-pic svg{width:30px;height:20px}
 .tl[data-act]{cursor:pointer}
@@ -607,13 +628,14 @@ button.sm{padding:7px 13px;font-size:12.5px}
 </div>
 <nav id="bnav" aria-label="Menu utama">
   <button type="button" class="bi" data-grp="home"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg></i>Beranda</button>
-  <button type="button" class="bi" data-grp="log"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M9 8.5h6M9 12h6M9 15.5h3.5"/></svg></i>Catatan</button>
+  <button type="button" class="bi" data-grp="log" aria-haspopup="menu" aria-expanded="false" aria-controls="gmenu"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M9 8.5h6M9 12h6M9 15.5h3.5"/></svg></i><span>Catatan<svg class="car" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 6.5 5 3.5l3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
   <button type="button" class="fab" id="mound" aria-label="Tulis catatan baru" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
   <span class="fab-l" aria-hidden="true">Tulis</span>
   <button type="button" class="bi" data-grp="grow"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5h16"/><path d="M6.5 16l4-5 3 3 4.5-6.5"/><path d="M15 7.5h3v3"/></svg></i>Tumbang</button>
-  <button type="button" class="bi" data-grp="rep"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5h6v2.5H9z"/><path d="M7.5 5.5H6a1.5 1.5 0 0 0-1.5 1.5v12A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 18 5.5h-1.5"/><path d="M8.5 12.5l2 2 4.5-4.5"/></svg></i>Laporan</button>
+  <button type="button" class="bi" data-grp="rep" aria-haspopup="menu" aria-expanded="false" aria-controls="gmenu"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5h6v2.5H9z"/><path d="M7.5 5.5H6a1.5 1.5 0 0 0-1.5 1.5v12A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 18 5.5h-1.5"/><path d="M8.5 12.5l2 2 4.5-4.5"/></svg></i><span>Laporan<svg class="car" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 6.5 5 3.5l3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
 </nav>
-<div id="pnm" hidden role="dialog" aria-modal="true" aria-labelledby="pnm-t"><div class="edm-card"><div class="edm-top"><b id="pnm-t">Yang baru di Jurnal Gia</b><button type="button" class="ghost icon-btn" data-act="pn-close" aria-label="Tutup">✕</button></div><div class="pn-v"><h3>16 Nov<span>Terbaru</span></h3><ul><li>Laporan: export tinggal PDF dan Excel. PDF-nya sekarang didesain ala Jurnal Gia, lengkap dengan grafik, sebaran BAB, foto pup, dan catatan harian.</li><li>Obat dan suplemen di Laporan dihapus, pakai halaman Suplemen.</li><li>Tombol + sekarang namanya Tulis, menu Tumbuh Kembang di bawah jadi Tumbang.</li><li>Sapaan dan menu jadi Mommy dan Daddy.</li><li>62 foto pup masuk sesuai tanggal dan jamnya, semua kotak 1:1. Foto BAB baru otomatis dipotong kotak.</li><li>Foto pup yang sempat error sudah diganti.</li><li>Timeline Beranda bisa digeser ke hari lain.</li><li>Kondisi: pilihan seberapa parah dihapus, keluhan perut dan makan tidak dobel lagi di riwayat Kondisi.</li><li>Ketuk Beranda 3 kali buat buka catatan update ini.</li></ul></div><div class="pn-v"><h3>Sebelumnya</h3><ul><li>Export Excel ke samping, satu baris per hari: menu, suplemen, BAB, tidur, respon, aktivitas.</li><li>Semua riwayat tinggal ketuk untuk ubah atau hapus, lewat popup.</li><li>Keluhan jadi Kondisi, ada pilihan Lagi bagus.</li><li>Catatan Suplemen baru, Reminder seperti app reminder biasa.</li><li>Grafik dan timeline harian pindah ke Laporan.</li><li>Data 9 sampai 12 Nov dari spreadsheet sudah masuk.</li><li>Navigasi bawah baru dengan tombol + di tengah, plus catatan Aktivitas.</li></ul></div></div></div>
+<div id="gmenu-bg" hidden></div><div id="gmenu" role="menu" hidden></div>
+<div id="pnm" hidden role="dialog" aria-modal="true" aria-labelledby="pnm-t"><div class="edm-card"><div class="edm-top"><b id="pnm-t">Yang baru di Jurnal Gia</b><button type="button" class="ghost icon-btn" data-act="pn-close" aria-label="Tutup">✕</button></div><div class="pn-v"><h3>17 Nov<span>Terbaru</span></h3><ul><li>Menu Catatan dan Laporan sekarang muncul dari tombolnya di bawah. Tab di bagian atas layar dihapus, jadi semua pilihan ada di jangkauan jempol.</li><li>Tiap pilihan di menu Catatan menunjukkan sudah berapa kali dicatat hari ini.</li></ul></div><div class="pn-v"><h3>16 Nov</h3><ul><li>Laporan: export tinggal PDF dan Excel. PDF-nya sekarang didesain ala Jurnal Gia, lengkap dengan grafik, sebaran BAB, foto pup, dan catatan harian.</li><li>Obat dan suplemen di Laporan dihapus, pakai halaman Suplemen.</li><li>Tombol + sekarang namanya Tulis, menu Tumbuh Kembang di bawah jadi Tumbang.</li><li>Sapaan dan menu jadi Mommy dan Daddy.</li><li>62 foto pup masuk sesuai tanggal dan jamnya, semua kotak 1:1. Foto BAB baru otomatis dipotong kotak.</li><li>Foto pup yang sempat error sudah diganti.</li><li>Timeline Beranda bisa digeser ke hari lain.</li><li>Kondisi: pilihan seberapa parah dihapus, keluhan perut dan makan tidak dobel lagi di riwayat Kondisi.</li><li>Ketuk Beranda 3 kali buat buka catatan update ini.</li></ul></div><div class="pn-v"><h3>Sebelumnya</h3><ul><li>Export Excel ke samping, satu baris per hari: menu, suplemen, BAB, tidur, respon, aktivitas.</li><li>Semua riwayat tinggal ketuk untuk ubah atau hapus, lewat popup.</li><li>Keluhan jadi Kondisi, ada pilihan Lagi bagus.</li><li>Catatan Suplemen baru, Reminder seperti app reminder biasa.</li><li>Grafik dan timeline harian pindah ke Laporan.</li><li>Data 9 sampai 12 Nov dari spreadsheet sudah masuk.</li><li>Navigasi bawah baru dengan tombol + di tengah, plus catatan Aktivitas.</li></ul></div></div></div>
 <div id="edm" hidden role="dialog" aria-modal="true" aria-labelledby="edm-t"><div class="edm-card"><div class="edm-top"><b id="edm-t">Ubah catatan</b><button type="button" class="ghost icon-btn" data-act="edit-cancel" aria-label="Tutup">✕</button></div><div id="edm-body"></div><div id="edm-foot"></div></div></div>
 <div id="toast" hidden></div>
 <input type="file" id="ph-input" accept="image/*" multiple hidden>
@@ -1003,7 +1025,7 @@ chipify('sum-days',{cls:'scrollx'});
 const BS_SVG=['<circle cx="7" cy="12" r="4"/><circle cx="16" cy="8" r="3.6"/><circle cx="25" cy="13" r="4.2"/><circle cx="16" cy="16.5" r="3"/>','<path d="M3 12c0-4 4-5 6-4 1-3 5-3 7-1 2-2 6-2 8 0 3 0 5 3 4 6-1 3-4 4-7 3-2 2-6 2-8 0-2 2-6 1-7-1-2 0-3-1-3-3z"/>','<rect x="2" y="6" width="30" height="11" rx="5.5"/><path d="M10 7l-1 4M18 7l1 4M25 8l-1 3" stroke="rgba(0,0,0,.35)" stroke-width="1.4" fill="none"/>','<rect x="2" y="6.5" width="30" height="10" rx="5"/>','<ellipse cx="8" cy="12" rx="6" ry="4.5"/><ellipse cx="19" cy="9" rx="5.5" ry="4"/><ellipse cx="27" cy="14" rx="5" ry="4"/>','<path d="M2 15c2-5 5-3 7-6 2 3 4-1 7 1 2-3 5 0 7-1 2 2 6 1 8 5 1 3-3 4-6 3-3 2-7 1-10 1-4 1-8 1-11-1-2 0-3-1-2-2z"/>','<path d="M1 14c4-3 7 2 11-1s7 2 11-1 7 1 10 0v4c-4 2-7-1-11 1s-7-2-11 0-7-1-10 0z" opacity=".85"/>'];
 const CAM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 const TRASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>';
-function toggleSheet(on){const m=document.getElementById('mound'),s=document.getElementById('sheet');const v=on==null?!s.classList.contains('on'):on;s.classList.toggle('on',v);m.setAttribute('aria-expanded',v?'true':'false')}
+function toggleSheet(on){const m=document.getElementById('mound'),s=document.getElementById('sheet');const v=on==null?!s.classList.contains('on'):on;if(v)closeGM();s.classList.toggle('on',v);m.setAttribute('aria-expanded',v?'true':'false')}
 document.addEventListener('click',e=>{
   if(e.target.closest('#mound')){toggleSheet();return}
   const q=e.target.closest('[data-quick]');
@@ -1013,7 +1035,7 @@ document.addEventListener('click',e=>{
 
 $('edm').addEventListener('click',e=>{if(e.target.id==='edm')endEdit(true)});
 document.addEventListener('click',e=>{if(e.target.closest('button,select,a,input,label,.thumb,#edm'))return;const en=e.target.closest('.entry,tr');if(!en)return;const mk=en.querySelector('[data-ed]');if(mk)startEdit(mk.dataset.ed,mk.dataset.eid)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){toggleSheet(false);if(!$('edm').hidden)endEdit(true);if($('viewer')&&!$('viewer').hidden)closeViewer()}if($('viewer')&&!$('viewer').hidden){if(e.key==='ArrowLeft'&&vw.prev){vw.id=vw.prev;renderViewer()}if(e.key==='ArrowRight'&&vw.next){vw.id=vw.next;renderViewer()}}if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('scene')){e.preventDefault();e.target.click()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(GM){closeGM(true);return}toggleSheet(false);if(!$('edm').hidden)endEdit(true);if($('viewer')&&!$('viewer').hidden)closeViewer()}if($('viewer')&&!$('viewer').hidden){if(e.key==='ArrowLeft'&&vw.prev){vw.id=vw.prev;renderViewer()}if(e.key==='ArrowRight'&&vw.next){vw.id=vw.next;renderViewer()}}if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('scene')){e.preventDefault();e.target.click()}});
 
 /* ---------- render ---------- */
 function renderAll(){
@@ -1587,14 +1609,36 @@ function setTab(n){const t=n||curTab;const ok=Object.values(GROUPS).flat().inclu
   document.querySelectorAll('section.panel').forEach(s=>s.classList.toggle('on',s.id==='p-'+ok));
   document.body.classList.toggle('g-home',g==='home');
   document.querySelectorAll('#bnav .bi').forEach(b=>b.dataset.grp===g?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
-  const L=GROUPS[g],sn=$('subnav');sn.hidden=L.length<2;
+  const L=GROUPS[g],sn=$('subnav');sn.hidden=true;
   $('seg').classList.toggle('compact',L.length>4);if(L.length>1)$('seg').innerHTML=L.map(k=>`<button type="button" role="tab" data-tab="${k}"${k===ok?' aria-current="page" aria-selected="true"':' aria-selected="false"'}><img alt="" src="${fe(SEG_L[k][1])}">${SEG_L[k][0]}</button>`).join('');
   try{history.replaceState(null,'','#'+ok)}catch(x){}
   scrollCharts()}
 let hmTaps=[];function openPN(){$('pnm').hidden=false;document.body.style.overflow='hidden'}function closePN(){$('pnm').hidden=true;document.body.style.overflow=''}
 $('bnav').addEventListener('click',e=>{if(!e.target.closest('.bi[data-grp="home"]'))return;const t=Date.now();hmTaps=hmTaps.filter(x=>t-x<900);hmTaps.push(t);if(hmTaps.length>=3){hmTaps=[];openPN()}});
 $('pnm').addEventListener('click',e=>{if(e.target.id==='pnm'||e.target.closest('[data-act="pn-close"]'))closePN()});
-$('bnav').addEventListener('click',e=>{const b=e.target.closest('.bi');if(!b)return;toggleSheet(false);const g=b.dataset.grp;setTab(lastIn[g]||GROUPS[g][0]);window.scrollTo(0,0)});
+
+// Menu Catatan/Laporan: muncul dari tombolnya di navbar bawah, menggantikan tab di atas.
+let GM=null;
+const GM_DESC={grafik:'Timeline dan grafik harian',pola:'Benang merah dari catatan',dokter:'Export PDF dan Excel'};
+const GM_SRC={makan:()=>babyFoods(),tidur:()=>D.sleeps,bab:()=>D.stools,aktivitas:()=>D.activities,suplemen:()=>D.supps,keluhan:()=>D.issues};
+function gmMeta(k){if(!GM_SRC[k])return GM_DESC[k]||'';const T=todayS(),n=GM_SRC[k]().filter(x=>x.date===T).length;return n?n+'x hari ini':'Belum ada hari ini'}
+function openGM(g,btn,kbd){const m=$('gmenu'),bg=$('gmenu-bg');
+  m.innerHTML=GROUPS[g].map((k,i)=>`<button type="button" role="menuitem" class="gm-i" data-gtab="${k}" style="transition-delay:${30+i*26}ms"${curTab===k?' aria-current="page"':''}><img alt="" src="${fe(SEG_L[k][1])}"><span><b>${esc(SEG_L[k][0])}</b><small>${esc(gmMeta(k))}</small></span></button>`).join('');
+  m.setAttribute('aria-label',g==='log'?'Catatan':'Laporan');
+  const r=btn.getBoundingClientRect(),w=248,cx=r.left+r.width/2,left=Math.max(12,Math.min(innerWidth-12-w,cx-w/2));
+  m.style.left=left+'px';m.style.transformOrigin=Math.round(cx-left)+'px 100%';
+  m.hidden=false;bg.hidden=false;m.classList.remove('out','on');bg.classList.remove('on');void m.offsetWidth;m.classList.add('on');bg.classList.add('on');
+  btn.setAttribute('aria-expanded','true');GM={g,btn};
+  if(kbd)(m.querySelector('[aria-current]')||m.querySelector('.gm-i')).focus()}
+function closeGM(focusBack){if(!GM)return;const m=$('gmenu'),bg=$('gmenu-bg'),b=GM.btn;GM=null;
+  m.querySelectorAll('.gm-i').forEach(x=>x.style.transitionDelay='0ms');m.classList.add('out');m.classList.remove('on');bg.classList.remove('on');b.setAttribute('aria-expanded','false');
+  setTimeout(()=>{if(!GM){m.hidden=true;bg.hidden=true}},160);if(focusBack)b.focus()}
+$('gmenu-bg').addEventListener('click',()=>closeGM());
+$('gmenu').addEventListener('click',e=>{const it=e.target.closest('[data-gtab]');if(!it)return;closeGM();setTab(it.dataset.gtab);window.scrollTo(0,0)});
+$('gmenu').addEventListener('keydown',e=>{if(e.key!=='ArrowDown'&&e.key!=='ArrowUp')return;e.preventDefault();const L=[...$('gmenu').querySelectorAll('.gm-i')],i=L.indexOf(document.activeElement);L[(i+(e.key==='ArrowDown'?1:L.length-1))%L.length].focus()});
+$('bnav').addEventListener('click',e=>{const b=e.target.closest('.bi');if(!b)return;toggleSheet(false);const g=b.dataset.grp;
+  if(GROUPS[g].length>1){if(GM&&GM.g===g){closeGM();return}closeGM();openGM(g,b,e.detail===0);return}
+  closeGM();setTab(lastIn[g]||GROUPS[g][0]);window.scrollTo(0,0)});
 $('seg').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;setTab(b.dataset.tab);window.scrollTo(0,0)});
 document.addEventListener('click',async e=>{
   const g=e.target.closest('[data-go]');if(g){setTab(g.dataset.go);window.scrollTo(0,0);return}
