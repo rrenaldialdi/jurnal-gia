@@ -183,8 +183,7 @@ fieldset legend{text-transform:uppercase;letter-spacing:.1em;font-size:10.5px}
 .sheet .sh-l{font-size:13px;font-weight:700;color:var(--ink)}
 .sheet .sh-m{font-size:11.5px;color:var(--muted);line-height:1.2}
 .sheet .sh-m.has{color:var(--accent);font-weight:700}
-.sheet button[data-quick="tumbuh"]{grid-column:1/-1;flex-direction:row;justify-content:flex-start;gap:12px;padding:12px 14px;text-align:left}
-.sheet button[data-quick="tumbuh"] .sh-m{margin-left:auto}
+.sheet button[data-quick="tumbuh"]{grid-column:span 2}
 .sheet button:active,#sheet button:active{background:var(--surface3)}
 @media (prefers-reduced-motion:reduce){.sheet,.sheet button{transform:translate(-50%,0)!important;transition:opacity .12s linear!important}.sheet button{transform:none!important}}
 #growth-list td.gr-d{white-space:nowrap}
@@ -258,6 +257,25 @@ img{-webkit-touch-callout:none}
 @media (hover:none){button:not(:disabled):active,.chipbtn:active{transform:scale(.96)}.entry:active,.mini:active,.scene:active{transform:scale(.985);transition:transform .1s}}
 .edm-card{max-height:90dvh}
 .dp input{min-height:0!important;padding:0!important;background-image:none!important}
+
+.fl-today{display:flex;flex-direction:column;gap:12px}
+.fl-top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.fl-k{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.fl-big{font:400 40px/1.05 var(--font-display);color:var(--accent);font-variant-numeric:tabular-nums}
+.fl-big span{font:700 15px var(--font-body);color:var(--muted)}
+.fl-week{display:grid;grid-template-columns:repeat(7,14px);gap:6px;align-items:end;height:64px;flex:none}
+.fl-bar{display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
+.fl-bar b{display:block;width:100%;flex:1;position:relative;border-radius:4px;background:var(--surface2);overflow:hidden}
+.fl-bar i{position:absolute;left:0;right:0;bottom:0;border-radius:4px;background:var(--accent);opacity:.55}
+.fl-bar.t i{opacity:1}
+.fl-bar span{font-size:10px;color:var(--muted);font-weight:700;line-height:1}
+.fl-bar.t span{color:var(--ink)}
+.fl-by{display:flex;flex-wrap:wrap;gap:6px}
+.chips.fl-q{display:grid;flex-wrap:nowrap;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.fl-q .chipbtn{width:100%;min-width:0;padding-inline:0;justify-content:center;font-variant-numeric:tabular-nums}
+.fl-q .chipbtn[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.day-sum{color:var(--accent);font-weight:700}
+.err-line{margin:0;color:var(--bad);font-size:13.5px;font-weight:600}
 #gmenu-bg{position:fixed;inset:0;z-index:19;background:rgba(8,8,10,.42);opacity:0;transition:opacity .18s ease-out}
 #gmenu-bg.on{opacity:1}
 #gmenu{position:fixed;z-index:21;bottom:calc(74px + env(safe-area-inset-bottom,0px));width:248px;background:var(--surface2);border-radius:22px;padding:6px;box-shadow:0 18px 44px -10px rgba(0,0,0,.75),0 2px 8px rgba(0,0,0,.35);opacity:0;transform:translateY(10px) scale(.94);transition:opacity .2s cubic-bezier(.16,1,.3,1),transform .26s cubic-bezier(.16,1,.3,1)}
@@ -526,6 +544,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
   <div id="sheet-bg" aria-hidden="true"></div>
   <div class="sheet" id="sheet" role="menu" aria-label="Catatan"><div class="sh-h"><b>Mau catat apa?</b><span id="sh-sum"></span></div>
     <button type="button" data-quick="makan" data-focus="fo-items"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Bowl%20with%20spoon/Flat/bowl_with_spoon_flat.svg"><span class="sh-l">Makan</span><small class="sh-m" data-meta="makan"></small></button>
+    <button type="button" data-quick="cairan" data-focus=""><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Baby%20bottle/Flat/baby_bottle_flat.svg"><span class="sh-l">Cairan</span><small class="sh-m" data-meta="cairan"></small></button>
     <button type="button" data-quick="tidur" data-focus=""><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Sleeping%20face/Flat/sleeping_face_flat.svg"><span class="sh-l">Tidur</span><small class="sh-m" data-meta="tidur"></small></button>
     <button type="button" data-quick="bab" data-focus=""><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Pile%20of%20poo/Flat/pile_of_poo_flat.svg"><span class="sh-l">BAB</span><small class="sh-m" data-meta="bab"></small></button>
     <button type="button" data-quick="suplemen" data-focus="sp-name"><img alt="" src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Pill/Flat/pill_flat.svg"><span class="sh-l">Suplemen</span><small class="sh-m" data-meta="suplemen"></small></button>
@@ -649,6 +668,29 @@ button.sm{padding:7px 13px;font-size:12.5px}
     <div class="card"><h2>7 hari terakhir</h2><p class="muted small" style="margin:2px 0 8px">Tidur dihitung di tanggal mulai tidur.</p><div class="scroll" id="sleep-week"></div></div>
   </section>
 
+  <section class="panel" id="p-cairan">
+    <div class="card fl-today" id="fl-today"></div>
+    <form class="card" id="f-fluid" autocomplete="off">
+      <h2 style="margin-bottom:12px">Catat cairan</h2>
+      <div class="stack">
+      <label>Minum apa?<select id="fl-kind"><option value="asip">ASI perah</option><option value="asi">ASI langsung</option><option value="sufor">Susu formula</option><option value="air">Air putih</option><option value="lain">Lainnya</option></select></label>
+      <label id="fl-other-l" hidden>Minum apa namanya?<input id="fl-other" maxlength="40" placeholder="mis. jus jeruk, kaldu"></label>
+      <div class="lbl" id="fl-ml-l"><span>Berapa banyak <span class="opt">(ml)</span></span>
+        <div class="chips fl-q" role="group" aria-label="Pilih jumlah cepat"><button type="button" class="chipbtn" data-flml="30">30</button><button type="button" class="chipbtn" data-flml="60">60</button><button type="button" class="chipbtn" data-flml="90">90</button><button type="button" class="chipbtn" data-flml="120">120</button><button type="button" class="chipbtn" data-flml="150">150</button><button type="button" class="chipbtn" data-flml="180">180</button></div>
+        <input id="fl-ml" inputmode="numeric" maxlength="4" placeholder="atau ketik, mis. 100" aria-label="Jumlah dalam ml"></div>
+      <label id="fl-dur-l" hidden><span>Berapa lama <span class="opt">(menit, opsional)</span></span><input id="fl-dur" inputmode="numeric" maxlength="3" placeholder="mis. 15"></label>
+      <div class="grid2">
+        <label>Tanggal<input type="date" id="fl-date" required></label>
+        <label>Jam<input type="time" id="fl-time"></label>
+      </div>
+      <label><span>Catatan <span class="opt">(opsional)</span></span><input id="fl-note" placeholder="mis. habis setengah, sisanya dibuang"></label>
+      <p class="err-line" id="fl-err" hidden></p>
+      </div>
+      <div class="row" style="margin-top:12px"><button class="primary" type="submit">Simpan</button></div>
+    </form>
+    <div class="card"><h2 style="margin-bottom:4px">Riwayat cairan</h2><div id="fluid-list"></div></div>
+  </section>
+
   <section class="panel" id="p-aktivitas">
     <form class="card" id="f-act" autocomplete="off">
       <h2 style="margin-bottom:12px">Catat aktivitas</h2>
@@ -750,7 +792,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
     <button type="button" class="bi" data-grp="rep" aria-haspopup="menu" aria-expanded="false" aria-controls="gmenu"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5h6v2.5H9z"/><path d="M7.5 5.5H6a1.5 1.5 0 0 0-1.5 1.5v12A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 18 5.5h-1.5"/><path d="M8.5 12.5l2 2 4.5-4.5"/></svg></i><span>Laporan<svg class="car" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 6.5 5 3.5l3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
 </nav>
 <div id="gmenu-bg" hidden></div><div id="gmenu" role="menu" hidden></div>
-<div id="pnm" hidden role="dialog" aria-modal="true" aria-labelledby="pnm-t"><div class="edm-card"><div class="edm-top"><b id="pnm-t">Yang baru di Jurnal Gia</b><button type="button" class="ghost icon-btn" data-act="pn-close" aria-label="Tutup">✕</button></div><div class="pn-v"><h3>17 Nov<span>Terbaru</span></h3><ul><li>Catatan dan Tulis digabung jadi satu menu Catatan yang menyala di navigasi bawah. Ketuk, pilih jenisnya, langsung bisa nulis atau lihat riwayatnya.</li><li>Tiap pilihan di menu Catatan nunjukin sudah berapa kali dicatat hari ini.</li><li>Buka halaman catatan ga langsung munculin keyboard lagi. Keyboard baru keluar pas kolomnya diketuk.</li><li>Tumbuh kembang pindah ke dalam menu Catatan. Navigasi bawah tinggal Beranda, Catatan, Laporan.</li><li>Menu Laporan muncul dari tombolnya di bawah, tab di atas layar dihapus.</li><li>Tombol tidur jadi lebih ringkas: Tidur dan Bangun, dan kartunya lebih kecil.</li><li>Form catat sekarang dilipat. Ketuk judulnya (tombol +) buat buka, jadi riwayat langsung kelihatan.</li><li>Riwayat cuma nampilin 7 hari terakhir, sisanya lewat tombol Lihat 7 hari sebelumnya.</li><li>Suplemen punya kalender 14 hari, langsung kelihatan hari yang kelewat.</li><li>Pola dan pertanyaan dokter diberi tanda tanggal ditulis, tiap poin bisa dibuka buat baca lengkap.</li><li>Timeline dobel di Grafik dihapus, grafik per jam lebih besar dan gampang dibaca.</li><li>Kartu tidur yang baru mulai sekarang tulis "baru mulai", bukan 0m.</li><li>Lebih rapi di Safari iPhone: kolom tanggal dan jam tidak melebar keluar lagi, ada ikon kalender dan jam, tombol tidak memunculkan menu salin saat ditekan lama, dan ada efek tekan seperti app.</li><li>Bisa dipasang ke Home Screen lewat Safari (Share, Add to Home Screen): ada ikon Jurnal Gia, kebuka full screen, dan halaman tetap bisa dibuka saat sinyal hilang.</li><li>Pengingat makan di Beranda dibikin ringkas: titik kuning berkedip plus tombol tiap makan yang belum dicatat, termasuk yang kemarin. Pagi dihitung lewat jam 10, siang lewat jam 14, sore lewat jam 18.30.</li><li>Navigasi bawah sekarang punya efek gelembung: ikonnya membal dan gelembung kecil naik tiap diketuk.</li><li>Pola: jumlah bahan yang sudah Gia coba tampil di atas, daftar bahan dipendekkan jadi 8 teratas dengan tombol Lihat semua.</li><li>Label lama dirapikan: Mommy, Kondisi, Untuk dokter.</li><li>Aktivitas Lainnya sekarang bisa diisi namanya, dan nama itu yang muncul di riwayat.</li><li>Tombol pilihan cepat Vitamin D di Suplemen dihapus. Nama suplemen yang pernah dicatat tetap muncul sebagai saran saat mengetik.</li><li>Riwayat Tumbuh kembang lebih rapi: satuan kg dan cm ada di bawah angkanya.</li></ul></div><div class="pn-v"><h3>16 Nov</h3><ul><li>Laporan: export tinggal PDF dan Excel. PDF-nya sekarang didesain ala Jurnal Gia, lengkap dengan grafik, sebaran BAB, foto pup, dan catatan harian.</li><li>Obat dan suplemen di Laporan dihapus, pakai halaman Suplemen.</li><li>Tombol + sekarang namanya Tulis, menu Tumbuh Kembang di bawah jadi Tumbang.</li><li>Sapaan dan menu jadi Mommy dan Daddy.</li><li>62 foto pup masuk sesuai tanggal dan jamnya, semua kotak 1:1. Foto BAB baru otomatis dipotong kotak.</li><li>Foto pup yang sempat error sudah diganti.</li><li>Timeline Beranda bisa digeser ke hari lain.</li><li>Kondisi: pilihan seberapa parah dihapus, keluhan perut dan makan tidak dobel lagi di riwayat Kondisi.</li><li>Ketuk Beranda 3 kali buat buka catatan update ini.</li></ul></div><div class="pn-v"><h3>Sebelumnya</h3><ul><li>Export Excel ke samping, satu baris per hari: menu, suplemen, BAB, tidur, respon, aktivitas.</li><li>Semua riwayat tinggal ketuk untuk ubah atau hapus, lewat popup.</li><li>Keluhan jadi Kondisi, ada pilihan Lagi bagus.</li><li>Catatan Suplemen baru, Reminder seperti app reminder biasa.</li><li>Grafik dan timeline harian pindah ke Laporan.</li><li>Data 9 sampai 12 Nov dari spreadsheet sudah masuk.</li><li>Navigasi bawah baru dengan tombol + di tengah, plus catatan Aktivitas.</li></ul></div></div></div>
+<div id="pnm" hidden role="dialog" aria-modal="true" aria-labelledby="pnm-t"><div class="edm-card"><div class="edm-top"><b id="pnm-t">Yang baru di Jurnal Gia</b><button type="button" class="ghost icon-btn" data-act="pn-close" aria-label="Tutup">✕</button></div><div class="pn-v"><h3>17 Nov<span>Terbaru</span></h3><ul><li>Catatan dan Tulis digabung jadi satu menu Catatan yang menyala di navigasi bawah. Ketuk, pilih jenisnya, langsung bisa nulis atau lihat riwayatnya.</li><li>Tiap pilihan di menu Catatan nunjukin sudah berapa kali dicatat hari ini.</li><li>Buka halaman catatan ga langsung munculin keyboard lagi. Keyboard baru keluar pas kolomnya diketuk.</li><li>Tumbuh kembang pindah ke dalam menu Catatan. Navigasi bawah tinggal Beranda, Catatan, Laporan.</li><li>Menu Laporan muncul dari tombolnya di bawah, tab di atas layar dihapus.</li><li>Tombol tidur jadi lebih ringkas: Tidur dan Bangun, dan kartunya lebih kecil.</li><li>Form catat sekarang dilipat. Ketuk judulnya (tombol +) buat buka, jadi riwayat langsung kelihatan.</li><li>Riwayat cuma nampilin 7 hari terakhir, sisanya lewat tombol Lihat 7 hari sebelumnya.</li><li>Suplemen punya kalender 14 hari, langsung kelihatan hari yang kelewat.</li><li>Pola dan pertanyaan dokter diberi tanda tanggal ditulis, tiap poin bisa dibuka buat baca lengkap.</li><li>Timeline dobel di Grafik dihapus, grafik per jam lebih besar dan gampang dibaca.</li><li>Kartu tidur yang baru mulai sekarang tulis "baru mulai", bukan 0m.</li><li>Catatan baru: Cairan. Catat ASI perah, ASI langsung, susu formula, air putih, atau minuman lain, lengkap dengan ml. Total hari ini dan 7 hari terakhir langsung kelihatan, dan ikut masuk ke timeline dan Export Excel.</li><li>Lebih rapi di Safari iPhone: kolom tanggal dan jam tidak melebar keluar lagi, ada ikon kalender dan jam, tombol tidak memunculkan menu salin saat ditekan lama, dan ada efek tekan seperti app.</li><li>Bisa dipasang ke Home Screen lewat Safari (Share, Add to Home Screen): ada ikon Jurnal Gia, kebuka full screen, dan halaman tetap bisa dibuka saat sinyal hilang.</li><li>Pengingat makan di Beranda dibikin ringkas: titik kuning berkedip plus tombol tiap makan yang belum dicatat, termasuk yang kemarin. Pagi dihitung lewat jam 10, siang lewat jam 14, sore lewat jam 18.30.</li><li>Navigasi bawah sekarang punya efek gelembung: ikonnya membal dan gelembung kecil naik tiap diketuk.</li><li>Pola: jumlah bahan yang sudah Gia coba tampil di atas, daftar bahan dipendekkan jadi 8 teratas dengan tombol Lihat semua.</li><li>Label lama dirapikan: Mommy, Kondisi, Untuk dokter.</li><li>Aktivitas Lainnya sekarang bisa diisi namanya, dan nama itu yang muncul di riwayat.</li><li>Tombol pilihan cepat Vitamin D di Suplemen dihapus. Nama suplemen yang pernah dicatat tetap muncul sebagai saran saat mengetik.</li><li>Riwayat Tumbuh kembang lebih rapi: satuan kg dan cm ada di bawah angkanya.</li></ul></div><div class="pn-v"><h3>16 Nov</h3><ul><li>Laporan: export tinggal PDF dan Excel. PDF-nya sekarang didesain ala Jurnal Gia, lengkap dengan grafik, sebaran BAB, foto pup, dan catatan harian.</li><li>Obat dan suplemen di Laporan dihapus, pakai halaman Suplemen.</li><li>Tombol + sekarang namanya Tulis, menu Tumbuh Kembang di bawah jadi Tumbang.</li><li>Sapaan dan menu jadi Mommy dan Daddy.</li><li>62 foto pup masuk sesuai tanggal dan jamnya, semua kotak 1:1. Foto BAB baru otomatis dipotong kotak.</li><li>Foto pup yang sempat error sudah diganti.</li><li>Timeline Beranda bisa digeser ke hari lain.</li><li>Kondisi: pilihan seberapa parah dihapus, keluhan perut dan makan tidak dobel lagi di riwayat Kondisi.</li><li>Ketuk Beranda 3 kali buat buka catatan update ini.</li></ul></div><div class="pn-v"><h3>Sebelumnya</h3><ul><li>Export Excel ke samping, satu baris per hari: menu, suplemen, BAB, tidur, respon, aktivitas.</li><li>Semua riwayat tinggal ketuk untuk ubah atau hapus, lewat popup.</li><li>Keluhan jadi Kondisi, ada pilihan Lagi bagus.</li><li>Catatan Suplemen baru, Reminder seperti app reminder biasa.</li><li>Grafik dan timeline harian pindah ke Laporan.</li><li>Data 9 sampai 12 Nov dari spreadsheet sudah masuk.</li><li>Navigasi bawah baru dengan tombol + di tengah, plus catatan Aktivitas.</li></ul></div></div></div>
 <div id="edm" hidden role="dialog" aria-modal="true" aria-labelledby="edm-t"><div class="edm-card"><div class="edm-top"><b id="edm-t">Ubah catatan</b><button type="button" class="ghost icon-btn" data-act="edit-cancel" aria-label="Tutup">✕</button></div><div id="edm-body"></div><div id="edm-foot"></div></div></div>
 <div id="toast" hidden></div>
 <input type="file" id="ph-input" accept="image/*" multiple hidden>
@@ -759,7 +801,7 @@ button.sm{padding:7px 13px;font-size:12.5px}
 <script>
 (function(){
 let SEED=null;const SEED_GZ="";
-const COLS=['foods','issues','stools','growth','meds','history','diapers','ingredients','photos','routine','checks','sleeps','activities','supps'];
+const COLS=['foods','issues','stools','growth','meds','history','diapers','ingredients','photos','routine','checks','sleeps','activities','supps','fluids'];
 const D={};COLS.forEach(c=>D[c]=[]);
 const BIRTH='2026-01-31';
 const MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
@@ -1031,19 +1073,20 @@ function openRem(id){const r=id?routine().find(x=>x.id===id):null;if(EDIT)endEdi
 /* ---------- ringkasan dokter: blok terstruktur, bisa jadi teks, Google Doc, PDF ---------- */
 let lastBlocks=[],lastPhotos=[],lastTitle="";
 let lastRows=[],lastFrom=null;
-const WIDE_HEAD=['HARI/ TANGGAL','MENU','SUPLEMENTASI','DEFEKASI','POLA TIDUR','RESPON','AKTIVITAS & MOOD'];
+const WIDE_HEAD=['HARI/ TANGGAL','MENU','CAIRAN','SUPLEMENTASI','DEFEKASI','POLA TIDUR','RESPON','AKTIVITAS & MOOD'];
 function wideRows(from,to){const out=[],ids=ref=>photosOf(ref).filter(p=>!String(p.fileId).startsWith('local-')).map(p=>p.fileId),hm=t=>(t||'').replace(':','.'),bt=(a,b)=>(a.time||'99').localeCompare(b.time||'99');
   for(let n=dayN(from);n<=dayN(to);n++){const d=fromN(n);
     const fo=D.foods.filter(f=>f.date===d).sort((a,b)=>(a.kind==='mom')-(b.kind==='mom')||(ORD[a.meal]||2)-(ORD[b.meal]||2));
     const menu=fo.map(f=>(f.kind==='mom'?'Menu Mommy ':'')+f.meal+': '+f.items+(f.amount?' ('+f.amount+')':'')+(f.note?'. '+f.note:'')).join('\n');
+    const flL=D.fluids.filter(x=>x.date===d).sort(bt),fl=flL.map(x=>(x.time?hm(x.time)+' ':'')+flTxt(x)+(x.note?', '+x.note:'')).join('\n')+(flSum(flL)?'\nTotal '+flSum(flL)+' ml':'');
     const sp=D.supps.filter(x=>x.date===d).sort(bt).map(x=>(x.time?hm(x.time)+' ':'')+x.name+(x.dose?' '+x.dose:'')+(x.note?' ('+x.note+')':'')).join('\n');
     const sts=D.stools.filter(x=>x.date===d).sort(bt),st=sts.map(x=>(x.time?hm(x.time)+' ':'')+'BS '+bsLabel(x)+(x.color?' '+x.color:'')+(x.strain?', mengejan':'')+(x.note?', '+x.note:'')).join('\n');
     const sl=[...D.sleeps.filter(z=>z.date===d).sort((a,b)=>(a.start||'').localeCompare(b.start||'')).map(z=>(z.kind==='malam'?'Malam ':'Siang ')+hm(z.start||'?')+'-'+(z.end?hm(z.end):'?')+(z.end?' ('+durShort(slMin(z))+')':'')+(z.note?', '+z.note:'')),...D.issues.filter(i=>i.date===d&&i.type==='tidur').map(i=>i.title+(i.note?' ('+i.note+')':''))].join('\n');
     const iss=D.issues.filter(i=>i.date===d&&i.type!=='tidur'),rs=iss.map(i=>(i.time?hm(i.time)+' ':'')+i.title+(i.type==='baik'?' (bagus)':'')+(i.note?'. '+i.note:'')).join('\n');
     const ac=D.activities.filter(a=>a.date===d).sort(bt).map(a=>(a.time?hm(a.time)+' ':'')+(acName(a))+(a.dur?' '+a.dur+' mnt':'')+(a.note?', '+a.note:'')).join('\n');
     const ph=[...fo.flatMap(f=>ids('foods:'+f.id)),...sts.flatMap(x=>ids('stools:'+x.id)),...iss.flatMap(i=>ids(i.id))];
-    if(!(menu||sp||st||sl||rs||ac||ph.length))continue;
-    out.push({cells:[dow(d)+', '+fmt(d),menu,sp,st,sl,rs,ac],ph})}
+    if(!(menu||fl||sp||st||sl||rs||ac||ph.length))continue;
+    out.push({cells:[dow(d)+', '+fmt(d),menu,fl,sp,st,sl,rs,ac],ph})}
   return out}
 function blocksToText(t,B){return [t,...B.filter(b=>!b.img).map(b=>b.h?'\n'+b.h.toUpperCase():b.day?b.day+'\n'+b.rows.map(r=>'  - '+r.t+(r.ph.length?' ['+r.ph.length+' foto]':'')).join('\n'):b.li?'- '+b.li:b.ol?'• '+b.ol:b.p)].join('\n')}
 /* grafik untuk dokumen: SVG layar (tema gelap) diubah ke PNG tema terang */
@@ -1107,9 +1150,9 @@ const GIA_URI='data:image/svg+xml;utf8,'+encodeURIComponent(giaSVG().replace('<s
 let heroP='';
 function paintHero(){const h=new Date().getHours();const p=h>=5&&h<10?'pagi':h>=10&&h<15?'siang':h>=15&&h<18?'sore':'malam';
   const g=document.getElementById('greet');if(g)g.textContent='selamat '+p;if(p===heroP)return;heroP=p;const a=document.getElementById('hero-art');if(a)a.innerHTML=heroArt(p)}
-const HEADS={suplemen:['','Suplemen','sunset',['Pill','Baby bottle','Sun']],grafik:['','Grafik','ocean',['Bar chart','Chart increasing','Calendar']],aktivitas:['main, mandi, jemur','Aktivitas','forest',['Teddy bear','Bathtub','Sun']],tidur:['tidur siang dan malam','Tidur','dusk',['Sleeping face','Crescent moon','Teddy bear']],makan:['apa yang Gia makan','Makan','sunset',['Bowl with spoon','Carrot','Fish']],keluhan:['','Kondisi','dusk',['Lotion bottle','Crescent moon','Adhesive bandage']],bab:['pup dan popok basah','BAB','ocean',['Pile of poo','Droplet','Roll of paper']],tumbuh:['berat dan panjang badan','Tumbuh Kembang','forest',['Balance scale','Straight ruler','Seedling']],pola:['benang merah dari catatan','Pola','dusk',['Magnifying glass tilted left','Light bulb','Bar chart']],dokter:['bawa ini saat kontrol','Untuk dokter','ocean',['Stethoscope','Pill','Clipboard']]};
+const HEADS={cairan:['susu, ASI dan air','Cairan','ocean',['Baby bottle','Droplet','Glass of milk']],suplemen:['','Suplemen','sunset',['Pill','Baby bottle','Sun']],grafik:['','Grafik','ocean',['Bar chart','Chart increasing','Calendar']],aktivitas:['main, mandi, jemur','Aktivitas','forest',['Teddy bear','Bathtub','Sun']],tidur:['tidur siang dan malam','Tidur','dusk',['Sleeping face','Crescent moon','Teddy bear']],makan:['apa yang Gia makan','Makan','sunset',['Bowl with spoon','Carrot','Fish']],keluhan:['','Kondisi','dusk',['Lotion bottle','Crescent moon','Adhesive bandage']],bab:['pup dan popok basah','BAB','ocean',['Pile of poo','Droplet','Roll of paper']],tumbuh:['berat dan panjang badan','Tumbuh Kembang','forest',['Balance scale','Straight ruler','Seedling']],pola:['benang merah dari catatan','Pola','dusk',['Magnifying glass tilted left','Light bulb','Bar chart']],dokter:['bawa ini saat kontrol','Untuk dokter','ocean',['Stethoscope','Pill','Clipboard']]};
 Object.entries(HEADS).forEach(([k,[a,b,p,ic]])=>{const s=document.getElementById('p-'+k);if(s&&!s.querySelector('.sec-hero'))s.insertAdjacentHTML('afterbegin',`<div class="sec-hero">${scene(p,'h')}<div class="sec-ill">${ic.map(n=>`<img alt="" src="${fe(n)}">`).join('')}</div><div class="sec-txt"><h2>${b}</h2></div></div>`)});
-const H2I={'Catat suplemen':'Pill','Riwayat suplemen':'Spiral notepad','Catat aktivitas':'Teddy bear','Riwayat aktivitas':'Spiral notepad','Catat tidur':'Sleeping face','7 hari terakhir':'Bar chart','Riwayat tidur':'Spiral notepad','14 hari terakhir':'Calendar','Grafik 60 hari':'Chart increasing','Popok basah':'Droplet','Riwayat BAB':'Spiral notepad','Berat badan':'Balance scale','Panjang badan':'Straight ruler','Bahan makanan dan kejadian merah-merah':'Magnifying glass tilted left','Bahan baru, urut pertama dicoba':'Seedling','Ringkasan untuk dokter':'Clipboard','Pertanyaan untuk dokter':'Light bulb','Obat dan suplemen':'Pill','Riwayat kesehatan':'Spiral notepad','Catat makan':'Bowl with spoon','Catat keluhan':'Lotion bottle','Catat BAB':'Pile of poo','Catat tumbuh kembang':'Balance scale','Foto kulit':'Camera with flash'};
+const H2I={'Catat cairan':'Baby bottle','Riwayat cairan':'Spiral notepad','Catat suplemen':'Pill','Riwayat suplemen':'Spiral notepad','Catat aktivitas':'Teddy bear','Riwayat aktivitas':'Spiral notepad','Catat tidur':'Sleeping face','7 hari terakhir':'Bar chart','Riwayat tidur':'Spiral notepad','14 hari terakhir':'Calendar','Grafik 60 hari':'Chart increasing','Popok basah':'Droplet','Riwayat BAB':'Spiral notepad','Berat badan':'Balance scale','Panjang badan':'Straight ruler','Bahan makanan dan kejadian merah-merah':'Magnifying glass tilted left','Bahan baru, urut pertama dicoba':'Seedling','Ringkasan untuk dokter':'Clipboard','Pertanyaan untuk dokter':'Light bulb','Obat dan suplemen':'Pill','Riwayat kesehatan':'Spiral notepad','Catat makan':'Bowl with spoon','Catat keluhan':'Lotion bottle','Catat BAB':'Pile of poo','Catat tumbuh kembang':'Balance scale','Foto kulit':'Camera with flash'};
 document.querySelectorAll('.card>h2').forEach(h=>{const n=H2I[h.textContent.trim()];if(n&&!h.querySelector('.h-ico'))h.insertAdjacentHTML('afterbegin',`<img class="h-ico" alt="" src="${fe(n)}">`)});
 function chipify(id,o={}){const sel=document.getElementById(id);if(!sel||sel._sync)return;const w=document.createElement('div');w.className='chips'+(o.cls?' '+o.cls:'');w.setAttribute('role','radiogroup');
   [...sel.options].forEach(op=>{const b=document.createElement('button');b.type='button';b.className='chipbtn';b.dataset.v=op.value;b.setAttribute('role','radio');
@@ -1128,6 +1171,7 @@ function kindIssueUI(){const g=$('is-kind').value==='baik';$('is-st-l').hidden=g
 $('is-kind').addEventListener('change',kindIssueUI);
 chipify('sl-kind',{icon:{siang:'Sun',malam:'Crescent moon'}});
 chipify('ac-kind',{icon:{main:'Teddy bear',mandi:'Bathtub',jemur:'Sun',tummy:'Baby',jalan:'Baby bottle',lain:'Sparkles'}});
+chipify('fl-kind',{icon:{asip:'Baby bottle',asi:'Breast-feeding',sufor:'Glass of milk',air:'Droplet',lain:'Cup with straw'}});
 function acOther(){const on=$('ac-kind').value==='lain';$('ac-other-l').hidden=!on;$('ac-other').required=on}
 $('ac-kind').addEventListener('change',acOther);
 function kindUI(){const m=$('fo-kind').value==='mom';document.querySelectorAll('#f-food .baby-only').forEach(x=>x.hidden=m);$('fo-items').placeholder=m?'mis. nasi, sayur bayam, ayam goreng':'mis. labu siam, ikan nila, VCO'}
@@ -1142,7 +1186,7 @@ chipify('sum-days',{cls:'scrollx'});
 const BS_SVG=['<circle cx="7" cy="12" r="4"/><circle cx="16" cy="8" r="3.6"/><circle cx="25" cy="13" r="4.2"/><circle cx="16" cy="16.5" r="3"/>','<path d="M3 12c0-4 4-5 6-4 1-3 5-3 7-1 2-2 6-2 8 0 3 0 5 3 4 6-1 3-4 4-7 3-2 2-6 2-8 0-2 2-6 1-7-1-2 0-3-1-3-3z"/>','<rect x="2" y="6" width="30" height="11" rx="5.5"/><path d="M10 7l-1 4M18 7l1 4M25 8l-1 3" stroke="rgba(0,0,0,.35)" stroke-width="1.4" fill="none"/>','<rect x="2" y="6.5" width="30" height="10" rx="5"/>','<ellipse cx="8" cy="12" rx="6" ry="4.5"/><ellipse cx="19" cy="9" rx="5.5" ry="4"/><ellipse cx="27" cy="14" rx="5" ry="4"/>','<path d="M2 15c2-5 5-3 7-6 2 3 4-1 7 1 2-3 5 0 7-1 2 2 6 1 8 5 1 3-3 4-6 3-3 2-7 1-10 1-4 1-8 1-11-1-2 0-3-1-2-2z"/>','<path d="M1 14c4-3 7 2 11-1s7 2 11-1 7 1 10 0v4c-4 2-7-1-11 1s-7-2-11 0-7-1-10 0z" opacity=".85"/>'];
 const CAM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 const TRASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>';
-function shMeta(){const T=todayS();let tot=0;document.querySelectorAll('#sheet [data-meta]').forEach(el=>{const k=el.dataset.meta;let t='',has=false;if(GM_SRC[k]){const n=GM_SRC[k]().filter(x=>x.date===T).length;tot+=n;has=n>0;t=n?n+'x hari ini':'belum'}else if(k==='tumbuh'){const g=D.growth.slice().sort(byDate).pop();t=g?'terakhir '+(+g.date.slice(8))+' '+MON[+g.date.slice(5,7)-1]:'belum ada'}el.textContent=t;el.classList.toggle('has',has)});$('sh-sum').textContent=tot?tot+' catatan hari ini':'Belum ada catatan hari ini'}
+function shMeta(){const T=todayS();let tot=0;document.querySelectorAll('#sheet [data-meta]').forEach(el=>{const k=el.dataset.meta;let t='',has=false;if(GM_SRC[k]){const L=GM_SRC[k]().filter(x=>x.date===T),n=L.length;tot+=n;has=n>0;t=n?(k==='cairan'&&flSum(L)?flSum(L)+' ml hari ini':n+'x hari ini'):'belum'}else if(k==='tumbuh'){const g=D.growth.slice().sort(byDate).pop();t=g?'terakhir '+(+g.date.slice(8))+' '+MON[+g.date.slice(5,7)-1]:'belum ada'}el.textContent=t;el.classList.toggle('has',has)});$('sh-sum').textContent=tot?tot+' catatan hari ini':'Belum ada catatan hari ini'}
 function toggleSheet(on){const m=document.getElementById('mound'),s=document.getElementById('sheet');const v=on==null?!s.classList.contains('on'):on;if(v){closeGM();shMeta();s.querySelectorAll('button').forEach((b,i)=>b.style.transitionDelay=(40+i*28)+'ms')}else s.querySelectorAll('button').forEach(b=>b.style.transitionDelay='0ms');s.classList.toggle('on',v);$('sheet-bg').classList.toggle('on',v);m.setAttribute('aria-expanded',v?'true':'false');if(v&&m.dataset.kbd==='1'){m.dataset.kbd='';setTimeout(()=>s.querySelector('button').focus(),60)}}
 document.addEventListener('click',e=>{
   if(e.target.closest('#mound')){$('mound').dataset.kbd=e.detail===0?'1':'';toggleSheet();return}
@@ -1158,7 +1202,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(GM){closeGM(true
 /* ---------- render ---------- */
 function renderAll(){try{setTimeout(shMeta,0);setTimeout(mealNudge,0)}catch(x){}
   $('age').textContent='Usia '+ageText(todayS())+' · lahir 31 Jan 2026';sceneN=0;paintHero();
-  renderBanner();renderSummary();renderHome();renderToday();renderTrials();renderFoods();renderIssues();renderGallery();renderBAB();renderSleep();renderAct();renderSupp();renderGrowth();renderPola();renderDokter();if($('viewer')&&!$('viewer').hidden)renderViewer();trialHint();scrollCharts();setTimeout(hydrate,30);
+  renderBanner();renderSummary();renderHome();renderToday();renderTrials();renderFoods();renderIssues();renderGallery();renderBAB();renderSleep();renderAct();renderFluid();renderSupp();renderGrowth();renderPola();renderDokter();if($('viewer')&&!$('viewer').hidden)renderViewer();trialHint();scrollCharts();setTimeout(hydrate,30);
 }
 function renderBanner(){
   const b=$('banner');
@@ -1204,7 +1248,7 @@ function renderSummary(){
   h+='</tbody></table>';
   $('strip').innerHTML=h;
 }
-const EDITABLE={supps:1,foods:1,issues:1,stools:1,growth:1,sleeps:1,activities:1,meds:1,history:1};
+const EDITABLE={fluids:1,supps:1,foods:1,issues:1,stools:1,growth:1,sleeps:1,activities:1,meds:1,history:1};
 const PENCIL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>';
 function delBtn(col,id){if(EDITABLE[col])return readOnly?'':`<i data-ed="${col}" data-eid="${esc(id)}" hidden></i>`;return readOnly?'':(EDITABLE[col]?`<button type="button" class="ghost icon-btn" data-act="edit" data-col="${col}" data-id="${esc(id)}" aria-label="Ubah" title="Ubah">${PENCIL}</button>`:'')+`<button class="ghost danger icon-btn" data-act="del" data-col="${col}" data-id="${esc(id)}" aria-label="Hapus" title="Hapus">${TRASH}</button>`}
 function renderFoods(){
@@ -1279,7 +1323,7 @@ function sleepNowHTML(){const z=slOngoing();
 const AC_L={main:'Main',mandi:'Mandi',jemur:'Jemur / matahari',tummy:'Tummy time',jalan:'Jalan-jalan',lain:'Aktivitas lain'},AC_I={main:'Teddy bear',mandi:'Bathtub',jemur:'Sun',tummy:'Baby',jalan:'Baby bottle',lain:'Sparkles'};
 const acName=a=>a.kind==='lain'&&a.what?a.what:(AC_L[a.kind]||a.kind);
 const ED_TAB={supps:'suplemen',foods:'makan',issues:'keluhan',stools:'bab',growth:'tumbuh',sleeps:'tidur',activities:'aktivitas',meds:'dokter',history:'dokter'};
-const ED_FORM={supps:'f-supp',foods:'f-food',issues:'f-issue',stools:'f-stool',growth:'f-growth',sleeps:'f-sleep',activities:'f-act',meds:'f-med',history:'f-hist'};
+const ED_FORM={fluids:'f-fluid',supps:'f-supp',foods:'f-food',issues:'f-issue',stools:'f-stool',growth:'f-growth',sleeps:'f-sleep',activities:'f-act',meds:'f-med',history:'f-hist'};
 let EDIT=null;
 function setV(id,v){const e=$(id);if(!e)return;e.value=v==null?'':v;e.dispatchEvent(new Event('change',{bubbles:true}))}
 function startEdit(col,id){const o=(D[col]||[]).find(x=>x.id===id);if(!o)return toast('Catatan tidak ditemukan');
@@ -1290,6 +1334,7 @@ function startEdit(col,id){const o=(D[col]||[]).find(x=>x.id===id);if(!o)return 
   if(col==='growth'){setV('gr-date',o.date);setV('gr-w',o.weight!=null?kg(o.weight):'');setV('gr-l',o.length!=null?String(o.length).replace('.',','):'');setV('gr-note',o.note)}
   if(col==='sleeps'){setV('sl-kind',o.kind||'siang');setV('sl-date',o.date);setV('sl-start',(o.start||'').replace('.',':'));setV('sl-end',(o.end||'').replace('.',':'));setV('sl-note',o.note);slDurHint()}
   if(col==='supps'){setV('sp-name',o.name);setV('sp-date',o.date);setV('sp-time',(o.time||'').replace('.',':'));setV('sp-dose',o.dose);setV('sp-note',o.note)}
+  if(col==='fluids'){setV('fl-kind',o.kind||'asip');setV('fl-other',o.what||'');setV('fl-ml',o.ml==null?'':o.ml);setV('fl-dur',o.dur==null?'':o.dur);setV('fl-date',o.date);setV('fl-time',(o.time||'').replace('.',':'));setV('fl-note',o.note);flKindUI()}
   if(col==='activities'){setV('ac-kind',o.kind||'main');setV('ac-other',o.what||'');acOther();setV('ac-date',o.date);setV('ac-time',(o.time||'').replace('.',':'));setV('ac-dur',o.dur);setV('ac-note',o.note)}
   if(col==='meds'){setV('md-date',o.date);setV('md-name',o.name);setV('md-dose',o.dose)}
   if(col==='history'){setV('hi-when',o.when);setV('hi-text',o.text)}
@@ -1320,6 +1365,24 @@ function renderSupp(){renderSuppCal();const names=[...new Set([...D.supps.slice(
   const g={};list.forEach(x=>(g[x.date]=g[x.date]||[]).push(x));let o='';
   Object.keys(g).forEach(d=>{o+=`<div class="day">${dow(d)}, ${fmt(d)}</div>`;g[d].forEach(x=>{o+=`<div class="entry"><div class="ico" style="background:var(--warn-soft)"><img alt="" loading="lazy" src="${fe('Pill')}"></div><div class="what"><div class="meta">${esc(x.time||'')}</div><b>${esc(x.name)}</b>${x.dose?`<div class="small muted">${esc(x.dose)}</div>`:''}${x.note?'<div class="small muted" style="margin-top:4px">'+esc(x.note)+'</div>':''}</div><div class="act">${delBtn('supps',x.id)}</div></div>`})});
   $('supp-list').innerHTML=o}
+const FL_L={asip:'ASI perah',asi:'ASI langsung',sufor:'Susu formula',air:'Air putih',lain:'Lainnya'},FL_I={asip:'Baby bottle',asi:'Breast-feeding',sufor:'Glass of milk',air:'Droplet',lain:'Cup with straw'};
+const flName=x=>x.kind==='lain'&&x.what?x.what:(FL_L[x.kind]||x.kind);
+const flSum=L=>L.reduce((a,x)=>a+(+x.ml||0),0);
+const flTxt=x=>flName(x)+(x.ml?' '+x.ml+' ml':'')+(x.dur?' '+x.dur+' mnt':'');
+function renderFluid(){const el=$('fluid-list');if(!el)return;const T=todayS();
+  const td=D.fluids.filter(x=>x.date===T),tot=flSum(td),by={};td.forEach(x=>{const k=flName(x);by[k]=by[k]||{ml:0,n:0};by[k].ml+=(+x.ml||0);by[k].n++});
+  const days=[];for(let i=6;i>=0;i--)days.push(fromN(dayN(T)-i));const dv=days.map(d=>flSum(D.fluids.filter(x=>x.date===d))),mx=Math.max(1,...dv);
+  $('fl-today').innerHTML=`<div class="fl-top"><div><div class="fl-k">Hari ini</div><div class="fl-big">${tot}<span> ml</span></div><div class="small muted">${td.length?td.length+'x minum':'Belum ada yang dicatat hari ini'}</div></div>
+    <div class="fl-week" aria-label="Total ml 7 hari terakhir">${days.map((d,i)=>`<div class="fl-bar${d===T?' t':''}" title="${fmt(d)}: ${dv[i]} ml"><b><i style="height:${dv[i]?Math.max(6,Math.round(dv[i]/mx*100)):0}%"></i></b><span>${dow(d).slice(0,1)}</span></div>`).join('')}</div></div>
+    ${Object.keys(by).length?`<div class="fl-by">${Object.entries(by).map(([k,v])=>`<span class="pill">${esc(k)} · ${v.ml?v.ml+' ml':v.n+'x'}</span>`).join('')}</div>`:''}`;
+  const list=D.fluids.slice().sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||'')));
+  if(!list.length){el.innerHTML='<div class="empty">Belum ada catatan cairan. Catat susu, ASI, atau air putih yang Gia minum.</div>';return}
+  const g={};list.forEach(x=>(g[x.date]=g[x.date]||[]).push(x));let o='';
+  Object.keys(g).forEach(d=>{const sm=flSum(g[d]);o+=`<div class="day">${dow(d)}, ${fmt(d)}${sm?` <span class="day-sum">· ${sm} ml</span>`:''}</div>`;g[d].forEach(x=>{o+=`<div class="entry"><div class="ico" style="background:var(--accent-soft)"><img alt="" loading="lazy" src="${fe(FL_I[x.kind]||'Baby bottle')}"></div><div class="what"><div class="meta">${esc(x.time||'')}</div><b>${esc(flName(x))}${x.ml?' · '+esc(x.ml)+' ml':''}</b>${x.dur?`<div class="small muted">${esc(x.dur)} menit</div>`:''}${x.note?'<div class="small muted" style="margin-top:4px">'+esc(x.note)+'</div>':''}</div><div class="act">${delBtn('fluids',x.id)}</div></div>`})});
+  el.innerHTML=o}
+function flKindUI(){const k=$('fl-kind').value;$('fl-other-l').hidden=k!=='lain';$('fl-other').required=k==='lain';$('fl-dur-l').hidden=k!=='asi';
+  $('fl-ml').placeholder=k==='asi'?'opsional, kalau tahu kira-kira':'atau ketik, mis. 100';flChips()}
+function flChips(){const v=$('fl-ml').value.trim();document.querySelectorAll('[data-flml]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.flml===v?'true':'false'))}
 function renderAct(){const list=D.activities.slice().sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||'')));
   if(!list.length){$('act-list').innerHTML='<div class="empty">Belum ada catatan aktivitas.</div>';return}
   const g={};list.forEach(a=>(g[a.date]=g[a.date]||[]).push(a));let o='';
@@ -1352,6 +1415,7 @@ function dayEvents(T){
   D.sleeps.filter(x=>x.date===T||(x.end&&diff(x.date,T)===1&&hm2m(x.end)<hm2m(x.start))).forEach(x=>{const st0=x.date===T?hm2m(x.start):0;ev.push({c:'sleeps',id:x.id,m:st0,t:x.date===T?x.start:'00.00',ic:x.kind==='malam'?'Crescent moon':'Sleeping face',b:(x.kind==='malam'?'Tidur malam':'Tidur siang')+(x.end?' sampai '+x.end:', masih tidur'),s:x.end?durTxt(slMin(x)):'sejak '+x.start})});
   D.stools.filter(x=>x.date===T).forEach(x=>ev.push({c:'stools',id:x.id,m:hm2m(x.time)??800,t:x.time||'-',ic:'Pile of poo',b:'BAB · '+bsText(x),s:[x.color,x.strain?'mengejan':''].filter(Boolean).join(' · ')}));
   D.issues.filter(x=>x.date===T).forEach(x=>ev.push({c:'issues',id:x.id,m:hm2m(x.time)??810,t:x.time||'-',ic:x.type==='baik'?'Smiling face with hearts':'Lotion bottle',b:x.title,s:x.type==='baik'?'Kondisi bagus':'Kondisi'+(x.flare?' · kejadian baru':'')}));
+  D.fluids.filter(x=>x.date===T).forEach(x=>ev.push({c:'fluids',id:x.id,m:hm2m(x.time)??700,t:x.time||'-',ic:FL_I[x.kind]||'Baby bottle',b:flName(x)+(x.ml?' · '+x.ml+' ml':''),s:['Cairan',x.dur?x.dur+' menit':'',x.note].filter(Boolean).join(' · ')}));
   D.activities.filter(a=>a.date===T).forEach(a=>ev.push({c:'activities',id:a.id,m:hm2m(a.time)??780,t:a.time||'-',ic:AC_I[a.kind]||'Teddy bear',b:acName(a),s:[a.dur?a.dur+' menit':'',a.note].filter(Boolean).join(' · ')}));
   D.supps.filter(x=>x.date===T).forEach(x=>ev.push({c:'supps',id:x.id,m:hm2m(x.time)??500,t:x.time||'-',ic:'Pill',b:x.name,s:['Suplemen',x.dose,x.note].filter(Boolean).join(' · ')}));
   D.checks.filter(c=>c.date===T).forEach(c=>ev.push({m:hm2m(c.at)??480,t:c.at||'-',ic:'Check mark button',b:rn[c.item]||c.item,s:'Reminder selesai'}));
@@ -1516,7 +1580,7 @@ function renderDokter(){
   H('BAB (skala Bristol)');
   if(D.stools.length)B.push({img:'bab',cap:'Skala Bristol per hari, 60 hari terakhir. Pita hijau = normal (3-4), kuning = keras, merah = cair.'});
   const st=D.stools.filter(s=>inP(s.until||s.date)).sort(byDate);(st.length?st:D.stools.slice().sort(byDate).slice(-6)).forEach(s=>LI(fmt(s.date)+(s.until?' sampai '+fmt(s.until):'')+(s.time?' '+s.time:'')+': BS '+bsLabel(s)+(s.color?', '+s.color:'')+(s.strain?', sulit mengejan':'')+(s.note?' ('+s.note+')':'')));
-  const ld=per||60,rows=dayRows(fromN(dayN(T)-ld+1),T);lastRows=rows;lastFrom=per?fromN(dayN(T)-per+1):[...D.foods,...D.stools,...D.issues,...D.sleeps,...D.activities,...D.supps].map(x=>x.date).filter(Boolean).sort()[0]||fromN(dayN(T)-59);
+  const ld=per||60,rows=dayRows(fromN(dayN(T)-ld+1),T);lastRows=rows;lastFrom=per?fromN(dayN(T)-per+1):[...D.foods,...D.stools,...D.issues,...D.sleeps,...D.activities,...D.supps,...D.fluids].map(x=>x.date).filter(Boolean).sort()[0]||fromN(dayN(T)-59);
   if(rows.length){H('Catatan harian'+(rows.some(r=>r.ph.length)?' dengan foto':'')+' ('+ld+' hari)');const byDay={};rows.forEach(r=>(byDay[r.date]=byDay[r.date]||[]).push(r));
     Object.keys(byDay).sort().forEach(d=>B.push({day:dow(d)+', '+fmt(d),rows:byDay[d].map(r=>({t:(r.time?r.time+' · ':'')+r.kind+': '+r.text,ph:r.ph}))}))}
   const qs=['Berat badan melambat sejak pertengahan September (7,1 ke 7,3 kg dalam 6,5 minggu). Perlu evaluasi atau ditimbang ulang?',
@@ -1723,13 +1787,13 @@ async function exportPdf(){
   finally{if(host&&!window.__rptKeep)host.remove();btn.disabled=false;btn.textContent=o}}
 
 
-['f-food','f-issue','f-stool','f-sleep','f-act','f-supp','f-growth'].forEach(id=>{const f=$(id);if(!f)return;f.classList.add('fold');const h=f.querySelector(':scope>h2');if(!h)return;h.setAttribute('role','button');h.tabIndex=0;h.setAttribute('aria-expanded','false');
+['f-food','f-fluid','f-issue','f-stool','f-sleep','f-act','f-supp','f-growth'].forEach(id=>{const f=$(id);if(!f)return;f.classList.add('fold');const h=f.querySelector(':scope>h2');if(!h)return;h.setAttribute('role','button');h.tabIndex=0;h.setAttribute('aria-expanded','false');
   const tg=()=>{const o=f.classList.toggle('open');h.setAttribute('aria-expanded',o?'true':'false')};h.addEventListener('click',()=>{if(f.closest('#edm'))return;tg()});h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tg()}})});
 const CAP={};
 function capList(id,byDay){const el=$(id);if(!el)return;const n=CAP[id]||(byDay?7:14);let cnt=0,hid=0;
   [...el.children].forEach(c=>{if(c.classList.contains('more-btn'))return;if(byDay?c.classList.contains('day'):c.classList.contains('entry'))cnt++;const h=cnt>n;c.hidden=h;if(h)hid++});
   let b=el.querySelector(':scope>.more-btn');if(hid){if(!b){b=document.createElement('button');b.type='button';b.className='more-btn ghost';el.appendChild(b)}b.textContent=byDay?'Lihat 7 hari sebelumnya':'Lihat lebih banyak';b.onclick=()=>{CAP[id]=n+(byDay?7:14);capList(id,byDay)}}else if(b)b.remove()}
-[['food-list',1],['supp-list',1],['act-list',1],['sleep-list',1],['issue-list',0],['stool-list',0]].forEach(([id,d])=>{const el=$(id);if(!el)return;const ob=new MutationObserver(()=>{capList(id,d);ob.takeRecords()});ob.observe(el,{childList:true});capList(id,d)});
+[['food-list',1],['fluid-list',1],['supp-list',1],['act-list',1],['sleep-list',1],['issue-list',0],['stool-list',0]].forEach(([id,d])=>{const el=$(id);if(!el)return;const ob=new MutationObserver(()=>{capList(id,d);ob.takeRecords()});ob.observe(el,{childList:true});capList(id,d)});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-act="ing-all"]');if(b)$('exposure').classList.add('all')});
 
 function navBubbles(el){const ic=el.querySelector('i');if(!ic)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -1751,8 +1815,8 @@ if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventLis
 /* ---------- events ---------- */
 function scrollCharts(){['strip','stool-chart','chart-w','chart-l'].forEach(id=>{const e=$(id);if(e&&!e.dataset.touched)e.scrollLeft=e.scrollWidth})}
 ['strip','stool-chart','chart-w','chart-l'].forEach(id=>['pointerdown','touchstart','wheel'].forEach(ev=>$(id).addEventListener(ev,()=>{$(id).dataset.touched='1'},{passive:true})));
-const GROUPS={home:['ringkasan'],log:['makan','tidur','bab','aktivitas','suplemen','keluhan'],grow:['tumbuh'],rep:['grafik','pola','dokter']};
-const SEG_L={makan:['Makan','Bowl with spoon'],tidur:['Tidur','Sleeping face'],bab:['BAB','Pile of poo'],keluhan:['Kondisi','Sparkles'],aktivitas:['Aktivitas','Teddy bear'],suplemen:['Suplemen','Pill'],grafik:['Grafik','Bar chart'],pola:['Pola','Magnifying glass tilted left'],dokter:['Untuk dokter','Stethoscope']};
+const GROUPS={home:['ringkasan'],log:['makan','cairan','tidur','bab','aktivitas','suplemen','keluhan'],grow:['tumbuh'],rep:['grafik','pola','dokter']};
+const SEG_L={makan:['Makan','Bowl with spoon'],cairan:['Cairan','Baby bottle'],tidur:['Tidur','Sleeping face'],bab:['BAB','Pile of poo'],keluhan:['Kondisi','Sparkles'],aktivitas:['Aktivitas','Teddy bear'],suplemen:['Suplemen','Pill'],grafik:['Grafik','Bar chart'],pola:['Pola','Magnifying glass tilted left'],dokter:['Untuk dokter','Stethoscope']};
 const lastIn={};let curTab='ringkasan';
 function grpOf(t){return Object.keys(GROUPS).find(g=>GROUPS[g].includes(t))||'home'}
 function setTab(n){const t=n||curTab;const ok=Object.values(GROUPS).flat().includes(t)?t:'ringkasan';curTab=ok;const g=grpOf(ok);lastIn[g]=ok;
@@ -1771,7 +1835,7 @@ $('pnm').addEventListener('click',e=>{if(e.target.id==='pnm'||e.target.closest('
 // Menu Catatan/Laporan: muncul dari tombolnya di navbar bawah, menggantikan tab di atas.
 let GM=null;
 const GM_DESC={grafik:'Timeline dan grafik harian',pola:'Benang merah dari catatan',dokter:'Export PDF dan Excel'};
-const GM_SRC={makan:()=>babyFoods(),tidur:()=>D.sleeps,bab:()=>D.stools,aktivitas:()=>D.activities,suplemen:()=>D.supps,keluhan:()=>D.issues};
+const GM_SRC={makan:()=>babyFoods(),cairan:()=>D.fluids,tidur:()=>D.sleeps,bab:()=>D.stools,aktivitas:()=>D.activities,suplemen:()=>D.supps,keluhan:()=>D.issues};
 function gmMeta(k){if(!GM_SRC[k])return GM_DESC[k]||'';const T=todayS(),n=GM_SRC[k]().filter(x=>x.date===T).length;return n?n+'x hari ini':'Belum ada hari ini'}
 function openGM(g,btn,kbd){const m=$('gmenu'),bg=$('gmenu-bg');
   m.innerHTML=GROUPS[g].map((k,i)=>`<button type="button" role="menuitem" class="gm-i" data-gtab="${k}" style="transition-delay:${30+i*26}ms"${curTab===k?' aria-current="page"':''}><img alt="" src="${fe(SEG_L[k][1])}"><span><b>${esc(SEG_L[k][0])}</b><small>${esc(gmMeta(k))}</small></span></button>`).join('');
@@ -1846,7 +1910,7 @@ document.addEventListener('submit',async e=>{if(e.target.id!=='f-rem')return;e.p
 document.addEventListener('submit',async e=>{if(e.target.id!=='f-routine')return;e.preventDefault();const n=$('rt-name').value.trim();if(!n)return;await save('routine',{name:n,dose:$('rt-dose').value.trim(),slot:'',sort:Date.now()/1e12+5,hidden:false},slug(n)+'-'+uid().slice(0,3));toast('Rutin ditambah')});
 $('st-bs').innerHTML=[1,2,3,4,5,6,7].map(n=>`<button type="button" data-bs="${n}" aria-pressed="false" aria-label="${esc(bsFull(n))}"><svg viewBox="0 0 34 22" fill="#B07A47" aria-hidden="true">${BS_SVG[n-1]}</svg>${n}</button>`).join('');
 $('st-bs').addEventListener('click',e=>{const b=e.target.closest('[data-bs]');if(!b)return;bs=+b.dataset.bs;$('st-bs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));$('st-bs-cap').innerHTML='<b>'+bs+' · '+(bs<=2?'keras':bs<=4?'normal':'lembek / cair')+'</b><br>'+esc(BS_DESC[bs-1])});
-['fo-date','is-date','st-date','gr-date','md-date','sl-date','ac-date','sp-date'].forEach(i=>$(i).value=todayS());$('sl-kind').value=slKindNow();$('sl-kind').dispatchEvent(new Event('change'));setInterval(()=>{if(document.visibilityState==='visible'){if(slOngoing()){const h=sleepNowHTML();$('sleep-now-t').innerHTML=h}renderHome()}},60000);
+['fo-date','is-date','st-date','gr-date','md-date','sl-date','ac-date','sp-date','fl-date'].forEach(i=>$(i).value=todayS());$('sl-kind').value=slKindNow();$('sl-kind').dispatchEvent(new Event('change'));setInterval(()=>{if(document.visibilityState==='visible'){if(slOngoing()){const h=sleepNowHTML();$('sleep-now-t').innerHTML=h}renderHome()}},60000);
 $('f-food').addEventListener('submit',async e=>{e.preventDefault();
   const items=$('fo-items').value.trim();if(!items)return;
   const ok=await saveOrEdit('foods',{date:$('fo-date').value,meal:$('fo-meal').value,kind:$('fo-kind').value,items,tags:parseTags(items),amount:$('fo-amount').value.trim(),asi:$('fo-asi').value.trim(),appetite:$('fo-app').value,note:$('fo-note').value.trim(),src:'jurnal'});
@@ -1875,6 +1939,16 @@ $('f-supp').addEventListener('submit',async e=>{e.preventDefault();const n=$('sp
   const t=$('sp-time').value||(!EDIT&&$('sp-date').value===todayS()?nowHM():'');
   const ok=await saveOrEdit('supps',{date:$('sp-date').value,time:t,name:n,dose:$('sp-dose').value.trim(),note:$('sp-note').value.trim()});
   if(ok){['sp-name','sp-time','sp-dose','sp-note'].forEach(i=>$(i).value='');toast('Suplemen tersimpan')}});
+$('fl-kind').addEventListener('change',flKindUI);$('fl-ml').addEventListener('input',flChips);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-flml]');if(!b)return;$('fl-ml').value=b.dataset.flml;flChips()});
+$('f-fluid').addEventListener('submit',async e=>{e.preventDefault();const k=$('fl-kind').value,err=$('fl-err'),mlRaw=$('fl-ml').value.replace(/[^0-9]/g,''),ml=mlRaw?+mlRaw:null;
+  const bad=m=>{err.hidden=false;err.textContent=m;return false};err.hidden=true;
+  if(k!=='asi'&&!ml)return bad('Isi jumlahnya dalam ml, atau pilih salah satu angka.');
+  if(ml!=null&&(ml<1||ml>1000))return bad('Jumlahnya antara 1 sampai 1000 ml.');
+  if(k==='lain'&&!$('fl-other').value.trim())return bad('Tulis minum apa.');
+  const t=$('fl-time').value||($('fl-date').value===todayS()?nowHM():'');
+  const ok=await saveOrEdit('fluids',{date:$('fl-date').value,time:t,kind:k,what:k==='lain'?$('fl-other').value.trim():'',ml:ml==null?'':ml,dur:k==='asi'?$('fl-dur').value.replace(/[^0-9]/g,''):'',note:$('fl-note').value.trim()});
+  if(ok){['fl-time','fl-ml','fl-dur','fl-note','fl-other'].forEach(i=>$(i).value='');flChips();toast(offline?'Tersimpan di HP, dikirim saat ada sinyal':'Cairan tersimpan')}});
 $('f-act').addEventListener('submit',async e=>{e.preventDefault();
   const t=$('ac-time').value||($('ac-date').value===todayS()?nowHM():'');
   const ok=await saveOrEdit('activities',{date:$('ac-date').value,time:t,kind:$('ac-kind').value,what:$('ac-kind').value==='lain'?$('ac-other').value.trim():'',dur:$('ac-dur').value.replace(/[^0-9]/g,''),note:$('ac-note').value.trim()});
